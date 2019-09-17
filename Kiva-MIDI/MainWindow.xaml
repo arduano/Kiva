@@ -1,0 +1,50 @@
+﻿<Window x:Class="Kiva_MIDI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kiva_MIDI"
+        mc:Ignorable="d"
+        Title="MainWindow" WindowStyle="None" Height="450" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <BitmapImage x:Key="Icon" UriSource="i2m.png" />
+                </ResourceDictionary>
+                <ResourceDictionary Source="WindowButtonTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="{Binding ActualHeight,ElementName=titlebar}"/>
+    </WindowChrome.WindowChrome>
+    <DockPanel LastChildFill="True">
+        <Border Background="#0068c9" DockPanel.Dock="Top" Height="50" x:Name="titlebar">
+            <DockPanel>
+                <Button Width="100" WindowChrome.IsHitTestVisibleInChrome="True" Content="Fullscreen" Click="Button_Click"/>
+                <!--<Image HorizontalAlignment="Center" Width="40" Height="Auto" Margin="5" Source="i2m.png"/>-->
+                <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,10,0">
+                    <Button Style="{StaticResource WindowButton}" Name="ExitButton" Background="Red" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="ExitButton_Click"></Button>
+                    <Button Style="{StaticResource WindowButton}" Name="MinimiseButton" Background="Orange" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinimiseButton_Click"></Button>
+                </DockPanel>
+                <Grid DockPanel.Dock="Left">
+                    <Grid VerticalAlignment="Top" HorizontalAlignment="Left" WindowChrome.IsHitTestVisibleInChrome="True">
+                        <!--<Button Style="{StaticResource MenuButtonStyle}" Click="MenuButton_Click" Visibility="Collapsed">
+                            <Grid>
+                                <Label>
+                                    File
+                                </Label>
+                                <Popup StaysOpen="False">
+                                    <Button>Test</Button>
+                                </Popup>
+                            </Grid>
+                        </Button>-->
+                    </Grid>
+                </Grid>
+            </DockPanel>
+        </Border>
+        <Grid Name="glContainer">
+        </Grid>
+    </DockPanel>
+</Window>
