@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kiva_MIDI"
+        xmlns:i="clr-namespace:System.Windows.Interop;assembly=PresentationCore"
+        xmlns:dxc="clr-namespace:SharpDX.WPF;assembly=SharpDX.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" WindowStyle="None" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="MainWindow" WindowStyle="None" Height="450" Width="800" Loaded="Window_Loaded" SnapsToDevicePixels="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -45,6 +47,7 @@
             </DockPanel>
         </Border>
         <Grid Name="glContainer">
+            <dxc:DXElement x:Name="dxview11"/>
         </Grid>
     </DockPanel>
 </Window>

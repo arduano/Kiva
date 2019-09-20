@@ -1,0 +1,2616 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SharpDX.DXGI</name>
+    </assembly>
+    <members>
+        <member name="T:SharpDX.DXGI.Surface">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGISurface</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.DeviceChild">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIDeviceSubObject</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.DXGIObject">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIObject</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.DXGIObject.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.DXGIObject"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.DXGIObject.SetPrivateData(System.Guid,System.Int32,System.IntPtr)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="name">No documentation.</param>
+            <param name="dataSize">No documentation.</param>
+            <param name="dataRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIObject::SetPrivateData([In] GUID* Name,[None] int DataSize,[In, Buffer] const void* pData)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.DXGIObject.SetPrivateDataInterface(System.Guid,SharpDX.ComObject)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="name">No documentation.</param>
+            <param name="unknownRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIObject::SetPrivateDataInterface([In] GUID* Name,[In] const IUnknown* pUnknown)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.DXGIObject.GetPrivateData(System.Guid,System.Int32@,System.IntPtr)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="name">No documentation.</param>
+            <param name="dataSizeRef">No documentation.</param>
+            <param name="dataRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIObject::GetPrivateData([In] GUID* Name,[InOut] int* pDataSize,[Out, Buffer] void* pData)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.DXGIObject.GetParent(System.Guid,System.IntPtr@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="riid">No documentation.</param>
+            <param name="parentRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIObject::GetParent([In] GUID* riid,[Out] void** ppParent)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.DXGIObject.GetParent``1">
+            <summary>
+            </summary>
+            <typeparam name = "T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:SharpDX.DXGI.DeviceChild.GetDevice``1">
+            <summary>
+            Retrieves the device.
+            </summary>
+            <typeparam name="T">The interface that is returned can be any interface published by the device.</typeparam>
+            <returns>The associated device. </returns>
+            <unmanaged>HRESULT IDXGIDeviceSubObject::GetDevice([In] GUID* riid,[Out] void** ppDevice)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.DeviceChild.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.DeviceChild"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.DeviceChild.GetDevice(System.Guid,System.IntPtr@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="riid">No documentation.</param>
+            <param name="deviceRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIDeviceSubObject::GetDevice([In] GUID* riid,[Out] void** ppDevice)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Surface.Map(SharpDX.DXGI.MapFlags)">
+            <summary>
+            Acquires access to the surface data.
+            </summary>
+            <param name="flags">Flags specifying CPU access permissions.</param>
+            <returns>A <see cref="T:SharpDX.DataRectangle" /> for accessing the mapped data, or <c>null</c> on failure.</returns>.
+        </member>
+        <member name="M:SharpDX.DXGI.Surface.FromSwapChain(SharpDX.DXGI.SwapChain,System.Int32)">
+            <summary>
+            Gets a swap chain back buffer.
+            </summary>
+            <param name="swapChain">The swap chain to get the buffer from.</param>
+            <param name="index">The index of the desired buffer.</param>
+            <returns>The buffer interface, or <c>null</c> on failure.</returns>
+        </member>
+        <member name="M:SharpDX.DXGI.Surface.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Surface"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Surface.GetDescription(SharpDX.DXGI.SurfaceDescription@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISurface::GetDesc([Out] DXGI_SURFACE_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Surface.Map(SharpDX.DXGI.MappedRect@,System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="lockedRectRef">No documentation.</param>
+            <param name="mapFlags">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISurface::Map([Out] DXGI_MAPPED_RECT* pLockedRect,[None] int MapFlags)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Surface.Unmap">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISurface::Unmap()</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Surface.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGISurface::GetDesc([Out] DXGI_SURFACE_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.SwapChain">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGISwapChain</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.#ctor(SharpDX.DXGI.Factory,SharpDX.ComObject,SharpDX.DXGI.SwapChainDescription)">
+            <summary>	
+            Creates a swap chain.	
+            </summary>	
+            <remarks>	
+            If you attempt to create a swap chain in full-screen mode, and full-screen mode is unavailable, the swap chain will be created in windowed mode and DXGI_STATUS_OCCLUDED will be returned. If the buffer width or the buffer height are zero, the sizes will be inferred from the output window size in the swap-chain description. Since the target output cannot be chosen explicitly when the swap-chain is created, you should not create a full-screen swap chain. This can reduce presentation performance if the swap chain size and the output window size do not match. Here are two ways to ensure the sizes match:  Create a windowed swap chain and then set it full-screen using <see cref="M:SharpDX.DXGI.SwapChain.SetFullscreenState(System.Boolean,SharpDX.DXGI.Output)"/>. Save a reference to the swap-chain immediately after creation, and use it to get the output window size during a WM_SIZE event. Then resize the swap chain buffers (with <see cref="M:SharpDX.DXGI.SwapChain.ResizeBuffers(System.Int32,System.Int32,System.Int32,SharpDX.DXGI.Format,System.Int32)"/>) during the transition from windowed to full-screen.  If the swap chain is in full-screen mode, before you release it, you must use {{SetFullscreenState}} to switch it to windowed mode. For more information about releasing a swap chain, see the Destroying a Swap Chain section of {{DXGI Overview}}. 	
+            </remarks>	
+            <param name="factory">a reference to a <see cref="T:SharpDX.DXGI.Factory"/>.</param>
+            <param name="device">A reference to the device that will write 2D images to the swap chain. </param>
+            <param name="description">A reference to the swap-chain description (see <see cref="T:SharpDX.DXGI.SwapChainDescription"/>).</param>
+            <unmanaged>HRESULT IDXGIFactory::CreateSwapChain([In] IUnknown* pDevice,[In] DXGI_SWAP_CHAIN_DESC* pDesc,[Out] IDXGISwapChain** ppSwapChain)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.GetBackBuffer``1(System.Int32)">
+            <summary>
+            Access one of the swap-chain back buffers.
+            </summary>
+            <typeparam name="T">The interface of the surface to resolve from the back buffer</typeparam>
+            <param name="index">A zero-based buffer index. If the swap effect is not DXGI_SWAP_EFFECT_SEQUENTIAL, this method only has access to the first buffer; for this case, set the index to zero.</param>
+            <returns>
+            Returns a reference to a back-buffer interface.
+            </returns>
+            <unmanaged>HRESULT IDXGISwapChain::GetBuffer([None] int Buffer,[In] GUID* riid,[Out] void** ppSurface)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.GetFullScreenState(System.Boolean@,SharpDX.DXGI.Output@)">
+            <summary>	
+            Get the state associated with full-screen mode.	
+            </summary>	
+            <remarks>	
+            When the swap chain is in full-screen mode, a reference to the  target output will be returned and its reference count will be incremented. 	
+            </remarks>	
+            <param name="isFullScreen">A reference to a boolean whose value is either:  TRUE if the swap chain is in full-screen mode FALSE if the swap chain is in windowed mode  </param>
+            <param name="target">A reference to the output target (see <see cref="T:SharpDX.DXGI.Output"/>) when the mode is full screen; otherwise NULL. </param>
+            <returns>Returns one of the following <see cref="T:SharpDX.DXGI.DXGIError"/>. </returns>
+            <unmanaged>HRESULT IDXGISwapChain::GetFullscreenState([Out] BOOL* pFullscreen,[Out] IDXGIOutput** ppTarget)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.SwapChain"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.Present(System.Int32,SharpDX.DXGI.PresentFlags)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="syncInterval">No documentation.</param>
+            <param name="flags">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::Present([None] int SyncInterval,[None] DXGI_PRESENT_FLAGS Flags)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.GetBuffer(System.Int32,System.Guid,System.IntPtr@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="buffer">No documentation.</param>
+            <param name="riid">No documentation.</param>
+            <param name="surfaceRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::GetBuffer([None] int Buffer,[In] GUID* riid,[Out] void** ppSurface)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.SetFullscreenState(System.Boolean,SharpDX.DXGI.Output)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="fullscreen">No documentation.</param>
+            <param name="targetRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::SetFullscreenState([None] BOOL Fullscreen,[In, Optional] IDXGIOutput* pTarget)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.GetFullscreenState(System.Int32@,SharpDX.DXGI.Output@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="fullscreenRef">No documentation.</param>
+            <param name="targetRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::GetFullscreenState([Out] BOOL* pFullscreen,[Out] IDXGIOutput** ppTarget)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.GetDescription(SharpDX.DXGI.SwapChainDescription@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::GetDesc([Out] DXGI_SWAP_CHAIN_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.ResizeBuffers(System.Int32,System.Int32,System.Int32,SharpDX.DXGI.Format,System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="bufferCount">No documentation.</param>
+            <param name="width">No documentation.</param>
+            <param name="height">No documentation.</param>
+            <param name="newFormat">No documentation.</param>
+            <param name="swapChainFlags">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::ResizeBuffers([None] int BufferCount,[None] int Width,[None] int Height,[None] DXGI_FORMAT NewFormat,[None] int SwapChainFlags)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.ResizeTarget(SharpDX.DXGI.ModeDescription@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="newTargetParametersRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::ResizeTarget([In] const DXGI_MODE_DESC* pNewTargetParameters)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.GetContainingOutput(SharpDX.DXGI.Output@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="outputRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::GetContainingOutput([Out] IDXGIOutput** ppOutput)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.GetFrameStatistics(SharpDX.DXGI.FrameStatistics@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="statsRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::GetFrameStatistics([Out] DXGI_FRAME_STATISTICS* pStats)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SwapChain.GetLastPresentCount(System.Int32@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="lastPresentCountRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISwapChain::GetLastPresentCount([Out] int* pLastPresentCount)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.SwapChain.IsFullScreen">
+            <summary>
+            Gets or sets a value indicating whether the swapchain is in fullscreen.
+            </summary>
+            <value>
+            	<c>true</c> if this swapchain is in fullscreen; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:SharpDX.DXGI.SwapChain.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGISwapChain::GetDesc([Out] DXGI_SWAP_CHAIN_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.SwapChain.ContainingOutput">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGISwapChain::GetContainingOutput([Out] IDXGIOutput** ppOutput)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.SwapChain.FrameStatistics">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGISwapChain::GetFrameStatistics([Out] DXGI_FRAME_STATISTICS* pStats)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.SwapChain.LastPresentCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGISwapChain::GetLastPresentCount([Out] int* pLastPresentCount)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Surface1">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGISurface1</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Surface1.ReleaseDC">
+            <summary>	
+            Releases the GDI device context (DC) associated with the current surface and allows rendering using Direct3D. The whole surface to be considered dirty.
+            </summary>	
+            <remarks>	
+            Use the ReleaseDC method to release the DC and indicate that your application has finished all GDI rendering to this surface.   You must call the ReleaseDC method before you perform addition rendering using Direct3D. Prior to resizing buffers all outstanding DCs must be released. 	
+            </remarks>	
+            <returns>If the method succeeds, it returns S_OK. Otherwise, it returns an HRESULT error code. </returns>
+            <unmanaged>HRESULT IDXGISurface1::ReleaseDC([In, Optional] RECT* pDirtyRect)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Surface1.ReleaseDC(SharpDX.Rectangle)">
+            <summary>	
+            Releases the GDI device context (DC) associated with the current surface and allows rendering using Direct3D.	
+            </summary>	
+            <remarks>	
+            Use the ReleaseDC method to release the DC and indicate that your application has finished all GDI rendering to this surface.   You must call the ReleaseDC method before you perform addition rendering using Direct3D. Prior to resizing buffers all outstanding DCs must be released. 	
+            </remarks>	
+            <param name="dirtyRect">A reference to a <see cref="T:SharpDX.Rectangle"/> structure that identifies the dirty region of the surface.   A dirty region is any part of the surface that you have used for GDI rendering and that you want to preserve.  This is used as a performance hint to graphics subsystem in certain scenarios.  Do not use this parameter to restrict rendering to the specified rectangular region. The area specified by the <see cref="T:SharpDX.Rectangle"/> will be used as a performance hint to indicate what areas have been manipulated by GDI rendering. </param>
+            <returns>If the method succeeds, it returns S_OK. Otherwise, it returns an HRESULT error code. </returns>
+            <unmanaged>HRESULT IDXGISurface1::ReleaseDC([In, Optional] RECT* pDirtyRect)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Surface1.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Surface1"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Surface1.GetDC(System.Boolean)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="discard">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISurface1::GetDC([None] BOOL Discard,[Out] void** phdc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Surface1.ReleaseDC_(System.Nullable{SharpDX.Rectangle})">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="dirtyRectRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGISurface1::ReleaseDC([In, Optional] RECT* pDirtyRect)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.SampleDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SAMPLE_DESC</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.SampleDescription.#ctor(System.Int32,System.Int32)">
+            <summary>
+              Initializes a new instance of the <see cref = "T:SharpDX.DXGI.SampleDescription" /> structure.
+            </summary>
+            <param name = "count">The sample count.</param>
+            <param name = "quality">The sample quality.</param>
+        </member>
+        <member name="F:SharpDX.DXGI.SampleDescription.Count">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Count</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SampleDescription.Quality">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Quality</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.ModeDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_DESC</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.ModeDescription.#ctor(System.Int32,System.Int32,SharpDX.DXGI.Rational,SharpDX.DXGI.Format)">
+            <summary>
+              Initializes a new instance of the <see cref = "T:SharpDX.DXGI.ModeDescription" /> structure.
+            </summary>
+            <param name = "width">The width.</param>
+            <param name = "height">The height.</param>
+            <param name = "refreshRate">The refresh rate.</param>
+            <param name = "format">The format.</param>
+        </member>
+        <member name="F:SharpDX.DXGI.ModeDescription.Width">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Width</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ModeDescription.Height">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Height</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ModeDescription.RefreshRate">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RATIONAL RefreshRate</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ModeDescription.Format">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT Format</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ModeDescription.ScanlineOrdering">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCANLINE_ORDER ScanlineOrdering</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ModeDescription.Scaling">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCALING Scaling</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Device">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIDevice</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Device.QueryResourceResidency(SharpDX.ComObject[])">
+            <summary>	
+            Gets the residency status of an array of resources.	
+            </summary>	
+            <remarks>	
+            The information returned by the pResidencyStatus argument array describes the residency status at the time that the QueryResourceResidency method was called.   Note that the residency status will constantly change. If you call the QueryResourceResidency method during a device removed state, the pResidencyStatus argument will return the DXGI_RESIDENCY_EVICTED_TO_DISK flag. Note??This method should not be called every frame as it incurs a non-trivial amount of overhead. 	
+            </remarks>	
+            <param name="comObjects">An array of <see cref="T:SharpDX.DXGI.Resource"/> interfaces. </param>
+            <returns>Returns an array of <see cref="T:SharpDX.DXGI.Residency"/> flags. Each element describes the residency status for corresponding element in  the ppResources argument array. </returns>
+            <unmanaged>HRESULT IDXGIDevice::QueryResourceResidency([In, Buffer] const IUnknown** ppResources,[Out, Buffer] DXGI_RESIDENCY* pResidencyStatus,[None] int NumResources)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Device.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Device"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Device.GetAdapter(SharpDX.DXGI.Adapter@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="adapterRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIDevice::GetAdapter([Out] IDXGIAdapter** pAdapter)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Device.CreateSurface(SharpDX.DXGI.SurfaceDescription@,System.Int32,SharpDX.DXGI.Usage,System.Nullable{SharpDX.DXGI.SharedResource},SharpDX.DXGI.Surface@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <param name="numSurfaces">No documentation.</param>
+            <param name="usage">No documentation.</param>
+            <param name="sharedResourceRef">No documentation.</param>
+            <param name="surfaceRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIDevice::CreateSurface([In] const DXGI_SURFACE_DESC* pDesc,[None] int NumSurfaces,[None] DXGI_USAGE Usage,[In, Optional] const DXGI_SHARED_RESOURCE* pSharedResource,[Out] IDXGISurface** ppSurface)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Device.QueryResourceResidency(SharpDX.ComObject[],SharpDX.DXGI.Residency[],System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="resourcesRef">No documentation.</param>
+            <param name="residencyStatusRef">No documentation.</param>
+            <param name="numResources">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIDevice::QueryResourceResidency([In, Buffer] const IUnknown** ppResources,[Out, Buffer] DXGI_RESIDENCY* pResidencyStatus,[None] int NumResources)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Device.SetGPUThreadPriority(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="priority">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIDevice::SetGPUThreadPriority([None] int Priority)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Device.GetGPUThreadPriority(System.Int32@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="riorityRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIDevice::GetGPUThreadPriority([Out] int* pPriority)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Device.Adapter">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIDevice::GetAdapter([Out] IDXGIAdapter** pAdapter)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Device.GPUThreadPriority">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIDevice::GetGPUThreadPriority([Out] int* pPriority)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Output">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIOutput</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.GetClosestMatchingMode(SharpDX.ComObject,SharpDX.DXGI.ModeDescription,SharpDX.DXGI.ModeDescription@)">
+            <summary>	
+            Find the display mode that most closely matches the requested display mode.	
+            </summary>	
+            <remarks>	
+            Direct3D devices require UNORM formats. This method finds the closest matching available display mode to the mode specified in pModeToMatch. Similarly ranked fields (ie. all specified, or all unspecified, etc) are resolved in the following order.  ScanlineOrdering Scaling Format Resolution RefreshRate  When determining the closest value for a particular field, previously matched fields are used to filter the display mode list choices, and  other fields are ignored. For example, when matching Resolution, the display mode list will have already been filtered by a certain ScanlineOrdering,  Scaling, and Format, while RefreshRate is ignored. This ordering doesn't define the absolute ordering for every usage scenario of FindClosestMatchingMode, because  the application can choose some values initially, effectively changing the order that fields are chosen. Fields of the display mode are matched one at a time, generally in a specified order. If a field is unspecified, FindClosestMatchingMode gravitates toward the values for the desktop related to this output.  If this output is not part of the desktop, then the default desktop output is used to find values. If an application uses a fully unspecified  display mode, FindClosestMatchingMode will typically return a display mode that matches the desktop settings for this output.   Unspecified fields are lower priority than specified fields and will be resolved later than specified fields. 	
+            </remarks>	
+            <param name="device">A reference to the Direct3D device interface. If this parameter is NULL, only modes whose format matches that of pModeToMatch will  be returned; otherwise, only those formats that are supported for scan-out by the device are returned. </param>
+            <param name="modeToMatch">The desired display mode (see <see cref="T:SharpDX.DXGI.ModeDescription"/>). Members of DXGI_MODE_DESC can be unspecified indicating no preference for  that member.  A value of 0 for Width or Height indicates the value is unspecified.  If either Width or  Height are 0 both must be 0.  A numerator and denominator of 0 in RefreshRate indicate it is unspecified. Other members  of DXGI_MODE_DESC have enumeration values indicating the member is unspecified.  If pConnectedDevice is NULL Format cannot be DXGI_FORMAT_UNKNOWN. </param>
+            <param name="closestMatch">The mode that most closely matches pModeToMatch. </param>
+            <returns>Returns one of the following <see cref="T:SharpDX.DXGI.DXGIError"/>. </returns>
+            <unmanaged>HRESULT IDXGIOutput::FindClosestMatchingMode([In] const DXGI_MODE_DESC* pModeToMatch,[Out] DXGI_MODE_DESC* pClosestMatch,[In, Optional] IUnknown* pConcernedDevice)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.GetDisplayModeList(SharpDX.DXGI.Format,SharpDX.DXGI.DisplayModeEnumerationFlags)">
+            <summary>	
+            Gets the display modes that match the requested format and other input options.	
+            </summary>	
+            <remarks>	
+            In general, when switching from windowed to full-screen mode, a swap chain automatically chooses a display mode that meets (or exceeds) the resolution, color  depth and refresh rate of the swap chain. To exercise more control over the display mode, use this API to poll the set of display modes that are validated  against monitor capabilities, or all modes that match the desktop (if the desktop settings are not validated against the monitor). As shown, this API is designed to be called twice. First to get the number of modes available, and second to return a description of the modes. 	
+            <code> UINT num = 0;	
+            DXGI_FORMAT format = DXGI_FORMAT_R32G32B32A32_FLOAT;	
+            UINT flags         = DXGI_ENUM_MODES_INTERLACED; pOutput-&gt;GetDisplayModeList( format, flags, &amp;num, 0); ... DXGI_MODE_DESC * pDescs = new DXGI_MODE_DESC[num];	
+            pOutput-&gt;GetDisplayModeList( format, flags, &amp;num, pDescs); </code>	
+            	
+             	
+            </remarks>	
+            <param name="format">The color format (see <see cref="T:SharpDX.DXGI.Format"/>). </param>
+            <param name="flags">format for modes to include (see {{DXGI_ENUM_MODES}}). DXGI_ENUM_MODES_SCALING needs to be specified to expose the display modes that require scaling.  Centered modes, requiring no  scaling and corresponding directly to the display output, are enumerated by default. </param>
+            <returns>Returns a list of display modes (see <see cref="T:SharpDX.DXGI.ModeDescription"/>); </returns>
+            <unmanaged>HRESULT IDXGIOutput::GetDisplayModeList([None] DXGI_FORMAT EnumFormat,[None] int Flags,[InOut] int* pNumModes,[Out, Buffer, Optional] DXGI_MODE_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Output"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Output.GetDescription(SharpDX.DXGI.OutputDescription@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::GetDesc([Out] DXGI_OUTPUT_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.GetDisplayModeList(SharpDX.DXGI.Format,System.Int32,System.Int32@,SharpDX.DXGI.ModeDescription[])">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="enumFormat">No documentation.</param>
+            <param name="flags">No documentation.</param>
+            <param name="numModesRef">No documentation.</param>
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::GetDisplayModeList([None] DXGI_FORMAT EnumFormat,[None] int Flags,[InOut] int* pNumModes,[Out, Buffer, Optional] DXGI_MODE_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.FindClosestMatchingMode(SharpDX.DXGI.ModeDescription@,SharpDX.DXGI.ModeDescription@,SharpDX.ComObject)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="modeToMatchRef">No documentation.</param>
+            <param name="closestMatchRef">No documentation.</param>
+            <param name="concernedDeviceRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::FindClosestMatchingMode([In] const DXGI_MODE_DESC* pModeToMatch,[Out] DXGI_MODE_DESC* pClosestMatch,[In, Optional] IUnknown* pConcernedDevice)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.WaitForVerticalBlank">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::WaitForVBlank()</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.TakeOwnership(SharpDX.ComObject,System.Boolean)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="deviceRef">No documentation.</param>
+            <param name="exclusive">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::TakeOwnership([In] IUnknown* pDevice,[None] BOOL Exclusive)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.ReleaseOwnership">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>void IDXGIOutput::ReleaseOwnership()</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.GetGammaControlCapabilities(SharpDX.DXGI.GammaControlCapabilities@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="gammaCapsRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::GetGammaControlCapabilities([Out] DXGI_GAMMA_CONTROL_CAPABILITIES* pGammaCaps)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.SetGammaControl(SharpDX.DXGI.GammaControl@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="arrayRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::SetGammaControl([In] const DXGI_GAMMA_CONTROL* pArray)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.GetGammaControl(SharpDX.DXGI.GammaControl@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="arrayRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::GetGammaControl([Out] DXGI_GAMMA_CONTROL* pArray)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.SetDisplaySurface(SharpDX.DXGI.Surface)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="scanoutSurfaceRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::SetDisplaySurface([In] IDXGISurface* pScanoutSurface)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.CopyDisplaySurfaceTo(SharpDX.DXGI.Surface)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="destinationRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::GetDisplaySurfaceData([In] IDXGISurface* pDestination)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Output.GetFrameStatistics(SharpDX.DXGI.FrameStatistics@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="statsRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIOutput::GetFrameStatistics([Out] DXGI_FRAME_STATISTICS* pStats)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Output.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIOutput::GetDesc([Out] DXGI_OUTPUT_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Output.GammaControlCapabilities">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIOutput::GetGammaControlCapabilities([Out] DXGI_GAMMA_CONTROL_CAPABILITIES* pGammaCaps)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Output.GammaControl">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIOutput::GetGammaControl([Out] DXGI_GAMMA_CONTROL* pArray)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Output.FrameStatistics">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIOutput::GetFrameStatistics([Out] DXGI_FRAME_STATISTICS* pStats)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Factory1">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIFactory1</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Factory">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIFactory</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory.#ctor">
+            <summary>
+              Default Constructor for Factory
+            </summary>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory.CreateSoftwareAdapter(System.Reflection.Module)">
+            <summary>	
+            Create an adapter interface that represents a software adapter.	
+            </summary>	
+            <remarks>	
+            A software adapter is a DLL that implements the entirety of a device driver interface, plus emulation, if necessary, of kernel-mode graphics components for Windows. Details on implementing a software adapter can be found in the Windows Vista Driver Development Kit. This is a very complex development task, and is not recommended for general readers. Calling this method will increment the module's reference count by one. The reference count can be decremented by calling {{FreeLibrary}}. The typical calling scenario is to call {{LoadLibrary}}, pass the handle to CreateSoftwareAdapter, then immediately call {{FreeLibrary}} on the DLL and forget the DLL's {{HMODULE}}. Since the software adapter calls FreeLibrary when it is destroyed, the lifetime of the DLL will now be owned by the adapter, and the application is free of any further consideration of its lifetime. 	
+            </remarks>	
+            <param name="module">Handle to the software adapter's dll.</param>
+            <returns>A reference to an adapter (see <see cref="T:SharpDX.DXGI.Adapter" />). </returns>
+            <unmanaged>HRESULT IDXGIFactory::CreateSoftwareAdapter([None] void* Module,[Out] IDXGIAdapter** ppAdapter)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory.GetAdapterCount">
+            <summary>
+              Return the number of available adapters from this factory.
+            </summary>
+            <returns>The number of adapters</returns>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Factory"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Factory.GetAdapter(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="adapter">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIFactory::EnumAdapters([None] int Adapter,[Out] IDXGIAdapter** ppAdapter)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory.MakeWindowAssociation(System.IntPtr,SharpDX.DXGI.WindowAssociationFlags)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="windowHandle">No documentation.</param>
+            <param name="flags">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIFactory::MakeWindowAssociation([None] void* WindowHandle,[None] DXGI_MWA_FLAGS Flags)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory.GetWindowAssociation">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIFactory::GetWindowAssociation([Out] void** pWindowHandle)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory.CreateSwapChain(SharpDX.ComObject,SharpDX.DXGI.SwapChainDescription@,SharpDX.DXGI.SwapChain@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="deviceRef">No documentation.</param>
+            <param name="descRef">No documentation.</param>
+            <param name="swapChainRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIFactory::CreateSwapChain([In] IUnknown* pDevice,[In] DXGI_SWAP_CHAIN_DESC* pDesc,[Out] IDXGISwapChain** ppSwapChain)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory.CreateSoftwareAdapter(System.IntPtr)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="module">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIFactory::CreateSoftwareAdapter([None] void* Module,[Out] IDXGIAdapter** ppAdapter)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory1.#ctor">
+            <summary>
+              Default Constructor for Factory1.
+            </summary>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory1.GetAdapterCount1">
+            <summary>
+              Return the number of available adapters from this factory.
+            </summary>
+            <returns>The number of adapters</returns>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory1.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Factory1"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Factory1.GetAdapter1(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="adapter">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIFactory1::EnumAdapters1([None] int Adapter,[Out] IDXGIAdapter1** ppAdapter)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Factory1.IsCurrent_">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>BOOL IDXGIFactory1::IsCurrent()</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Factory1.IsCurrent">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>BOOL IDXGIFactory1::IsCurrent()</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Rational">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RATIONAL</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Rational.#ctor(System.Int32,System.Int32)">
+            <summary>
+              Initializes a new instance of the <see cref = "T:SharpDX.DXGI.Rational" /> structure.
+            </summary>
+            <param name = "numerator">The numerator of the rational pair.</param>
+            <param name = "denominator">The denominator of the rational pair.</param>
+        </member>
+        <member name="F:SharpDX.DXGI.Rational.Numerator">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Numerator</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Rational.Denominator">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Denominator</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Resource">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIResource</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Resource.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Resource"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Resource.GetSharedHandle(System.IntPtr@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="sharedHandleRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIResource::GetSharedHandle([Out] void** pSharedHandle)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Resource.GetUsage(SharpDX.DXGI.Usage@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="usageRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIResource::GetUsage([Out] DXGI_USAGE* pUsage)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Resource.SetEvictionPriority(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="evictionPriority">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIResource::SetEvictionPriority([None] int EvictionPriority)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Resource.GetEvictionPriority(System.Int32@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="evictionPriorityRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIResource::GetEvictionPriority([Out] int* pEvictionPriority)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Resource.SharedHandle">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIResource::GetSharedHandle([Out] void** pSharedHandle)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Resource.Usage">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIResource::GetUsage([Out] DXGI_USAGE* pUsage)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Resource.EvictionPriority">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIResource::GetEvictionPriority([Out] int* pEvictionPriority)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.KeyedMutex">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIKeyedMutex</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.KeyedMutex.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.KeyedMutex"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.KeyedMutex.Acquire(System.Int64,System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="key">No documentation.</param>
+            <param name="dwMilliseconds">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIKeyedMutex::AcquireSync([None] __int64 Key,[None] int dwMilliseconds)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.KeyedMutex.Release(System.Int64)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="key">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIKeyedMutex::ReleaseSync([None] __int64 Key)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Adapter">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIAdapter</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Adapter"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter.GetOutput(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="output">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIAdapter::EnumOutputs([None] int Output,[Out] IDXGIOutput** ppOutput)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter.GetDescription(SharpDX.DXGI.AdapterDescription@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIAdapter::GetDesc([Out] DXGI_ADAPTER_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter.CheckInterfaceSupport(System.Guid,System.Int64@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="interfaceName">No documentation.</param>
+            <param name="uMDVersionRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIAdapter::CheckInterfaceSupport([In] GUID* InterfaceName,[Out] __int64* pUMDVersion)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter.IsInterfaceSupported(System.Type)">
+            <summary>	
+            Checks to see if a device interface for a graphics component is supported by the system.	
+            </summary>	
+            <param name="type">The GUID of the interface of the device version for which support is being checked. For example, typeof(ID3D10Device).GUID. </param>
+            <returns>
+            	<c>true</c> if the interface is supported; otherwise, <c>false</c>.
+            </returns>
+            <unmanaged>HRESULT IDXGIAdapter::CheckInterfaceSupport([In] GUID* InterfaceName,[Out] __int64* pUMDVersion)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter.IsInterfaceSupported``1">
+            <summary>	
+            Checks to see if a device interface for a graphics component is supported by the system.	
+            </summary>	
+            <typeparam name="T">the interface of the device version for which support is being checked.</typeparam>
+            <returns>
+            	<c>true</c> if the interface is supported; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter.IsInterfaceSupported``1(System.Int64@)">
+            <summary>	
+            Checks to see if a device interface for a graphics component is supported by the system.	
+            </summary>	
+            <typeparam name="T">the interface of the device version for which support is being checked.</typeparam>
+            <param name="userModeVersion">The user mode driver version of InterfaceName. This is only returned if the interface is supported.</param>
+            <returns>
+            	<c>true</c> if the interface is supported; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter.IsInterfaceSupported(System.Type,System.Int64@)">
+            <summary>	
+            Checks to see if a device interface for a graphics component is supported by the system.	
+            </summary>	
+            <param name="type">The GUID of the interface of the device version for which support is being checked. For example, typeof(ID3D10Device).GUID. </param>
+            <param name="userModeVersion">The user mode driver version of InterfaceName. This is only returned if the interface is supported.</param>
+            <returns>
+            	<c>true</c> if the interface is supported; otherwise, <c>false</c>.
+            </returns>
+            <unmanaged>HRESULT IDXGIAdapter::CheckInterfaceSupport([In] GUID* InterfaceName,[Out] __int64* pUMDVersion)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter.GetOutputCount">
+            <summary>
+              Return the number of available outputs from this adapter.
+            </summary>
+            <returns>The number of outputs</returns>
+        </member>
+        <member name="P:SharpDX.DXGI.Adapter.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIAdapter::GetDesc([Out] DXGI_ADAPTER_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Adapter1">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIAdapter1</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter1.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Adapter1"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Adapter1.GetDescription1(SharpDX.DXGI.AdapterDescription1@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIAdapter1::GetDesc1([Out] DXGI_ADAPTER_DESC1* pDesc)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Adapter1.Description1">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIAdapter1::GetDesc1([Out] DXGI_ADAPTER_DESC1* pDesc)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Device1">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>IDXGIDevice1</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Device1.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.DXGI.Device1"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.DXGI.Device1.SetMaximumFrameLatency(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="maxLatency">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIDevice1::SetMaximumFrameLatency([None] int MaxLatency)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.Device1.GetMaximumFrameLatency(System.Int32@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="maxLatencyRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT IDXGIDevice1::GetMaximumFrameLatency([Out] int* pMaxLatency)</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.Device1.MaximumFrameLatency">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT IDXGIDevice1::GetMaximumFrameLatency([Out] int* pMaxLatency)</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.FrameStatistics">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FRAME_STATISTICS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.FrameStatistics.PresentCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int PresentCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.FrameStatistics.PresentRefreshCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int PresentRefreshCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.FrameStatistics.SyncRefreshCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int SyncRefreshCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.FrameStatistics.SyncQPCTime">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>__int64 SyncQPCTime</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.FrameStatistics.SyncGPUTime">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>__int64 SyncGPUTime</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.MappedRect">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MAPPED_RECT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.MappedRect.Pitch">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Pitch</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.MappedRect.PBits">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>byte* pBits</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.AdapterDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ADAPTER_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>wchar_t Description[128]</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription.VendorId">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int VendorId</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription.DeviceId">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int DeviceId</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription.SubsystemId">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int SubSysId</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription.Revision">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Revision</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription.DedicatedVideoMemory">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>SIZE_T DedicatedVideoMemory</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription.DedicatedSystemMemory">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>SIZE_T DedicatedSystemMemory</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription.SharedSystemMemory">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>SIZE_T SharedSystemMemory</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription.Luid">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>__int64 AdapterLuid</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.OutputDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_OUTPUT_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.OutputDescription.DeviceName">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>wchar_t DeviceName[32]</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.OutputDescription.DesktopBounds">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>RECT DesktopCoordinates</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.OutputDescription.Rotation">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_ROTATION Rotation</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.OutputDescription.MonitorHandle">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>void* Monitor</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.OutputDescription.IsAttachedToDesktop">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>BOOL AttachedToDesktop</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.SharedResource">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SHARED_RESOURCE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SharedResource.Handle">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>void* Handle</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.SurfaceDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SURFACE_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SurfaceDescription.Width">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Width</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SurfaceDescription.Height">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Height</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SurfaceDescription.Format">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT Format</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SurfaceDescription.SampleDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SAMPLE_DESC SampleDesc</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.SwapChainDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_CHAIN_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainDescription.ModeDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_DESC BufferDesc</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainDescription.SampleDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SAMPLE_DESC SampleDesc</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainDescription.Usage">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_USAGE BufferUsage</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainDescription.BufferCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int BufferCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainDescription.OutputHandle">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>void* OutputWindow</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainDescription.SwapEffect">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_EFFECT SwapEffect</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainDescription.Flags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_CHAIN_FLAG Flags</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.SwapChainDescription.IsWindowed">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>BOOL Windowed</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.AdapterDescription1">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ADAPTER_DESC1</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>wchar_t Description[128]</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.VendorId">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int VendorId</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.DeviceId">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int DeviceId</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.SubsystemId">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int SubSysId</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.Revision">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Revision</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.DedicatedVideoMemory">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>SIZE_T DedicatedVideoMemory</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.DedicatedSystemMemory">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>SIZE_T DedicatedSystemMemory</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.SharedSystemMemory">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>SIZE_T SharedSystemMemory</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.Luid">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>__int64 AdapterLuid</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterDescription1.Flags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ADAPTER_FLAG Flags</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.GammaControl">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_GAMMA_CONTROL</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.GammaControl.Scale">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RGB Scale</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.GammaControl.Offset">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RGB Offset</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.GammaControl.GammaCurve">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RGB GammaCurve[1025]</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.GammaControlCapabilities">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_GAMMA_CONTROL_CAPABILITIES</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.GammaControlCapabilities.MaximumConvertedValue">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>float MaxConvertedValue</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.GammaControlCapabilities.MinimumConvertedValue">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>float MinConvertedValue</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.GammaControlCapabilities.ControlPointsCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int NumGammaControlPoints</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.GammaControlCapabilities.IsScaleAndOffsetSupported">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>BOOL ScaleAndOffsetSupported</unmanaged>
+        </member>
+        <member name="P:SharpDX.DXGI.GammaControlCapabilities.ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>float ControlPointPositions[1025]</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Residency">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESIDENCY</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Residency.FullyResident">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESIDENCY_FULLY_RESIDENT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Residency.ResidentInSharedMemory">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESIDENCY_RESIDENT_IN_SHARED_MEMORY</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Residency.EvictedToDisk">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESIDENCY_EVICTED_TO_DISK</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.SwapEffect">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_EFFECT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapEffect.Discard">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_EFFECT_DISCARD</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapEffect.Sequential">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_EFFECT_SEQUENTIAL</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.SwapChainFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_CHAIN_FLAG</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainFlags.Nonprerotated">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_CHAIN_FLAG_NONPREROTATED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainFlags.AllowModeSwitch">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainFlags.GdiCompatible">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_SWAP_CHAIN_FLAG_GDI_COMPATIBLE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.SwapChainFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.AdapterFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ADAPTER_FLAG</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterFlags.None">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ADAPTER_FLAG_NONE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.AdapterFlags.Remote">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ADAPTER_FLAG_REMOTE</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.PresentFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_PRESENT_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.PresentFlags.Test">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_PRESENT_TEST</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.PresentFlags.DoNotSequence">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_PRESENT_DO_NOT_SEQUENCE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.PresentFlags.Restart">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_PRESENT_RESTART</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.PresentFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.ResourcePriority">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESOURCE_PRIORITY</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ResourcePriority.Minimum">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESOURCE_PRIORITY_MINIMUM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ResourcePriority.Low">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESOURCE_PRIORITY_LOW</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ResourcePriority.Normal">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESOURCE_PRIORITY_NORMAL</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ResourcePriority.High">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESOURCE_PRIORITY_HIGH</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.ResourcePriority.Maximum">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_RESOURCE_PRIORITY_MAXIMUM</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.MapFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MAP_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.MapFlags.Read">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MAP_READ</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.MapFlags.Write">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MAP_WRITE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.MapFlags.Discard">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MAP_DISCARD</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.DisplayModeEnumerationFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ENUM_MODES_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeEnumerationFlags.Interlaced">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ENUM_MODES_INTERLACED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeEnumerationFlags.Scaling">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ENUM_MODES_SCALING</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.WindowAssociationFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MWA_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.WindowAssociationFlags.IgnoreAll">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MWA_NO_WINDOW_CHANGES</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.WindowAssociationFlags.IgnoreAltEnter">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MWA_NO_ALT_ENTER</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.WindowAssociationFlags.IgnorePrintScreen">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MWA_NO_PRINT_SCREEN</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.WindowAssociationFlags.Valid">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MWA_VALID</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.WindowAssociationFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.DisplayModeScanlineOrder">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCANLINE_ORDER</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeScanlineOrder.Unspecified">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeScanlineOrder.Progressive">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeScanlineOrder.UpperFieldFirst">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCANLINE_ORDER_UPPER_FIELD_FIRST</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeScanlineOrder.LowerFieldFirst">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCANLINE_ORDER_LOWER_FIELD_FIRST</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.DisplayModeScaling">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCALING</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeScaling.Unspecified">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCALING_UNSPECIFIED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeScaling.Centered">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCALING_CENTERED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeScaling.Stretched">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_SCALING_STRETCHED</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.DisplayModeRotation">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_ROTATION</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeRotation.Unspecified">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_ROTATION_UNSPECIFIED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeRotation.Identity">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_ROTATION_IDENTITY</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeRotation.Rotate90">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_ROTATION_ROTATE90</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeRotation.Rotate180">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_ROTATION_ROTATE180</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DisplayModeRotation.Rotate270">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_MODE_ROTATION_ROTATE270</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Usage">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_USAGE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Usage.ShaderInput">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_USAGE_SHADER_INPUT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Usage.RenderTargetOutput">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_USAGE_RENDER_TARGET_OUTPUT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Usage.BackBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_USAGE_BACK_BUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Usage.Shared">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_USAGE_SHARED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Usage.ReadOnly">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_USAGE_READ_ONLY</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Usage.DiscardOnPresent">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_USAGE_DISCARD_ON_PRESENT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Usage.UnorderedAccess">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_USAGE_UNORDERED_ACCESS</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.DXGIError">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.InvalidCall">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_INVALID_CALL</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.NotFound">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_NOT_FOUND</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.MoreData">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_MORE_DATA</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.Unsupported">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_UNSUPPORTED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.DeviceRemoved">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_DEVICE_REMOVED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.DeviceHung">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_DEVICE_HUNG</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.DeviceReset">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_DEVICE_RESET</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.WasStillDrawing">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_WAS_STILL_DRAWING</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.FrameStatisticsDisjoint">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_FRAME_STATISTICS_DISJOINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.GraphicsVidpnSourceInUse">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_GRAPHICS_VIDPN_SOURCE_IN_USE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.DriverInternalError">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_DRIVER_INTERNAL_ERROR</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.Nonexclusive">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_NONEXCLUSIVE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.NotCurrentlyAvailable">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_NOT_CURRENTLY_AVAILABLE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.RemoteClientDisconnected">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_REMOTE_CLIENT_DISCONNECTED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIError.RemoteOutofmemory">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_ERROR_REMOTE_OUTOFMEMORY</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.DXGIStatus">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_STATUS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIStatus.Occluded">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_STATUS_OCCLUDED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIStatus.Clipped">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_STATUS_CLIPPED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIStatus.NoRedirection">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_STATUS_NO_REDIRECTION</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIStatus.NoDesktopAccess">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_STATUS_NO_DESKTOP_ACCESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIStatus.GraphicsVidpnSourceInUse">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_STATUS_GRAPHICS_VIDPN_SOURCE_IN_USE</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIStatus.ModeChanged">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_STATUS_MODE_CHANGED</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.DXGIStatus.ModeChangeInProgress">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_STATUS_MODE_CHANGE_IN_PROGRESS</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.Format">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.Unknown">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_UNKNOWN</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32B32A32_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32B32A32_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32B32A32_Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32B32A32_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32B32A32_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32B32A32_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32B32A32_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32B32A32_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32B32_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32B32_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32B32_Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32B32_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32B32_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32B32_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32B32_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32B32_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16B16A16_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16B16A16_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16B16A16_Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16B16A16_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16B16A16_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16B16A16_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16B16A16_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16B16A16_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16B16A16_SNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16B16A16_SNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16B16A16_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16B16A16_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32_Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G32_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G32_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32G8X24_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32G8X24_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.D32_Float_S8X24_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_D32_FLOAT_S8X24_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32_Float_X8X24_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.X32_Typeless_G8X24_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_X32_TYPELESS_G8X24_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R10G10B10A2_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R10G10B10A2_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R10G10B10A2_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R10G10B10A2_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R10G10B10A2_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R10G10B10A2_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R11G11B10_Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R11G11B10_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8B8A8_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8B8A8_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8B8A8_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8B8A8_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8B8A8_UNorm_SRgb">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8B8A8_UNORM_SRGB</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8B8A8_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8B8A8_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8B8A8_SNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8B8A8_SNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8B8A8_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8B8A8_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16_Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16_SNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16_SNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16G16_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16G16_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.D32_Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_D32_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32_Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R32_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R32_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R24G8_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R24G8_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.D24_UNorm_S8_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_D24_UNORM_S8_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R24_UNorm_X8_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R24_UNORM_X8_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.X24_Typeless_G8_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_X24_TYPELESS_G8_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8_SNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8_SNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16_Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.D16_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_D16_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16_SNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16_SNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R16_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R16_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8_UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8_SNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8_SNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8_SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.A8_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_A8_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R1_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R1_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R9G9B9E5_Sharedexp">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R9G9B9E5_SHAREDEXP</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R8G8_B8G8_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R8G8_B8G8_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.G8R8_G8B8_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_G8R8_G8B8_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC1_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC1_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC1_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC1_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC1_UNorm_SRgb">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC1_UNORM_SRGB</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC2_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC2_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC2_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC2_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC2_UNorm_SRgb">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC2_UNORM_SRGB</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC3_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC3_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC3_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC3_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC3_UNorm_SRgb">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC3_UNORM_SRGB</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC4_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC4_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC4_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC4_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC4_SNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC4_SNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC5_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC5_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC5_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC5_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC5_SNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC5_SNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.B5G6R5_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_B5G6R5_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.B5G5R5A1_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_B5G5R5A1_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.B8G8R8A8_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_B8G8R8A8_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.B8G8R8X8_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_B8G8R8X8_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.R10G10B10_Xr_Bias_A2_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.B8G8R8A8_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_B8G8R8A8_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.B8G8R8A8_UNorm_SRgb">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_B8G8R8A8_UNORM_SRGB</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.B8G8R8X8_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_B8G8R8X8_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.B8G8R8X8_UNorm_SRgb">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_B8G8R8X8_UNORM_SRGB</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC6H_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC6H_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC6H_Uf16">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC6H_UF16</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC6H_Sf16">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC6H_SF16</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC7_Typeless">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC7_TYPELESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC7_UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC7_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.DXGI.Format.BC7_UNorm_SRgb">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>DXGI_FORMAT_BC7_UNORM_SRGB</unmanaged>
+        </member>
+        <member name="T:SharpDX.DXGI.FormatHelper">
+            <summary>
+            Helper to use with <see cref="T:SharpDX.DXGI.Format"/>.
+            </summary>
+        </member>
+        <member name="M:SharpDX.DXGI.FormatHelper.SizeOfInBytes(SharpDX.DXGI.Format)">
+            <summary>
+            Calculates the size of a <see cref="T:SharpDX.DXGI.Format"/> in bytes.
+            </summary>
+            <param name="format">The dxgi format.</param>
+            <returns>size of in bytes</returns>
+        </member>
+        <member name="M:SharpDX.DXGI.FormatHelper.SizeOfInBits(SharpDX.DXGI.Format)">
+            <summary>
+            Calculates the size of a <see cref="T:SharpDX.DXGI.Format"/> in bits.
+            </summary>
+            <param name="format">The dxgi format.</param>
+            <returns>size of in bits</returns>
+        </member>
+        <member name="T:SharpDX.DXGI.DXGI">
+            <summary>
+            DXGI Functions.
+            </summary>
+        </member>
+        <member name="M:SharpDX.DXGI.DXGI.#cctor">
+            <summary>
+            Load DLLs and bind functions
+            </summary>
+        </member>
+        <member name="M:SharpDX.DXGI.DXGI.CreateDXGIFactory(System.Guid,System.IntPtr@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="riid">No documentation.</param>
+            <param name="factoryRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT CreateDXGIFactory([None] GUID* riid,[Out] void** ppFactory)</unmanaged>
+        </member>
+        <member name="M:SharpDX.DXGI.DXGI.CreateDXGIFactory1(System.Guid,System.IntPtr@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="riid">No documentation.</param>
+            <param name="factoryRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT CreateDXGIFactory1([None] GUID* riid,[Out] void** ppFactory)</unmanaged>
+        </member>
+    </members>
+</doc>

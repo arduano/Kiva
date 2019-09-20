@@ -1,0 +1,3199 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SharpDX.D3DCompiler</name>
+    </assembly>
+    <members>
+        <member name="T:SharpDX.D3DCompiler.ShaderSignature">
+            <summary>
+              Represents a shader signature.
+            </summary>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderSignature.#ctor(System.IntPtr)">
+            <summary>
+              Initializes a new instance of the <see cref = "T:SharpDX.D3DCompiler.ShaderSignature" /> class.
+            </summary>
+            <param name = "ptr">A pointer to a Blob object.</param>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderSignature.GetInputOutputSignature(SharpDX.D3DCompiler.ShaderBytecode)">
+            <summary>
+              Extracts the input and output signatures from a compiled shader or effect.
+            </summary>
+            <param name = "shaderBytecode">The bytecode of the compiled shader or effect.</param>
+            <returns>The input and output signatures of the shader or effect.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderSignature.GetInputSignature(SharpDX.D3DCompiler.ShaderBytecode)">
+            <summary>
+              Extracts the input signature from a compiled shader or effect.
+            </summary>
+            <param name = "shaderBytecode">The bytecode of the compiled shader or effect.</param>
+            <returns>The input signature of the shader or effect.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderSignature.GetOutputSignature(SharpDX.D3DCompiler.ShaderBytecode)">
+            <summary>
+              Extracts the output signature from a compiled shader or effect.
+            </summary>
+            <param name = "shaderBytecode">The bytecode of the compiled shader or effect.</param>
+            <returns>The output signature of the shader or effect.</returns>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderSignature.Data">
+            <summary>
+              Gets the raw data of the shader signature.
+            </summary>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderParameterDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SIGNATURE_PARAMETER_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderParameterDescription.SemanticName">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>const char* SemanticName</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderParameterDescription.SemanticIndex">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int SemanticIndex</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderParameterDescription.Register">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Register</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderParameterDescription.SystemValueType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME SystemValueType</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderParameterDescription.ComponentType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_REGISTER_COMPONENT_TYPE ComponentType</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderParameterDescription.UsageMask">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_REGISTER_COMPONENT_MASK_FLAG Mask</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderParameterDescription.ReadWriteMask">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_REGISTER_COMPONENT_MASK_FLAG ReadWriteMask</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderParameterDescription.Stream">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Stream</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ConstantBufferDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHADER_BUFFER_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferDescription.Name">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>const char* Name</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferDescription.Type">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_CBUFFER_TYPE Type</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferDescription.VariableCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Variables</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferDescription.Size">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Size</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferDescription.Flags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_CBUFFER_FLAGS uFlags</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderVariableDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHADER_VARIABLE_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableDescription.Name">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>const char* Name</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableDescription.StartOffset">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int StartOffset</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableDescription.Size">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Size</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableDescription.Flags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_VARIABLE_FLAGS uFlags</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableDescription.DefaultValue">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>void* DefaultValue</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableDescription.StartTexture">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int StartTexture</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableDescription.TextureSize">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int TextureSize</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableDescription.StartSampler">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int StartSampler</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableDescription.SamplerSize">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int SamplerSize</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderTypeDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHADER_TYPE_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderTypeDescription.Class">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_VARIABLE_CLASS Class</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderTypeDescription.Type">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_VARIABLE_TYPE Type</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderTypeDescription.RowCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Rows</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderTypeDescription.ColumnCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Columns</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderTypeDescription.ElementCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Elements</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderTypeDescription.MemberCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Members</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderTypeDescription.Offset">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Offset</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderTypeDescription.Name">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>const char* Name</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHADER_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.Version">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int Version</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.Creator">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>const char* Creator</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.Flags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_SHADER_FLAGS Flags</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.ConstantBuffers">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int ConstantBuffers</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.BoundResources">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int BoundResources</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.InputParameters">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int InputParameters</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.OutputParameters">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int OutputParameters</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.InstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int InstructionCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.TempRegisterCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int TempRegisterCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.TempArrayCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int TempArrayCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.DefineCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int DefCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.DeclarationCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int DclCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.TextureNormalInstructions">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int TextureNormalInstructions</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.TextureLoadInstructions">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int TextureLoadInstructions</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.TextureCompInstructions">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int TextureCompInstructions</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.TextureBiasInstructions">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int TextureBiasInstructions</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.TextureGradientInstructions">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int TextureGradientInstructions</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.FloatInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int FloatInstructionCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.IntInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int IntInstructionCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.UintInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int UintInstructionCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.StaticFlowControlCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int StaticFlowControlCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.DynamicFlowControlCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int DynamicFlowControlCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.MacroInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int MacroInstructionCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.ArrayInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int ArrayInstructionCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.CutInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int CutInstructionCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.EmitInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int EmitInstructionCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.GeometryShaderOutputTopology">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_TOPOLOGY GSOutputTopology</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.GeometryShaderMaxOutputVertexCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int GSMaxOutputVertexCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.InputPrimitive">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE InputPrimitive</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.PatchConstantParameters">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int PatchConstantParameters</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.GeometryShaderInstanceCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int cGSInstanceCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int cControlPoints</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.HullShaderOutputPrimitive">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_OUTPUT_PRIMITIVE HSOutputPrimitive</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.HullShaderPartitioning">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_PARTITIONING HSPartitioning</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.TessellatorDomain">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_DOMAIN TessellatorDomain</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.BarrierInstructions">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int cBarrierInstructions</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.InterlockedInstructions">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int cInterlockedInstructions</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderDescription.TextureStoreInstructions">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int cTextureStoreInstructions</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.InputBindingDescription">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHADER_INPUT_BIND_DESC</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputBindingDescription.Name">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>const char* Name</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputBindingDescription.Type">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_INPUT_TYPE Type</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputBindingDescription.BindPoint">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int BindPoint</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputBindingDescription.BindCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int BindCount</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputBindingDescription.Flags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_INPUT_FLAGS uFlags</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputBindingDescription.ReturnType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RESOURCE_RETURN_TYPE ReturnType</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputBindingDescription.Dimension">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SRV_DIMENSION Dimension</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputBindingDescription.NumSamples">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int NumSamples</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderData">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_DATA</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderData.BytecodePtr">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>const void* pBytecode</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderData.BytecodeLength">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>SIZE_T BytecodeLength</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderReflectionType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>ID3D11ShaderReflectionType</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.IsEqual(SharpDX.D3DCompiler.ShaderReflectionType)">
+            <summary>	
+            Indicates whether two <see cref="T:SharpDX.D3DCompiler.ShaderReflectionType"/> references have the same underlying type.	
+            </summary>	
+            <remarks>	
+            IsEqual indicates whether the sources of the <see cref="T:SharpDX.D3DCompiler.ShaderReflectionType"/> references have the same underlying type. For example, if two ID3D11ShaderReflectionType Interface references were retrieved from variables, IsEqual can be used to see if  the variables have the same type. This method's interface is hosted in the out-of-box DLL D3DCompiler_xx.dll. 	
+            </remarks>	
+            <param name="typeRef">A reference to a <see cref="T:SharpDX.D3DCompiler.ShaderReflectionType"/>. </param>
+            <returns>Returns true if the references have the same underlying type; otherwise returns false. </returns>
+            <unmanaged>HRESULT ID3D11ShaderReflectionType::IsEqual([In] ID3D11ShaderReflectionType* pType)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.IsOfType(SharpDX.D3DCompiler.ShaderReflectionType)">
+            <summary>	
+            Indicates whether a variable is of the specified type.	
+            </summary>	
+            <remarks>	
+            This method's interface is hosted in the out-of-box DLL D3DCompiler_xx.dll. 	
+            </remarks>	
+            <param name="typeRef">A reference to a <see cref="T:SharpDX.D3DCompiler.ShaderReflectionType"/>. </param>
+            <returns>Returns true if object being queried is equal to or inherits from the type in the pType parameter; otherwise returns false. </returns>
+            <unmanaged>HRESULT ID3D11ShaderReflectionType::IsOfType([In] ID3D11ShaderReflectionType* pType)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.ImplementsInterface(SharpDX.D3DCompiler.ShaderReflectionType)">
+            <summary>	
+            Indicates whether a class type implements an interface.	
+            </summary>	
+            <remarks>	
+            This method's interface is hosted in the out-of-box DLL D3DCompiler_xx.dll. 	
+            </remarks>	
+            <param name="baseRef">A reference to a <see cref="T:SharpDX.D3DCompiler.ShaderReflectionType"/>. </param>
+            <returns>Returns true if the interface is implemented; otherwise return false. </returns>
+            <unmanaged>HRESULT ID3D11ShaderReflectionType::ImplementsInterface([In] ID3D11ShaderReflectionType* pBase)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.D3DCompiler.ShaderReflectionType"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.GetDescription(SharpDX.D3DCompiler.ShaderTypeDescription@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflectionType::GetDesc([Out] D3D11_SHADER_TYPE_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.GetMemberType(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="index">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionType* ID3D11ShaderReflectionType::GetMemberTypeByIndex([In] int Index)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.GetMemberType(System.String)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="name">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionType* ID3D11ShaderReflectionType::GetMemberTypeByName([In] const char* Name)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.GetMemberTypeName(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="index">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>const char* ID3D11ShaderReflectionType::GetMemberTypeName([In] int Index)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.IsEqual_(SharpDX.D3DCompiler.ShaderReflectionType)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="typeRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflectionType::IsEqual([In] ID3D11ShaderReflectionType* pType)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.GetSubType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionType* ID3D11ShaderReflectionType::GetSubType()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.GetBaseClass">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionType* ID3D11ShaderReflectionType::GetBaseClass()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.GetNumInterfaces">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>int ID3D11ShaderReflectionType::GetNumInterfaces()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.GetInterface(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="uIndex">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionType* ID3D11ShaderReflectionType::GetInterfaceByIndex([In] int uIndex)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.IsOfType_(SharpDX.D3DCompiler.ShaderReflectionType)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="typeRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflectionType::IsOfType([In] ID3D11ShaderReflectionType* pType)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionType.ImplementsInterface_(SharpDX.D3DCompiler.ShaderReflectionType)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="baseRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflectionType::ImplementsInterface([In] ID3D11ShaderReflectionType* pBase)</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflectionType.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT ID3D11ShaderReflectionType::GetDesc([Out] D3D11_SHADER_TYPE_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflectionType.SubType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>ID3D11ShaderReflectionType* ID3D11ShaderReflectionType::GetSubType()</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflectionType.BaseClass">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>ID3D11ShaderReflectionType* ID3D11ShaderReflectionType::GetBaseClass()</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflectionType.NumInterfaces">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int ID3D11ShaderReflectionType::GetNumInterfaces()</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.InputPrimitive">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.Undefined">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_UNDEFINED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.Point">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_POINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.Line">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_LINE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.Triangle">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_TRIANGLE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.LineWithAdjacency">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_LINE_ADJ</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.TriangleWithAdjacency">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_TRIANGLE_ADJ</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith1ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_1_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith2ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_2_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith3ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_3_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith4ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_4_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith5ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_5_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith6ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_6_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith7ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_7_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith8ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_8_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith9ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_9_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith10ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_10_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith11ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_11_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith12ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_12_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith13ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_13_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith14ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_14_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith15ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_15_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith16ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_16_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith17ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_17_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith18ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_18_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith19ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_19_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith20ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_20_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith21ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_21_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith22ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_22_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith23ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_23_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith24ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_24_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith25ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_25_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith26ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_26_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith27ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_27_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith28ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_28_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith29ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_29_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith30ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_30_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith31ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_31_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.InputPrimitive.PatchWith32ControlPoints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE_32_CONTROL_POINT_PATCH</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.IncludeType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_INCLUDE_TYPE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.IncludeType.Local">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_INCLUDE_LOCAL</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.IncludeType.System">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_INCLUDE_SYSTEM</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderVariableClass">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_VARIABLE_CLASS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableClass.Scalar">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVC_SCALAR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableClass.Vector">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVC_VECTOR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableClass.MatrixRows">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVC_MATRIX_ROWS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableClass.MatrixColumns">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVC_MATRIX_COLUMNS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableClass.Object">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVC_OBJECT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableClass.Struct">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVC_STRUCT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableClass.InterfaceClass">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVC_INTERFACE_CLASS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableClass.InterfacePointer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVC_INTERFACE_POINTER</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderVariableFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_VARIABLE_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableFlags.Userpacked">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVF_USERPACKED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableFlags.Used">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVF_USED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableFlags.InterfacePointer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVF_INTERFACE_POINTER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableFlags.InterfaceParameter">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVF_INTERFACE_PARAMETER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderVariableType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_VARIABLE_TYPE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Void">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_VOID</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Bool">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_BOOL</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Int">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_INT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.String">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_STRING</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Texture">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Texture1D">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURE1D</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Texture2D">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURE2D</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Texture3D">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURE3D</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.TextureCube">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURECUBE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Sampler">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_SAMPLER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Sampler1d">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_SAMPLER1D</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Sampler2d">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_SAMPLER2D</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Sampler3d">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_SAMPLER3D</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Samplercube">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_SAMPLERCUBE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Pixelshader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_PIXELSHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Vertexshader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_VERTEXSHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Pixelfragment">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_PIXELFRAGMENT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Vertexfragment">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_VERTEXFRAGMENT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.UInt8">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_UINT8</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Geometryshader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_GEOMETRYSHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Rasterizer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RASTERIZER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Depthstencil">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_DEPTHSTENCIL</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Blend">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_BLEND</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Buffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_BUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.ConstantBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_CBUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.TextureBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TBUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Texture1DArray">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURE1DARRAY</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Texture2DArray">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURE2DARRAY</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Rendertargetview">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RENDERTARGETVIEW</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Depthstencilview">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_DEPTHSTENCILVIEW</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Texture2DMultisampled">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURE2DMS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Texture2DMultisampledArray">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURE2DMSARRAY</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Texturecubearray">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_TEXTURECUBEARRAY</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Hullshader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_HULLSHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Domainshader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_DOMAINSHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.InterfacePointer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_INTERFACE_POINTER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Computeshader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_COMPUTESHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.Double">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_DOUBLE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.RWTexture1D">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RWTEXTURE1D</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.RWTexture1DArray">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RWTEXTURE1DARRAY</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.RWTexture2D">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RWTEXTURE2D</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.RWTexture2DArray">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RWTEXTURE2DARRAY</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.RWTexture3D">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RWTEXTURE3D</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.RWBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RWBUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.ByteaddressBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_BYTEADDRESS_BUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.RWByteAddressBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RWBYTEADDRESS_BUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.StructuredBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_STRUCTURED_BUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.RwstructuredBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_RWSTRUCTURED_BUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.AppendStructuredBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_APPEND_STRUCTURED_BUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVariableType.ConsumeStructuredBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SVT_CONSUME_STRUCTURED_BUFFER</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderInputFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_INPUT_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputFlags.Userpacked">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIF_USERPACKED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputFlags.ComparisonSampler">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIF_COMPARISON_SAMPLER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputFlags.TextureComponent0">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIF_TEXTURE_COMPONENT_0</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputFlags.TextureComponent1">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIF_TEXTURE_COMPONENT_1</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputFlags.TextureComponents">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIF_TEXTURE_COMPONENTS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderInputType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_INPUT_TYPE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.ConstantBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_CBUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.TextureBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_TBUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.Texture">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_TEXTURE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.Sampler">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_SAMPLER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.UnorderedAccessViewRwtyped">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_UAV_RWTYPED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.Structured">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_STRUCTURED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.UnorderedAccessViewRwstructured">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_UAV_RWSTRUCTURED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.Byteaddress">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_BYTEADDRESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.UnorderedAccessViewRWByteAddress">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_UAV_RWBYTEADDRESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.UnorderedAccessViewAppendStructured">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_UAV_APPEND_STRUCTURED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.UnorderedAccessViewConsumeStructured">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_UAV_CONSUME_STRUCTURED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderInputType.UnorderedAccessViewRwstructuredWithCounter">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ConstantBufferFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_SHADER_CBUFFER_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferFlags.ConstantBufferUserpacked">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_CBF_USERPACKED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ConstantBufferType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_CBUFFER_TYPE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferType.ConstantBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_CT_CBUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferType.TextureBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_CT_TBUFFER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferType.InterfacePointers">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_CT_INTERFACE_POINTERS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ConstantBufferType.ResourceBindInformation">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_CT_RESOURCE_BIND_INFO</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.SystemValueType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.Undefined">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_UNDEFINED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.Position">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_POSITION</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.ClipDistance">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_CLIP_DISTANCE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.CullDistance">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_CULL_DISTANCE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.RenderTargetArrayIndex">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_RENDER_TARGET_ARRAY_INDEX</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.ViewportArrayIndex">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_VIEWPORT_ARRAY_INDEX</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.VertexId">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_VERTEX_ID</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.PrimitiveId">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_PRIMITIVE_ID</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.InstanceId">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_INSTANCE_ID</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.IsFrontFace">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_IS_FRONT_FACE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.SampleIndex">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_SAMPLE_INDEX</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.FinalQuadEdgeTessfactor">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_FINAL_QUAD_EDGE_TESSFACTOR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.FinalQuadInsideTessfactor">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_FINAL_QUAD_INSIDE_TESSFACTOR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.FinalTriEdgeTessfactor">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_FINAL_TRI_EDGE_TESSFACTOR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.FinalTriInsideTessfactor">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_FINAL_TRI_INSIDE_TESSFACTOR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.FinalLineDetailTessfactor">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_FINAL_LINE_DETAIL_TESSFACTOR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.FinalLineDensityTessfactor">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_FINAL_LINE_DENSITY_TESSFACTOR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.Target">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_TARGET</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.Depth">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_DEPTH</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.Coverage">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_COVERAGE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.DepthGreaterEqual">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_DEPTH_GREATER_EQUAL</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.SystemValueType.DepthLessEqual">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_NAME_DEPTH_LESS_EQUAL</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ResourceReturnType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RESOURCE_RETURN_TYPE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ResourceReturnType.UNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RETURN_TYPE_UNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ResourceReturnType.SNorm">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RETURN_TYPE_SNORM</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ResourceReturnType.SInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RETURN_TYPE_SINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ResourceReturnType.UInt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RETURN_TYPE_UINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ResourceReturnType.Float">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RETURN_TYPE_FLOAT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ResourceReturnType.Mixed">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RETURN_TYPE_MIXED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ResourceReturnType.Double">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RETURN_TYPE_DOUBLE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ResourceReturnType.Continued">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_RETURN_TYPE_CONTINUED</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.RegisterComponentType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_REGISTER_COMPONENT_TYPE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentType.Unknown">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_REGISTER_COMPONENT_UNKNOWN</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentType.Uint32">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_REGISTER_COMPONENT_UINT32</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentType.Sint32">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_REGISTER_COMPONENT_SINT32</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentType.Float32">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_REGISTER_COMPONENT_FLOAT32</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.TessellatorDomain">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_DOMAIN</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorDomain.Undefined">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_DOMAIN_UNDEFINED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorDomain.Isoline">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_DOMAIN_ISOLINE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorDomain.Triangle">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_DOMAIN_TRI</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorDomain.Quad">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_DOMAIN_QUAD</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.TessellatorPartitioning">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_PARTITIONING</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorPartitioning.Undefined">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_PARTITIONING_UNDEFINED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorPartitioning.Integer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_PARTITIONING_INTEGER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorPartitioning.PowerOfTwo">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_PARTITIONING_POW2</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorPartitioning.FractionalOdd">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_PARTITIONING_FRACTIONAL_ODD</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorPartitioning.FractionalEven">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_PARTITIONING_FRACTIONAL_EVEN</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.TessellatorOutputPrimitive">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_OUTPUT_PRIMITIVE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorOutputPrimitive.Undefined">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_OUTPUT_UNDEFINED</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorOutputPrimitive.Point">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_OUTPUT_POINT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorOutputPrimitive.Line">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_OUTPUT_LINE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorOutputPrimitive.TriangleClockwise">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_OUTPUT_TRIANGLE_CW</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.TessellatorOutputPrimitive.TriangleCounterclockwise">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_TESSELLATOR_OUTPUT_TRIANGLE_CCW</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderVersion">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHADER_VERSION_TYPE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVersion.PixelShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHVER_PIXEL_SHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVersion.VertexShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHVER_VERTEX_SHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVersion.GeometryShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHVER_GEOMETRY_SHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVersion.HullShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHVER_HULL_SHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVersion.DomainShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHVER_DOMAIN_SHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderVersion.ComputeShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_SHVER_COMPUTE_SHADER</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.StripFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILER_STRIP_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.StripFlags.CompilerStripReflectionData">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILER_STRIP_REFLECTION_DATA</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.StripFlags.CompilerStripDebugInformation">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILER_STRIP_DEBUG_INFO</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.StripFlags.CompilerStripTestBlobs">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILER_STRIP_TEST_BLOBS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.StripFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderBytecodePart">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_PART</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.InputSignatureBlob">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_INPUT_SIGNATURE_BLOB</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.OutputSignatureBlob">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_OUTPUT_SIGNATURE_BLOB</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.InputAndOutputSignatureBlob">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_INPUT_AND_OUTPUT_SIGNATURE_BLOB</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.PatchConstantSignatureBlob">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_PATCH_CONSTANT_SIGNATURE_BLOB</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.AllSignatureBlob">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_ALL_SIGNATURE_BLOB</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.DebugInformation">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_DEBUG_INFO</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.LegacyShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_LEGACY_SHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.XnaPrepassShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_XNA_PREPASS_SHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.XnaShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_XNA_SHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.TestAlternateShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_TEST_ALTERNATE_SHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.TestCompileDetails">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_TEST_COMPILE_DETAILS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderBytecodePart.TestCompilePerf">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_BLOB_TEST_COMPILE_PERF</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_SHADER_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.Debug">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_DEBUG</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.SkipValidation">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_SKIP_VALIDATION</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.SkipOptimization">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_SKIP_OPTIMIZATION</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.PackMatrixRowMajor">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_PACK_MATRIX_ROW_MAJOR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.PackMatrixColumnMajor">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.PartialPrecision">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_PARTIAL_PRECISION</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.ForceVsSoftwareNoOpt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_FORCE_VS_SOFTWARE_NO_OPT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.ForcePsSoftwareNoOpt">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_FORCE_PS_SOFTWARE_NO_OPT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.NoPreshader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_NO_PRESHADER</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.AvoidFlowControl">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_AVOID_FLOW_CONTROL</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.PreferFlowControl">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_PREFER_FLOW_CONTROL</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.EnableStrictness">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_ENABLE_STRICTNESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.EnableBackwardsCompatibility">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_ENABLE_BACKWARDS_COMPATIBILITY</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.IeeeStrictness">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_IEEE_STRICTNESS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel0">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_OPTIMIZATION_LEVEL0</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel1">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_OPTIMIZATION_LEVEL1</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel2">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_OPTIMIZATION_LEVEL2</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel3">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_OPTIMIZATION_LEVEL3</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.Reserved16">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_RESERVED16</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.Reserved17">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_RESERVED17</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.WarningsAreErrors">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_WARNINGS_ARE_ERRORS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.ShaderFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.EffectFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_EFFECT_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.EffectFlags.ChildEffect">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_EFFECT_CHILD_EFFECT</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.EffectFlags.AllowSlowOperations">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_EFFECT_ALLOW_SLOW_OPS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.EffectFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.DisassemblyFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3DCOMPILE_DISASM_FLAGS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.DisassemblyFlags.EnableColorCode">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_DISASM_ENABLE_COLOR_CODE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.DisassemblyFlags.EnableDefaultValuePrints">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_DISASM_ENABLE_DEFAULT_VALUE_PRINTS</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.DisassemblyFlags.EnableInstructionNumbering">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_DISASM_ENABLE_INSTRUCTION_NUMBERING</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.DisassemblyFlags.EnableInstructionCycle">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_DISASM_ENABLE_INSTRUCTION_CYCLE</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.DisassemblyFlags.DisableDebugInformation">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_DISASM_DISABLE_DEBUG_INFO</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.DisassemblyFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.Include">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>ID3DInclude</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.Include.Open(SharpDX.D3DCompiler.IncludeType,System.String,System.IO.Stream,System.IO.Stream@)">
+            <summary>	
+            A user-implemented method for opening and reading the contents of a shader #include file.	
+            </summary>	
+            <param name="type">A <see cref="T:SharpDX.D3DCompiler.IncludeType"/>-typed value that indicates the location of the #include file. </param>
+            <param name="fileName">Name of the #include file.</param>
+            <param name="parentStream">Pointer to the container that includes the #include file.</param>
+            <param name="stream">Stream that is associated with fileName to be read. This reference remains valid until <see cref="M:SharpDX.D3DCompiler.Include.Close(System.IO.Stream)"/> is called.</param>
+            <unmanaged>HRESULT Open([None] D3D_INCLUDE_TYPE IncludeType,[None] const char* pFileName,[None] LPCVOID pParentData,[None] LPCVOID* ppData,[None] UINT* pBytes)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.Include.Close(System.IO.Stream)">
+            <summary>	
+            A user-implemented method for closing a shader #include file.	
+            </summary>	
+            <remarks>	
+            If <see cref="M:SharpDX.D3DCompiler.Include.Open(SharpDX.D3DCompiler.IncludeType,System.String,System.IO.Stream,System.IO.Stream@)"/> was successful, Close is guaranteed to be called before the API using the <see cref="T:SharpDX.D3DCompiler.Include"/> interface returns.	
+            </remarks>	
+            <param name="stream">This is a reference that was returned by the corresponding <see cref="M:SharpDX.D3DCompiler.Include.Open(SharpDX.D3DCompiler.IncludeType,System.String,System.IO.Stream,System.IO.Stream@)"/> call.</param>
+            <unmanaged>HRESULT Close([None] LPCVOID pData)</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.IncludeCallback">
+            <summary>
+            Internal Include Callback
+            </summary>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.IncludeCallback.OpenDelegate">
+            <summary>	
+            A user-implemented method for opening and reading the contents of a shader #include file.	
+            </summary>
+            <param name="thisPtr">This pointer</param>
+            <param name="includeType">A <see cref="T:SharpDX.D3DCompiler.IncludeType"/>-typed value that indicates the location of the #include file. </param>
+            <param name="fileNameRef">Name of the #include file.</param>
+            <param name="pParentData">Pointer to the container that includes the #include file.</param>
+            <param name="dataRef">Pointer to the buffer that Open returns that contains the include directives. This pointer remains valid until <see cref="M:SharpDX.D3DCompiler.Include.Close(System.IO.Stream)"/> is called.</param>
+            <param name="bytesRef">Pointer to the number of bytes that Open returns in ppData.</param>
+            <returns>The user-implemented method should return S_OK. If Open fails when reading the #include file, the application programming interface (API) that caused Open to be called fails. This failure can occur in one of the following situations:The high-level shader language (HLSL) shader fails one of the D3D10CompileShader*** functions.The effect fails one of the D3D10CreateEffect*** functions.</returns>
+            <unmanaged>HRESULT Open([None] D3D_INCLUDE_TYPE IncludeType,[None] const char* pFileName,[None] LPCVOID pParentData,[None] LPCVOID* ppData,[None] UINT* pBytes)</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.IncludeCallback.CloseDelegate">
+            <summary>	
+            A user-implemented method for closing a shader #include file.	
+            </summary>	
+            <remarks>	
+            If <see cref="M:SharpDX.D3DCompiler.Include.Open(SharpDX.D3DCompiler.IncludeType,System.String,System.IO.Stream,System.IO.Stream@)"/> was successful, Close is guaranteed to be called before the API using the <see cref="T:SharpDX.D3DCompiler.Include"/> interface returns.	
+            </remarks>
+            <param name="thisPtr">This pointer</param>
+            <param name="pData">Pointer to the buffer that contains the include directives. This is the pointer that was returned by the corresponding <see cref="M:SharpDX.D3DCompiler.Include.Open(SharpDX.D3DCompiler.IncludeType,System.String,System.IO.Stream,System.IO.Stream@)"/> call.</param>
+            <returns>The user-implemented Close method should return S_OK. If Close fails when it closes the #include file, the application programming interface (API) that caused Close to be called fails. This failure can occur in one of the following situations:The high-level shader language (HLSL) shader fails one of the D3D10CompileShader*** functions.The effect fails one of the D3D10CreateEffect*** functions.</returns>
+            <unmanaged>HRESULT Close([None] LPCVOID pData)</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.D3D">
+            <summary>
+            D3D Functions.
+            </summary>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.#cctor">
+            <summary>
+            Load DLLs and bind functions
+            </summary>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.Compile(System.IntPtr,SharpDX.Size,System.String,SharpDX.Direct3D.ShaderMacro[],System.IntPtr,System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.Blob@,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="sourceNameRef">No documentation.</param>
+            <param name="definesRef">No documentation.</param>
+            <param name="includeRef">No documentation.</param>
+            <param name="entrypointRef">No documentation.</param>
+            <param name="targetRef">No documentation.</param>
+            <param name="flags1">No documentation.</param>
+            <param name="flags2">No documentation.</param>
+            <param name="codeRef">No documentation.</param>
+            <param name="errorMsgsRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DCompile([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[In, Optional] const char* pSourceName,[In, Buffer, Optional] const D3D_SHADER_MACRO* pDefines,[In, Optional] ID3DInclude* pInclude,[In] const char* pEntrypoint,[In] const char* pTarget,[In] D3DCOMPILE_SHADER_FLAGS Flags1,[In] D3DCOMPILE_EFFECT_FLAGS Flags2,[Out] ID3DBlob** ppCode,[Out, Optional] ID3DBlob** ppErrorMsgs)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.Preprocess(System.IntPtr,SharpDX.Size,System.String,SharpDX.Direct3D.ShaderMacro[],System.IntPtr,SharpDX.Direct3D.Blob@,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="sourceNameRef">No documentation.</param>
+            <param name="definesRef">No documentation.</param>
+            <param name="includeRef">No documentation.</param>
+            <param name="codeTextRef">No documentation.</param>
+            <param name="errorMsgsRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DPreprocess([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[In, Optional] const char* pSourceName,[In, Buffer, Optional] const D3D_SHADER_MACRO* pDefines,[In, Optional] ID3DInclude* pInclude,[Out] ID3DBlob** ppCodeText,[Out, Optional] ID3DBlob** ppErrorMsgs)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.GetDebugInfo(System.IntPtr,SharpDX.Size,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="debugInfoRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DGetDebugInfo([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[Out] ID3DBlob** ppDebugInfo)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.Reflect(System.IntPtr,SharpDX.Size,System.Guid,System.IntPtr@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="interfaceRef">No documentation.</param>
+            <param name="reflectorRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DReflect([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[In] GUID* pInterface,[Out] void** ppReflector)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.Disassemble(System.IntPtr,SharpDX.Size,SharpDX.D3DCompiler.DisassemblyFlags,System.String,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="flags">No documentation.</param>
+            <param name="szComments">No documentation.</param>
+            <param name="disassemblyRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DDisassemble([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[In] D3DCOMPILE_DISASM_FLAGS Flags,[In, Optional] const char* szComments,[Out] ID3DBlob** ppDisassembly)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.Disassemble10Effect(System.IntPtr,System.Int32,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="effectRef">No documentation.</param>
+            <param name="flags">No documentation.</param>
+            <param name="disassemblyRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DDisassemble10Effect([In] ID3D10Effect* pEffect,[In] int Flags,[Out] ID3DBlob** ppDisassembly)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.GetInputSignatureBlob(System.IntPtr,SharpDX.Size,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="signatureBlobRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DGetInputSignatureBlob([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[Out] ID3DBlob** ppSignatureBlob)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.GetOutputSignatureBlob(System.IntPtr,SharpDX.Size,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="signatureBlobRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DGetOutputSignatureBlob([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[Out] ID3DBlob** ppSignatureBlob)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.GetInputAndOutputSignatureBlob(System.IntPtr,SharpDX.Size,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="signatureBlobRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DGetInputAndOutputSignatureBlob([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[Out] ID3DBlob** ppSignatureBlob)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.StripShader(System.IntPtr,SharpDX.Size,SharpDX.D3DCompiler.StripFlags,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="shaderBytecodeRef">No documentation.</param>
+            <param name="bytecodeLength">No documentation.</param>
+            <param name="uStripFlags">No documentation.</param>
+            <param name="strippedBlobRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DStripShader([In, Buffer] const void* pShaderBytecode,[In] SIZE_T BytecodeLength,[In] D3DCOMPILER_STRIP_FLAGS uStripFlags,[Out] ID3DBlob** ppStrippedBlob)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.GetBlobPart(System.IntPtr,SharpDX.Size,SharpDX.D3DCompiler.ShaderBytecodePart,System.Int32,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="part">No documentation.</param>
+            <param name="flags">No documentation.</param>
+            <param name="partRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DGetBlobPart([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[In] D3D_BLOB_PART Part,[In] int Flags,[Out] ID3DBlob** ppPart)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.CompressShaders(System.Int32,SharpDX.D3DCompiler.ShaderData[],System.Int32,SharpDX.Direct3D.Blob@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="uNumShaders">No documentation.</param>
+            <param name="shaderDataRef">No documentation.</param>
+            <param name="uFlags">No documentation.</param>
+            <param name="compressedDataRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DCompressShaders([In] int uNumShaders,[In, Buffer] D3D_SHADER_DATA* pShaderData,[In] int uFlags,[Out] ID3DBlob** ppCompressedData)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.D3D.DecompressShaders(System.IntPtr,SharpDX.Size,System.Int32,System.Int32,System.Int32[],System.Int32,SharpDX.Direct3D.Blob[],System.Int32@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="srcDataRef">No documentation.</param>
+            <param name="srcDataSize">No documentation.</param>
+            <param name="uNumShaders">No documentation.</param>
+            <param name="uStartIndex">No documentation.</param>
+            <param name="indicesRef">No documentation.</param>
+            <param name="uFlags">No documentation.</param>
+            <param name="shadersRef">No documentation.</param>
+            <param name="totalShadersRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT D3DDecompressShaders([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[In] int uNumShaders,[In] int uStartIndex,[In, Buffer, Optional] int* pIndices,[In] int uFlags,[Out, Buffer] ID3DBlob** ppShaders,[Out, Optional] int* pTotalShaders)</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderReflectionVariable">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>ID3D11ShaderReflectionVariable</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionVariable.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.D3DCompiler.ShaderReflectionVariable"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionVariable.GetDescription(SharpDX.D3DCompiler.ShaderVariableDescription@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflectionVariable::GetDesc([Out] D3D11_SHADER_VARIABLE_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionVariable.GetVariableType">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionType* ID3D11ShaderReflectionVariable::GetType()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionVariable.GetBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionConstantBuffer* ID3D11ShaderReflectionVariable::GetBuffer()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflectionVariable.GetInterfaceSlot(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="uArrayIndex">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>int ID3D11ShaderReflectionVariable::GetInterfaceSlot([In] int uArrayIndex)</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflectionVariable.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT ID3D11ShaderReflectionVariable::GetDesc([Out] D3D11_SHADER_VARIABLE_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflectionVariable.Buffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>ID3D11ShaderReflectionConstantBuffer* ID3D11ShaderReflectionVariable::GetBuffer()</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ConstantBuffer">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>ID3D11ShaderReflectionConstantBuffer</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ConstantBuffer.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.D3DCompiler.ConstantBuffer"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ConstantBuffer.GetDescription(SharpDX.D3DCompiler.ConstantBufferDescription@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflectionConstantBuffer::GetDesc([Out] D3D11_SHADER_BUFFER_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ConstantBuffer.GetVariable(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="index">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionVariable* ID3D11ShaderReflectionConstantBuffer::GetVariableByIndex([In] int Index)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ConstantBuffer.GetVariable(System.String)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="name">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionVariable* ID3D11ShaderReflectionConstantBuffer::GetVariableByName([In] const char* Name)</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ConstantBuffer.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT ID3D11ShaderReflectionConstantBuffer::GetDesc([Out] D3D11_SHADER_BUFFER_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderReflection">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>ID3D11ShaderReflection</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.D3DCompiler.ShaderReflection"/> class.
+            </summary>
+            <param name="nativePtr">The native pointer.</param>	
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetDescription(SharpDX.D3DCompiler.ShaderDescription@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="descRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflection::GetDesc([Out] D3D11_SHADER_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetConstantBuffer(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="index">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionConstantBuffer* ID3D11ShaderReflection::GetConstantBufferByIndex([In] int Index)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetConstantBuffer(System.String)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="name">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionConstantBuffer* ID3D11ShaderReflection::GetConstantBufferByName([In] const char* Name)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetResourceBindingDescription(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="resourceIndex">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflection::GetResourceBindingDesc([In] int ResourceIndex,[Out] D3D11_SHADER_INPUT_BIND_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetInputParameterDescription(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="parameterIndex">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflection::GetInputParameterDesc([In] int ParameterIndex,[Out] D3D11_SIGNATURE_PARAMETER_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetOutputParameterDescription(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="parameterIndex">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflection::GetOutputParameterDesc([In] int ParameterIndex,[Out] D3D11_SIGNATURE_PARAMETER_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetPatchConstantParameterDescription(System.Int32)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="parameterIndex">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflection::GetPatchConstantParameterDesc([In] int ParameterIndex,[Out] D3D11_SIGNATURE_PARAMETER_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetVariable(System.String)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="name">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>ID3D11ShaderReflectionVariable* ID3D11ShaderReflection::GetVariableByName([In] const char* Name)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetResourceBindingDescription(System.String)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="name">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflection::GetResourceBindingDescByName([In] const char* Name,[Out] D3D11_SHADER_INPUT_BIND_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetMoveInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>int ID3D11ShaderReflection::GetMovInstructionCount()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetConditionalMoveInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>int ID3D11ShaderReflection::GetMovcInstructionCount()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetConversionInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>int ID3D11ShaderReflection::GetConversionInstructionCount()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetBitwiseInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>int ID3D11ShaderReflection::GetBitwiseInstructionCount()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetGeometryShaderSInputPrimitive">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>D3D_PRIMITIVE ID3D11ShaderReflection::GetGSInputPrimitive()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.IsSampleFrequencyShader_">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>BOOL ID3D11ShaderReflection::IsSampleFrequencyShader()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetInterfaceSlotCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <returns>No documentation.</returns>
+            <unmanaged>int ID3D11ShaderReflection::GetNumInterfaceSlots()</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetMinFeatureLevel(SharpDX.Direct3D.FeatureLevel@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="levelRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>HRESULT ID3D11ShaderReflection::GetMinFeatureLevel([Out] D3D_FEATURE_LEVEL* pLevel)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.GetThreadGroupSize(System.Int32@,System.Int32@,System.Int32@)">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <param name="sizeXRef">No documentation.</param>
+            <param name="sizeYRef">No documentation.</param>
+            <param name="sizeZRef">No documentation.</param>
+            <returns>No documentation.</returns>
+            <unmanaged>int ID3D11ShaderReflection::GetThreadGroupSize([Out, Optional] int* pSizeX,[Out, Optional] int* pSizeY,[Out, Optional] int* pSizeZ)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderReflection.#ctor(SharpDX.D3DCompiler.ShaderBytecode)">
+            <summary>
+              Initializes a new instance of the <see cref = "T:SharpDX.D3DCompiler.ShaderReflection" /> class from a <see cref = "T:SharpDX.D3DCompiler.ShaderBytecode" />.
+            </summary>
+            <param name = "shaderBytecode"></param>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflection.Description">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT ID3D11ShaderReflection::GetDesc([Out] D3D11_SHADER_DESC* pDesc)</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflection.MoveInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int ID3D11ShaderReflection::GetMovInstructionCount()</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflection.ConditionalMoveInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int ID3D11ShaderReflection::GetMovcInstructionCount()</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflection.ConversionInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int ID3D11ShaderReflection::GetConversionInstructionCount()</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflection.BitwiseInstructionCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int ID3D11ShaderReflection::GetBitwiseInstructionCount()</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflection.GeometryShaderSInputPrimitive">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D_PRIMITIVE ID3D11ShaderReflection::GetGSInputPrimitive()</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflection.IsSampleFrequencyShader">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>BOOL ID3D11ShaderReflection::IsSampleFrequencyShader()</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflection.InterfaceSlotCount">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>int ID3D11ShaderReflection::GetNumInterfaceSlots()</unmanaged>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderReflection.MinFeatureLevel">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>HRESULT ID3D11ShaderReflection::GetMinFeatureLevel([Out] D3D_FEATURE_LEVEL* pLevel)</unmanaged>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.ShaderBytecode">
+            <summary>
+              Represents the compiled bytecode of a shader or effect.
+            </summary>
+            <unmanaged>Blob</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.#ctor(SharpDX.DataStream)">
+            <summary>
+              Initializes a new instance of the <see cref = "T:SharpDX.D3DCompiler.ShaderBytecode" /> class.
+            </summary>
+            <param name = "data">A <see cref = "T:SharpDX.DataStream" /> containing the compiled bytecode.</param>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.#ctor(System.IO.Stream)">
+            <summary>
+              Initializes a new instance of the <see cref = "T:SharpDX.D3DCompiler.ShaderBytecode" /> class.
+            </summary>
+            <param name = "data">A <see cref = "T:System.IO.Stream" /> containing the compiled bytecode.</param>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.D3DCompiler.ShaderBytecode"/> class.
+            </summary>
+            <param name="buffer">The buffer.</param>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.#ctor(System.IntPtr,System.Int32)">
+            <summary>
+              Initializes a new instance of the <see cref = "T:SharpDX.D3DCompiler.ShaderBytecode" /> class.
+            </summary>
+            <param name = "buffer">a pointer to a compiler bytecode</param>
+            <param name = "sizeInBytes">size of the bytecode</param>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.#ctor(SharpDX.Direct3D.Blob)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SharpDX.D3DCompiler.ShaderBytecode"/> class.
+            </summary>
+            <param name="blob">The BLOB.</param>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">A string containing the source of the shader or effect to compile.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.Byte[],System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">An array of bytes containing the raw source of the shader or effect to compile.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.String,System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">A string containing the source of the shader or effect to compile.</param>
+            <param name = "entryPoint">The name of the shader entry-point function, or <c>null</c> for an effect file.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.Byte[],System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">An array of bytes containing the raw source of the shader or effect to compile.</param>
+            <param name = "entryPoint">The name of the shader entry-point function, or <c>null</c> for an effect file.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">A string containing the source of the shader or effect to compile.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.Byte[],System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">An array of bytes containing the raw source of the shader or effect to compile.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include,System.String@)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">A string containing the source of the shader or effect to compile.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <param name = "compilationErrors">When the method completes, contains a string of compilation errors, or an empty string if compilation succeeded.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.Byte[],System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include,System.String@)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">An array of bytes containing the raw source of the shader or effect to compile.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <param name = "compilationErrors">When the method completes, contains a string of compilation errors, or an empty string if compilation succeeded.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.String,System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">A string containing the source of the shader or effect to compile.</param>
+            <param name = "entryPoint">The name of the shader entry-point function, or <c>null</c> for an effect file.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.Byte[],System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">An array of bytes containing the raw source of the shader or effect to compile.</param>
+            <param name = "entryPoint">The name of the shader entry-point function, or <c>null</c> for an effect file.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.Byte[],System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include,System.String@)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">An array of bytes containing the raw source of the shader or effect to compile.</param>
+            <param name = "entryPoint">The name of the shader entry-point function, or <c>null</c> for an effect file.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <param name = "compilationErrors">When the method completes, contains a string of compilation errors, or an empty string if compilation succeeded.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compile(System.String,System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include,System.String@)">
+            <summary>
+              Compiles the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">A string containing the source of the shader or effect to compile.</param>
+            <param name = "entryPoint">The name of the shader entry-point function, or <c>null</c> for an effect file.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <param name = "compilationErrors">When the method completes, contains a string of compilation errors, or an empty string if compilation succeeded.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.CompileFromFile(System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags)">
+            <summary>
+              Compiles a shader or effect from a file on disk.
+            </summary>
+            <param name = "fileName">The name of the source file to compile.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.CompileFromFile(System.String,System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags)">
+            <summary>
+              Compiles a shader or effect from a file on disk.
+            </summary>
+            <param name = "fileName">The name of the source file to compile.</param>
+            <param name = "entryPoint">The name of the shader entry-point function, or <c>null</c> for an effect file.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.CompileFromFile(System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include)">
+            <summary>
+              Compiles a shader or effect from a file on disk.
+            </summary>
+            <param name = "fileName">The name of the source file to compile.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.CompileFromFile(System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include,System.String@)">
+            <summary>
+              Compiles a shader or effect from a file on disk.
+            </summary>
+            <param name = "fileName">The name of the source file to compile.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <param name = "compilationErrors">When the method completes, contains a string of compilation errors, or an empty string if compilation succeeded.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.CompileFromFile(System.String,System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include)">
+            <summary>
+              Compiles a shader or effect from a file on disk.
+            </summary>
+            <param name = "fileName">The name of the source file to compile.</param>
+            <param name = "entryPoint">The name of the shader entry-point function, or <c>null</c> for an effect file.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.CompileFromFile(System.String,System.String,System.String,SharpDX.D3DCompiler.ShaderFlags,SharpDX.D3DCompiler.EffectFlags,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include,System.String@)">
+            <summary>
+              Compiles a shader or effect from a file on disk.
+            </summary>
+            <param name = "fileName">The name of the source file to compile.</param>
+            <param name = "entryPoint">The name of the shader entry-point function, or <c>null</c> for an effect file.</param>
+            <param name = "profile">The shader target or set of shader features to compile against.</param>
+            <param name = "shaderFlags">Shader compilation options.</param>
+            <param name = "effectFlags">Effect compilation options.</param>
+            <param name = "defines">A set of macros to define during compilation.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <param name = "compilationErrors">When the method completes, contains a string of compilation errors, or an empty string if compilation succeeded.</param>
+            <returns>The compiled shader bytecode, or <c>null</c> if the method fails.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Compress(SharpDX.D3DCompiler.ShaderBytecode[])">
+            <summary>	
+            Compresses a set of shaders into a more compact form. 	
+            </summary>	
+            <param name="shaderBytecodes">An array of <see cref="T:SharpDX.D3DCompiler.ShaderBytecode"/> structures that describe the set of shaders to compress. </param>
+            <returns>A compressed <see cref="T:SharpDX.D3DCompiler.ShaderBytecode"/>. </returns>
+            <unmanaged>HRESULT D3DCompressShaders([In] int uNumShaders,[In, Buffer] D3D_SHADER_DATA* pShaderData,[In] int uFlags,[Out] ID3DBlob** ppCompressedData)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Disassemble">
+            <summary>
+              Disassembles compiled HLSL code back into textual source.
+            </summary>
+            <returns>The textual source of the shader or effect.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Disassemble(SharpDX.D3DCompiler.DisassemblyFlags)">
+            <summary>
+              Disassembles compiled HLSL code back into textual source.
+            </summary>
+            <param name = "flags">Flags affecting the output of the disassembly.</param>
+            <returns>The textual source of the shader or effect.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Disassemble(SharpDX.D3DCompiler.DisassemblyFlags,System.String)">
+            <summary>
+              Disassembles compiled HLSL code back into textual source.
+            </summary>
+            <param name = "flags">Flags affecting the output of the disassembly.</param>
+            <param name = "comments">Commenting information to embed in the disassembly.</param>
+            <returns>The textual source of the shader or effect.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.GetPart(SharpDX.D3DCompiler.ShaderBytecodePart)">
+            <summary>	
+            Retrieves a specific part from a compilation result.	
+            </summary>	
+            <remarks>	
+            D3DGetBlobPart retrieves the part of a blob (arbitrary length data buffer) that contains the type of data that the  Part parameter specifies. 	
+            </remarks>	
+            <param name="part">A <see cref="T:SharpDX.D3DCompiler.ShaderBytecodePart"/>-typed value that specifies the part of the buffer to retrieve. </param>
+            <returns>Returns the extracted part. </returns>
+            <unmanaged>HRESULT D3DGetBlobPart([In, Buffer] const void* pSrcData,[In] SIZE_T SrcDataSize,[In] D3D_BLOB_PART Part,[In] int Flags,[Out] ID3DBlob** ppPart)</unmanaged>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.FromPointer(System.IntPtr)">
+            <summary>
+            Froms the pointer.
+            </summary>
+            <param name="pointer">The pointer.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Preprocess(System.String)">
+            <summary>
+              Preprocesses the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">A string containing the source of the shader or effect to preprocess.</param>
+            <returns>The preprocessed shader source.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Preprocess(System.Byte[])">
+            <summary>
+              Preprocesses the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">An array of bytes containing the raw source of the shader or effect to preprocess.</param>
+            <returns>The preprocessed shader source.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Preprocess(System.String,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include)">
+            <summary>
+              Preprocesses the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">A string containing the source of the shader or effect to preprocess.</param>
+            <param name = "defines">A set of macros to define during preprocessing.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <returns>The preprocessed shader source.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Preprocess(System.Byte[],SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include)">
+            <summary>
+              Preprocesses the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">An array of bytes containing the raw source of the shader or effect to preprocess.</param>
+            <param name = "defines">A set of macros to define during preprocessing.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <returns>The preprocessed shader source.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Preprocess(System.Byte[],SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include,System.String@)">
+            <summary>
+              Preprocesses the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">An array of bytes containing the raw source of the shader or effect to preprocess.</param>
+            <param name = "defines">A set of macros to define during preprocessing.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <param name = "compilationErrors">When the method completes, contains a string of compilation errors, or an empty string if preprocessing succeeded.</param>
+            <returns>The preprocessed shader source.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Preprocess(System.String,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include,System.String@)">
+            <summary>
+              Preprocesses the provided shader or effect source.
+            </summary>
+            <param name = "shaderSource">A string containing the source of the shader or effect to preprocess.</param>
+            <param name = "defines">A set of macros to define during preprocessing.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <param name = "compilationErrors">When the method completes, contains a string of compilation errors, or an empty string if preprocessing succeeded.</param>
+            <returns>The preprocessed shader source.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.PreprocessFromFile(System.String)">
+            <summary>
+              Preprocesses a shader or effect from a file on disk.
+            </summary>
+            <param name = "fileName">The name of the source file to compile.</param>
+            <returns>The preprocessed shader source.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.PreprocessFromFile(System.String,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include)">
+            <summary>
+              Preprocesses a shader or effect from a file on disk.
+            </summary>
+            <param name = "fileName">The name of the source file to compile.</param>
+            <param name = "defines">A set of macros to define during preprocessing.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <returns>The preprocessed shader source.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.PreprocessFromFile(System.String,SharpDX.Direct3D.ShaderMacro[],SharpDX.D3DCompiler.Include,System.String@)">
+            <summary>
+              Preprocesses a shader or effect from a file on disk.
+            </summary>
+            <param name = "fileName">The name of the source file to compile.</param>
+            <param name = "defines">A set of macros to define during preprocessing.</param>
+            <param name = "include">An interface for handling include files.</param>
+            <param name = "compilationErrors">When the method completes, contains a string of compilation errors, or an empty string if preprocessing succeeded.</param>
+            <returns>The preprocessed shader source.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.Strip(SharpDX.D3DCompiler.StripFlags)">
+            <summary>
+              Strips extraneous information from a compiled shader or effect.
+            </summary>
+            <param name = "flags">Options specifying what to remove from the shader.</param>
+            <returns>A string containing any errors that may have occurred.</returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.FromStream(System.IO.Stream)">
+            <summary>
+              Read a compiled shader bytecode from a Stream and return a ShaderBytecode
+            </summary>
+            <param name = "stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SharpDX.D3DCompiler.ShaderBytecode.FromFile(System.String)">
+            <summary>
+              Read a compiled shader bytecode from a Stream and return a ShaderBytecode
+            </summary>
+            <param name = "fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderBytecode.IsCompressed">
+            <summary>
+            Gets this instance is composed of compressed shaders.
+            </summary>
+            <value>
+            	<c>true</c> if this instance is compressed; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:SharpDX.D3DCompiler.ShaderBytecode.Data">
+            <summary>
+              Gets the raw data of the compiled bytecode.
+            </summary>
+        </member>
+        <member name="T:SharpDX.D3DCompiler.RegisterComponentMaskFlags">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_REGISTER_COMPONENT_MASK_FLAG</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentMaskFlags.All">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_REGISTER_COMPONENT_MASK_ALL</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentMaskFlags.ComponentW">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_REGISTER_COMPONENT_MASK_COMPONENT_W</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentMaskFlags.ComponentX">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_REGISTER_COMPONENT_MASK_COMPONENT_X</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentMaskFlags.ComponentY">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_REGISTER_COMPONENT_MASK_COMPONENT_Y</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentMaskFlags.ComponentZ">
+            <summary>	
+            No documentation.	
+            </summary>	
+            <unmanaged>D3D11_REGISTER_COMPONENT_MASK_COMPONENT_Z</unmanaged>
+        </member>
+        <member name="F:SharpDX.D3DCompiler.RegisterComponentMaskFlags.None">
+            <summary>	
+            None.	
+            </summary>	
+            <unmanaged>None</unmanaged>
+        </member>
+    </members>
+</doc>

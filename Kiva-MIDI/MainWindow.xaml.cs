@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,17 +16,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+using SharpDX.Direct3D;
+using SharpDX.DXGI;
+using SharpDX.WPF;
 
 namespace Kiva_MIDI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+
     public partial class MainWindow : Window
     {
+
         #region Chrome Window scary code
         private static IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -167,10 +170,12 @@ namespace Kiva_MIDI
         }
         #endregion
 
-        ThreadOpenTkControl glControl = new ThreadOpenTkControl();
 
         public MainWindow()
         {
+            //var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
+            //file.Parse();
+
             InitializeComponent();
             AllowsTransparency = false;
             SourceInitialized += (s, e) =>
@@ -179,11 +184,25 @@ namespace Kiva_MIDI
                 HwndSource.FromHwnd(handle).AddHook(new HwndSourceHook(WindowProc));
             };
 
-            glContainer.Children.Add(glControl);
+
+            var FPS = new FPS();
+            dxview11.Renderer = new Scene_11() { Renderer = new D3D11() };
+
+            dxview11.Loaded += (s, e) =>
+            {
+                Task.Run(() =>
+                {
+                    Thread.Sleep(1000);
+                    Dispatcher.Invoke(() =>
+                    {
+                        dxview11.Render();
+                        //dxview11.SnapsToDevicePixels = !dxview11.SnapsToDevicePixels;
+                        //dxview11.SnapsToDevicePixels = !dxview11.SnapsToDevicePixels;
+                    });
+                });
+            };
         }
 
-        GLTextEngine text;
-        bool glInitiated = false;
         Stopwatch fpsTime = new Stopwatch();
 
         double fps;
@@ -191,39 +210,7 @@ namespace Kiva_MIDI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            fpsTime.Start();
-            glControl.GlRender += (s, _e) =>
-            {
-                if (!glInitiated)
-                {
-                    text = new GLTextEngine();
-                    text.SetFont("Arial", 50);
-                    glInitiated = true;
-                }
-                GL.Viewport(0, 0, (int)glControl.ActualWidth, (int)glControl.ActualHeight);
 
-                GL.Clear(ClearBufferMask.ColorBufferBit);
-                //GL.ClearColor(new Color4(255, 0, 0, 255));
-
-                GL.Begin(PrimitiveType.Quads);
-                GL.Color3(255, 0, 0);
-                GL.Vertex2(-1, -1);
-                GL.Vertex2(1, -1);
-                GL.Vertex2(1, 1);
-                GL.Vertex2(-1, 1);
-                GL.End();
-
-                Matrix4 transform = Matrix4.Identity;
-                transform = Matrix4.Mult(transform, Matrix4.CreateScale(1.0f / (float)glControl.ActualWidth, -1.0f / (float)glControl.ActualHeight, 1.0f));
-                transform = Matrix4.Mult(transform, Matrix4.CreateTranslation(-1, 1, 0));
-                transform = Matrix4.Mult(transform, Matrix4.CreateRotationZ(0));
-                double _fps = (10000000.0 / fpsTime.ElapsedTicks);
-                double sampleTime = fpsSampleTime * fps;
-                fps = (fps * sampleTime + _fps) / (sampleTime + 1);
-                fpsTime.Restart();
-                fpsTime.Start();
-                text.Render(fps.ToString(), transform, Color4.Blue);
-            };
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)

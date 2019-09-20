@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SharpDX.WPF.DXImageSource">
+    <Position X="0.5" Y="0.75" Width="2.25" />
+    <Members>
+      <Method Name="~DXImageSource" Hidden="true" />
+      <Field Name="activeClients" Hidden="true" />
+      <Field Name="backBuffer" Hidden="true" />
+      <Field Name="d3d9" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="DXImageSource" Hidden="true" />
+      <Method Name="EndD3D9" Hidden="true" />
+      <Field Name="isDisposed" Hidden="true" />
+      <Property Name="IsDisposed" Hidden="true" />
+      <Method Name="StartD3D9" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QEAAAAAEACAAAAAAEAgAABAAAAAAAAAQAAEAAAAAAAA=</HashCode>
+      <FileName>DXImageSource.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpDX.WPF.DXElement" Collapsed="true">
+    <Position X="3.75" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Events" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>JAAFAAEIAASAAACAIRRAAJCUhBYAhAABKBCAIAACAAA=</HashCode>
+      <FileName>DXElement.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Surface" />
+      <Property Name="Renderer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SharpDX.WPF.D3D">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <Members>
+      <Method Name="~D3D" Hidden="true" />
+      <Method Name="BeginRender" Hidden="true" />
+      <Method Name="D3D" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="EndRender" Hidden="true" />
+      <Field Name="mCurrentCamera" Hidden="true" />
+      <Method Name="OnInteractiveInit" Hidden="true" />
+      <Method Name="OnKeyDown" Hidden="true" />
+      <Method Name="OnKeyUp" Hidden="true" />
+      <Method Name="OnMouseDown" Hidden="true" />
+      <Method Name="OnMouseMove" Hidden="true" />
+      <Method Name="OnMouseUp" Hidden="true" />
+      <Method Name="OnMouseWheel" Hidden="true" />
+      <Method Name="OnPropertyChanged" Hidden="true" />
+      <Event Name="PropertyChanged" Hidden="true" />
+      <Method Name="Render" Hidden="true" />
+      <Method Name="RenderScene" Hidden="true" />
+      <Method Name="Reset" Hidden="true" />
+      <Method Name="Set" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAgICSCABACAIAACAAEAgBIIAAAQIBAAAgACAAE=</HashCode>
+      <FileName>D3D.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="CurrentCamera" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SharpDX.WPF.D2D1" Collapsed="true">
+    <Position X="2.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAACCAABAAAAAAgAAAAAAAAACAAAAAgAAAAAAM=</HashCode>
+      <FileName>D2D1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpDX.WPF.D3D10" Collapsed="true">
+    <Position X="2.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAACCSAgBgAEIAAAABAAAAAAAIAQAAAAAAAAAAE=</HashCode>
+      <FileName>D3D10.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpDX.WPF.D3D11" Collapsed="true">
+    <Position X="4.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAACCSAgBgAEIAAAABAAAAAAAIAQAAAAAAAAAAE=</HashCode>
+      <FileName>D3D11.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpDX.WPF.D3D9" Collapsed="true">
+    <Position X="0.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAACASAgBgQEIAAAABAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>D3D9.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpDX.WPF.BaseCamera" Collapsed="true">
+    <Position X="5.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AGAAgQAkAhEABACgBkAAAEQAACABAAFCAEBBAAASMgI=</HashCode>
+      <FileName>Cameras.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="SharpDX.WPF.IDirect3D">
+    <Position X="6.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>IDirect3D.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SharpDX.WPF.IInteractiveDirect3D" Collapsed="true">
+    <Position X="6.25" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAACAAAAAAAAAABIAAAAAIAAAAAACAAA=</HashCode>
+      <FileName>IDirect3D.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
