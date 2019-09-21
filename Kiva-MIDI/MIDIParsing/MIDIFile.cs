@@ -69,6 +69,7 @@ namespace Kiva_MIDI
         public MIDIEvent[] MIDIEvents = null;
         public Note[][] Notes = new Note[256][];
         public int[] NoteReadProgresses = new int[256];
+        public int lastRenderTime = 0;
 
         public ushort division;
         public int trackcount;

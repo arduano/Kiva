@@ -17,11 +17,17 @@ using System.Threading;
 namespace Kiva_MIDI
 {
 
-    public class Scene_11 : IDirect3D
+    class Scene : IDirect3D
     {
         public FPS FPS { get; set; }
 
         MIDIRenderer render;
+
+        public MIDIFile File
+        {
+            get => render.File;
+            set => render.File = value;
+        }
 
         public virtual D3D11 Renderer
         {

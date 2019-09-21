@@ -25,6 +25,7 @@
     <DockPanel LastChildFill="True">
         <Border Visibility="{Binding ChromeVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Background="#0068c9" DockPanel.Dock="Top" Height="50" x:Name="titlebar">
             <DockPanel>
+                <Label Name="fpsLabel"></Label>
                 <!--<Image HorizontalAlignment="Center" Width="40" Height="Auto" Margin="5" Source="i2m.png"/>-->
                 <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,10,0">
                     <Button Style="{StaticResource WindowButton}" Focusable="False" Name="ExitButton" Background="Red" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="ExitButton_Click"></Button>

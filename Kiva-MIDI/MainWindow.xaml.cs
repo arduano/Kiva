@@ -186,9 +186,6 @@ namespace Kiva_MIDI
 
         public MainWindow()
         {
-            //var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
-            //file.Parse();
-
             InitializeComponent();
             AllowsTransparency = false;
             SourceInitialized += (s, e) =>
@@ -198,7 +195,18 @@ namespace Kiva_MIDI
             };
 
             FPS = new FPS();
-            dxview11.Renderer = new Scene_11() { Renderer = new D3D11(), FPS = FPS };
+            var scene = new Scene() { Renderer = new D3D11(), FPS = FPS };
+            dxview11.Renderer = scene;
+
+            var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
+            file.Parse();
+
+            scene.File = file;
+
+            CompositionTarget.Rendering += (s, e) =>
+            {
+                fpsLabel.Content = FPS.Value;
+            };
         }
         public FPS FPS { get; set; }
 

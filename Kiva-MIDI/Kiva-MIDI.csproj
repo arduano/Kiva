@@ -104,7 +104,7 @@
     <Compile Include="MIDIParsing\MIDITrackParser.cs" />
     <Compile Include="MIDIRenderer.cs" />
     <Compile Include="PlayingState.cs" />
-    <Compile Include="Scene_11.cs" />
+    <Compile Include="Scene.cs" />
     <Compile Include="MIDIParsing\TimedMerger.cs" />
     <Compile Include="ShaderManager.cs" />
     <Page Include="MainWindow.xaml">

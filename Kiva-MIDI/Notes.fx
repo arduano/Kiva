@@ -52,21 +52,27 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	v.col = cl;
 	v.pos = float4(borderLeft, borderBottom, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	v.pos = float4(borderLeft, borderTop, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	v.col = cr;
 	v.pos = float4(borderRight, borderTop, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 
 	v.col = cr;
 	v.pos = float4(borderRight, borderTop, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	v.pos = float4(borderRight, borderBottom, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	v.col = cl;
 	v.pos = float4(borderLeft, borderBottom, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 
@@ -81,21 +87,27 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	v.col = cl;
 	v.pos = float4(NoteLeft, n.start, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	v.pos = float4(NoteLeft, n.end, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	v.col = cr;
 	v.pos = float4(NoteRight, n.end, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 
 	v.col = cr;
 	v.pos = float4(NoteRight, n.end, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	v.pos = float4(NoteRight, n.start, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	v.col = cl;
 	v.pos = float4(NoteLeft, n.start, 0, 1);
+	v.pos.xy = v.pos.xy * 2 - 1;
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 }

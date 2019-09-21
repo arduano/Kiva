@@ -85,16 +85,20 @@ namespace Kiva_MIDI
                 double v = 0;
                 while (currGlobalTempoID < globaTempos.Length && trackTimep2 > globaTempos[currGlobalTempoID].time)
                 {
-                    v += (t - globaTempos[currGlobalTempoID].time) * tempoMultiplier;
+                    v += (globaTempos[currGlobalTempoID].time - t) * tempoMultiplier;
                     t = globaTempos[currGlobalTempoID].time;
                     tempoMultiplier = ((double)globaTempos[currGlobalTempoID].tempo / ppq) / 1000000;
                     currGlobalTempoID++;
                 }
                 v += (trackTimep2 - t) * tempoMultiplier;
+                if (v < 0)
+                { }
                 return v;
             }
             else
             {
+                if (val * tempoMultiplier < 0)
+                { }
                 return val * tempoMultiplier;
             }
         }
