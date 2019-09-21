@@ -89,10 +89,10 @@ namespace SharpDX.WPF
 			if (CurrentCamera != null)
 				CurrentCamera.FrameMove(args.DeltaTime);
 
-            SetBackBuffer(args.Target);
             BeginRender(args);
 			RenderScene(args);
 			EndRender(args);
+            //SetBackBuffer(args.Target);
 		}
 
 		public virtual void BeginRender(DrawEventArgs args) { }

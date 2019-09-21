@@ -403,9 +403,9 @@ namespace Kiva_MIDI
                     byte channel = (byte)(command & 0b00001111);
                     byte note = reader.Read();
                     byte vel = reader.ReadFast();
-                        var un = UnendedNotes[note * 16 + channel];
-                        if (!un.ZeroLen)
-                            Notes[note][un.Pop()].end = trackSeconds;
+                    var un = UnendedNotes[note * 16 + channel];
+                    if (!un.ZeroLen)
+                        Notes[note][un.Pop()].end = trackSeconds;
                 }
                 else if (comm == 0b10100000)
                 {
@@ -639,7 +639,13 @@ namespace Kiva_MIDI
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Tempos = null;
+            globaTempos = null;
+            noteCounts = null;
+            colorEventCounts = null;
+            UnendedNotes = null;
+            Notes = null;
+            currNoteIndexes = null;
         }
     }
 }

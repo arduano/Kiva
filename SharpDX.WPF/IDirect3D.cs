@@ -24,9 +24,9 @@ namespace SharpDX.WPF
 	/// </summary>
 	public interface IDirect3D
 	{
-		void Reset(DrawEventArgs args);
+        void Reset(DrawEventArgs args);
 		void Render(DrawEventArgs args);
-	}
+    }
 
 	/// <summary>
 	/// A IDirect3D context which handles input event as well

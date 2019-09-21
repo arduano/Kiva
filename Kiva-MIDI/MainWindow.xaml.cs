@@ -160,15 +160,28 @@ namespace Kiva_MIDI
             if (value)
             {
                 _cacheWindowState = WindowState;
+                WindowState = System.Windows.WindowState.Normal;
                 WindowState = System.Windows.WindowState.Maximized;
+                ChromeVisibility = Visibility.Collapsed;
             }
             else
             {
                 WindowState = System.Windows.WindowState.Normal;
                 WindowState = _cacheWindowState;
+                ChromeVisibility = Visibility.Visible;
             }
         }
         #endregion
+
+
+        public Visibility ChromeVisibility
+        {
+            get { return (Visibility)GetValue(ChromeVisibilityProperty); }
+            set { SetValue(ChromeVisibilityProperty, value); }
+        }
+
+        public static readonly DependencyProperty ChromeVisibilityProperty =
+            DependencyProperty.Register("ChromeVisibility", typeof(Visibility), typeof(MainWindow), new PropertyMetadata(Visibility.Visible));
 
 
         public MainWindow()
@@ -184,29 +197,12 @@ namespace Kiva_MIDI
                 HwndSource.FromHwnd(handle).AddHook(new HwndSourceHook(WindowProc));
             };
 
-
-            var FPS = new FPS();
-            dxview11.Renderer = new Scene_11() { Renderer = new D3D11() };
-
-            dxview11.Loaded += (s, e) =>
-            {
-                Task.Run(() =>
-                {
-                    Thread.Sleep(1000);
-                    Dispatcher.Invoke(() =>
-                    {
-                        dxview11.Render();
-                        //dxview11.SnapsToDevicePixels = !dxview11.SnapsToDevicePixels;
-                        //dxview11.SnapsToDevicePixels = !dxview11.SnapsToDevicePixels;
-                    });
-                });
-            };
+            FPS = new FPS();
+            dxview11.Renderer = new Scene_11() { Renderer = new D3D11(), FPS = FPS };
         }
+        public FPS FPS { get; set; }
 
         Stopwatch fpsTime = new Stopwatch();
-
-        double fps;
-        double fpsSampleTime = 1;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -220,12 +216,34 @@ namespace Kiva_MIDI
 
         private void MinimiseButton_Click(object sender, RoutedEventArgs e)
         {
-
+            WindowStyle = WindowStyle.SingleBorderWindow;
+            WindowState = WindowState.Minimized;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             SetFullscreen(!Fullscreen);
+        }
+
+        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SetFullscreen(!Fullscreen);
+            }
+            if (e.Key == Key.Escape && Fullscreen)
+            {
+                SetFullscreen(!_fullscreen);
+            }
+        }
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            if(e.Property == WindowStateProperty)
+            {
+                if (WindowState != WindowState.Minimized) WindowStyle = WindowStyle.None;
+            }
         }
     }
 }

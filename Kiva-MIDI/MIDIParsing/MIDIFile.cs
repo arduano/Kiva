@@ -62,13 +62,13 @@ namespace Kiva_MIDI
         List<long> trackBeginnings = new List<long>();
         List<uint> trackLengths = new List<uint>();
 
-        public Note[][] NoteBuffers = new Note[256][];
+        MIDITrackParser[] parsers;
+        TempoEvent[] globalTempos;
+
+        //Persistent values
         public MIDIEvent[] MIDIEvents = null;
-
-        public MIDITrackParser[] parsers;
-
-        public TempoEvent[] globalTempos;
-        public Note[][] notes = new Note[256][];
+        public Note[][] Notes = new Note[256][];
+        public int[] NoteReadProgresses = new int[256];
 
         public ushort division;
         public int trackcount;
@@ -142,6 +142,14 @@ namespace Kiva_MIDI
                 p.PrepareForSecondPass();
             }
             SecondPassParse();
+            foreach (var p in parsers) p.Dispose();
+            parsers = null;
+            globalTempos = null;
+            trackBeginnings = null;
+            trackLengths = null;
+            MidiFileReader.Dispose();
+            MidiFileReader = null;
+            GC.Collect();
         }
 
         void Open()
@@ -190,15 +198,13 @@ namespace Kiva_MIDI
             int keysMerged = 0;
             Parallel.For(0, 256, (i) =>
             {
-                notes[i] = TimedMerger<Note>.MergeMany(parsers.Select(p => p.Notes[i]).ToArray(), n => n.start).ToArray();
+                Notes[i] = TimedMerger<Note>.MergeMany(parsers.Select(p => p.Notes[i]).ToArray(), n => n.start).ToArray();
                 lock (l)
                 {
                     keysMerged++;
                     Console.WriteLine("Merged key " + keysMerged + "/" + 256);
                 }
             });
-            parsers = null;
-            GC.Collect();
         }
     }
 }

@@ -102,8 +102,11 @@
     <Compile Include="Disposer.cs" />
     <Compile Include="MIDIParsing\MIDIFile.cs" />
     <Compile Include="MIDIParsing\MIDITrackParser.cs" />
+    <Compile Include="MIDIRenderer.cs" />
+    <Compile Include="PlayingState.cs" />
     <Compile Include="Scene_11.cs" />
     <Compile Include="MIDIParsing\TimedMerger.cs" />
+    <Compile Include="ShaderManager.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -149,7 +152,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MiniTri.fx">
+    <Content Include="Notes.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
