@@ -22,16 +22,36 @@ namespace Kiva_MIDI
     }
 
     [StructLayout(LayoutKind.Sequential)]
+    struct RenderCol
+    {
+        public float r, g, b, a;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct RenderPos
+    {
+        public float x, y, z, w;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
     struct RenderQuad
     {
-        public float x1, y1, z1, w1;
-        public float r1, g1, b1, a1;
-        public float x2, y2, z2, w2;
-        public float r2, g2, b2, a2;
-        public float x3, y3, z3, w3;
-        public float r3, g3, b3, a3;
-        //public float x4, y4, z4, w4;
-        //public float r4, g4, b4, a4;
+        public RenderPos pos1;
+        public RenderCol col1;
+        public RenderPos pos2;
+        public RenderCol col2;
+        public RenderPos pos3;
+        public RenderCol col3;
+        public RenderPos pos4;
+        public RenderCol col4;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct RenderNote
+    {
+        public float start;
+        public float end;
+        public NoteCol color;
     }
 
     public class Scene_11 : IDirect3D
@@ -62,6 +82,8 @@ namespace Kiva_MIDI
         VertexShader vertexShader;
         ShaderBytecode pixelShaderByteCode;
         PixelShader pixelShader;
+        ShaderBytecode geometryShaderByteCode;
+        GeometryShader geometryShader;
         InputLayout layout;
         Buffer globalConstants;
 
@@ -73,35 +95,53 @@ namespace Kiva_MIDI
             var context = device.ImmediateContext;
 
             // Compile Vertex and Pixel shaders
-            vertexShaderByteCode = ShaderBytecode.CompileFromFile("MiniTri.fx", "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None);
+            vertexShaderByteCode = ShaderBytecode.CompileFromFile("MiniTri.fx", "VS_Note", "vs_4_0", ShaderFlags.None, EffectFlags.None);
             vertexShader = new VertexShader(device, vertexShaderByteCode);
             pixelShaderByteCode = ShaderBytecode.CompileFromFile("MiniTri.fx", "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None);
             pixelShader = new PixelShader(device, pixelShaderByteCode);
+            geometryShaderByteCode = ShaderBytecode.CompileFromFile("MiniTri.fx", "GS_Note", "gs_4_0", ShaderFlags.None, EffectFlags.None);
+            geometryShader = new GeometryShader(device, geometryShaderByteCode);
 
             // Layout from VertexShader input signature
+            //layout = new InputLayout(device, ShaderSignature.GetInputSignature(vertexShaderByteCode), new[] {
+            //    new InputElement("POSITION",0,Format.R32G32B32A32_Float,0,0),
+            //    new InputElement("COLOR",0,Format.R32G32B32A32_Float,16,0)
+            //});
             layout = new InputLayout(device, ShaderSignature.GetInputSignature(vertexShaderByteCode), new[] {
-                new InputElement("POSITION",0,Format.R32G32B32A32_Float,0,0),
-                new InputElement("COLOR",0,Format.R32G32B32A32_Float,16,0)
+                new InputElement("START",0,Format.R32_Float,0,0),
+                new InputElement("END",0,Format.R32_Float,4,0),
+                new InputElement("COLORL",0,Format.R32G32B32A32_Float,8,0),
+                new InputElement("COLORR",0,Format.R32G32B32A32_Float,24,0),
             });
 
             // Write vertex data to a datastream
             var stream = new DataStream(32 * 4, true, true);
 
-            var quad = new RenderQuad();
-            quad.x1 = 0.0f; quad.y1 = 0.5f; quad.z1 = 0.0f; quad.w1 = 1.0f;
-            quad.x2 = 0.5f; quad.y2 = -0.5f; quad.z2 = 0.0f; quad.w2 = 1.0f;
-            quad.x3 = -0.5f; quad.y3 = -0.5f; quad.z3 = 0.0f; quad.w3 = 1.0f;
-            //quad.x4 = 0.5f; quad.y4 = 0.5f; quad.z4 = 0.0f; quad.w4 = 1.0f;
-            quad.r1 = 1; quad.g1 = 1; quad.b1 = 0; quad.a1 = 1;
-            quad.r2 = 1; quad.g2 = 1; quad.b2 = 0; quad.a2 = 1;
-            quad.r3 = 1; quad.g3 = 1; quad.b3 = 0; quad.a3 = 1;
-            //quad.r4 = 1; quad.g4 = 1; quad.b4 = 0; quad.a4 = 1;
+            //var quad = new RenderQuad();
+            //quad.pos1 = new RenderPos() { x = 0.0f, y = 0.5f, z = 0f, w = 1.0f };
+            //quad.pos2 = new RenderPos() { x = 0.5f, y = -0.5f, z = 0f, w = 1.0f };
+            //quad.pos3 = new RenderPos() { x = -0.5f, y = -0.5f, z = 0f, w = 1.0f };
+            //quad.pos4 = new RenderPos() { x = -0.5f, y = 0.5f, z = 0f, w = 1.0f };
+            //quad.col1 = new RenderCol() { r = 1, g = 1, b = 0, a = 1 };
+            //quad.col2 = new RenderCol() { r = 1, g = 1, b = 0, a = 1 };
+            //quad.col3 = new RenderCol() { r = 1, g = 1, b = 0, a = 1 };
+            //quad.col4 = new RenderCol() { r = 0, g = 1, b = 0, a = 1 };
+            //stream.Write(quad);
 
-            stream.Write(quad);
-            //stream.Write(new RenderPos() { x = 0.0f, y = 0.5f, z = 0f, w = 1.0f });
+            var note = new RenderNote()
+            {
+                start = -0.5f,
+                end = 0.5f,
+                color = new NoteCol() {
+                    r = 1, g = 0, b = 1, a = 1,
+                    r2 = 0, g2 = 1, b2 = 1, a2 = 1
+                }
+            };
+            stream.Write(note);
+
             //stream.WriteRange(new[]
             //                      {
-            //                          new Vector4(1.0f, 0.0f, 0.0f, 1.0f),
+            //                          new Vector4(0.0f, 0.5f, 0f, 1.0f), new Vector4(1.0f, 0.0f, 0.0f, 1.0f),
             //                          new Vector4(0.5f, -0.5f, 0f, 1.0f), new Vector4(0.0f, 1.0f, 0.0f, 1.0f),
             //                          new Vector4(-0.5f, -0.5f, 0f, 1.0f), new Vector4(0.0f, 0.0f, 1.0f, 1.0f)
             //                      });
@@ -113,7 +153,7 @@ namespace Kiva_MIDI
                 BindFlags = BindFlags.VertexBuffer,
                 CpuAccessFlags = CpuAccessFlags.None,
                 OptionFlags = ResourceOptionFlags.None,
-                SizeInBytes = 32 * 3,
+                SizeInBytes = 32 * 4,
                 Usage = ResourceUsage.Default,
                 StructureByteStride = 0
             });
@@ -134,9 +174,10 @@ namespace Kiva_MIDI
 
             // Prepare All the stages
             context.InputAssembler.SetInputLayout(layout);
-            context.InputAssembler.SetPrimitiveTopology(PrimitiveTopology.TriangleList);
-            context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(vertices, 32, 0));
+            context.InputAssembler.SetPrimitiveTopology(PrimitiveTopology.PointList);
+            context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(vertices, 12, 0));
             context.VertexShader.Set(vertexShader);
+            context.GeometryShader.Set(geometryShader);
             context.PixelShader.Set(pixelShader);
         }
 
@@ -146,6 +187,8 @@ namespace Kiva_MIDI
             Disposer.SafeDispose(ref vertexShader);
             Disposer.SafeDispose(ref pixelShaderByteCode);
             Disposer.SafeDispose(ref pixelShader);
+            Disposer.SafeDispose(ref geometryShaderByteCode);
+            Disposer.SafeDispose(ref geometryShader);
             Disposer.SafeDispose(ref vertices);
             Disposer.SafeDispose(ref layout);
             Disposer.SafeDispose(ref globalConstants);
@@ -162,7 +205,7 @@ namespace Kiva_MIDI
             context.VertexShader.SetConstantBuffer(0, globalConstants);
 
             context.ClearRenderTargetView(Renderer.RenderTargetView, new Color4(0.6f, 0, 0, 0));
-            context.Draw(3, 0);
+            context.Draw(1, 0);
         }
 
         void IDirect3D.Reset(DrawEventArgs args)

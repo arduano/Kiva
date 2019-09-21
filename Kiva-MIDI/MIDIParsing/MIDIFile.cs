@@ -11,8 +11,8 @@ namespace Kiva_MIDI
     [StructLayout(LayoutKind.Sequential)]
     struct NoteCol
     {
-        public byte r, g, b, a;
-        public byte r2, g2, b2, a2;
+        public float r, g, b, a;
+        public float r2, g2, b2, a2;
     }
 
     interface ITimed

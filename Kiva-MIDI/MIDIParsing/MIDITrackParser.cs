@@ -403,9 +403,9 @@ namespace Kiva_MIDI
                     byte channel = (byte)(command & 0b00001111);
                     byte note = reader.Read();
                     byte vel = reader.ReadFast();
-                    var un = UnendedNotes[note * 16 + channel];
-                    if (!un.ZeroLen)
-                        Notes[note][un.Pop()].end = trackSeconds;
+                        var un = UnendedNotes[note * 16 + channel];
+                        if (!un.ZeroLen)
+                            Notes[note][un.Pop()].end = trackSeconds;
                 }
                 else if (comm == 0b10100000)
                 {
@@ -502,10 +502,10 @@ namespace Kiva_MIDI
                                         if (reader.Read() == 0x00)
                                         {
                                             var col = new NoteCol();
-                                            col.r = reader.Read();
-                                            col.g = reader.Read();
-                                            col.b = reader.Read();
-                                            col.a = reader.Read();
+                                            col.r = reader.Read() / 255.0f;
+                                            col.g = reader.Read() / 255.0f;
+                                            col.b = reader.Read() / 255.0f;
+                                            col.a = reader.Read() / 255.0f;
                                             if (size == 8)
                                             {
                                                 col.r2 = col.r;
@@ -515,10 +515,10 @@ namespace Kiva_MIDI
                                             }
                                             else
                                             {
-                                                col.r2 = reader.Read();
-                                                col.g2 = reader.Read();
-                                                col.b2 = reader.Read();
-                                                col.a2 = reader.Read();
+                                                col.r2 = reader.Read() / 255.0f;
+                                                col.g2 = reader.Read() / 255.0f;
+                                                col.b2 = reader.Read() / 255.0f;
+                                                col.a2 = reader.Read() / 255.0f;
                                             }
                                             if (channel == 0x7F)
                                             {
