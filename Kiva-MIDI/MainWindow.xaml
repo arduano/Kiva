@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Kiva_MIDI"
         xmlns:i="clr-namespace:System.Windows.Interop;assembly=PresentationCore"
         xmlns:dxc="clr-namespace:SharpDX.WPF;assembly=SharpDX.WPF"
+        xmlns:wpf="clr-namespace:SharpDX.WPF"
         mc:Ignorable="d"
         Name="mainWindow"
         Title="MainWindow" WindowStyle="None" Height="450" Width="800" Loaded="Window_Loaded" SnapsToDevicePixels="True" PreviewKeyDown="MainWindow_PreviewKeyDown">
@@ -48,7 +49,10 @@
             </DockPanel>
         </Border>
         <Grid Name="glContainer">
-            <dxc:DXElement x:Name="dxview11"/>
+            <!--<local:DXImage x:Name="dx11img">
+            </local:DXImage>-->
+            <local:DXElement x:Name="dx11img">
+            </local:DXElement>
         </Grid>
     </DockPanel>
 </Window>

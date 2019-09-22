@@ -12,6 +12,7 @@ using SharpDX.WPF;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using SharpDX.Direct3D;
+using System.Collections.Concurrent;
 
 namespace Kiva_MIDI
 {
@@ -44,9 +45,8 @@ namespace Kiva_MIDI
 
         NotesGlobalConstants noteConstants;
 
-        int noteBufferLength = 1 << 14;
+        int noteBufferLength = 1 << 10;
         Buffer noteBuffer;
-        RenderNote[][] renderNotes = new RenderNote[256][];
 
         bool[] blackKeys = new bool[257];
         int[] keynum = new int[257];
@@ -84,8 +84,6 @@ namespace Kiva_MIDI
                 Usage = ResourceUsage.Dynamic,
                 StructureByteStride = 0
             });
-            for (int i = 0; i < 256; i++)
-                renderNotes[i] = new RenderNote[noteBufferLength];
 
             globalNoteConstants = new Buffer(device, new BufferDescription()
             {
@@ -109,7 +107,8 @@ namespace Kiva_MIDI
 
         void SetNoteShaderConstants(DeviceContext context, NotesGlobalConstants constants)
         {
-            var data = context.MapSubresource(globalNoteConstants, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None).Data;
+            DataStream data;
+            context.MapSubresource(globalNoteConstants, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
             data.Write(constants);
             context.UnmapSubresource(globalNoteConstants, 0);
             context.VertexShader.SetConstantBuffer(0, globalNoteConstants);
@@ -122,7 +121,7 @@ namespace Kiva_MIDI
         public void Render(Device device, RenderTargetView target, DrawEventArgs args)
         {
             var context = device.ImmediateContext;
-            context.InputAssembler.SetInputLayout(noteLayout);
+            context.InputAssembler.InputLayout = noteLayout;
 
             double time = 0;
             double timeScale = 400;
@@ -168,47 +167,45 @@ namespace Kiva_MIDI
 
             notesShader.SetShaders(context);
             noteConstants.ScreenAspect = (float)(args.RenderSize.Height / args.RenderSize.Width);
+            noteConstants.NoteBorder = 0.0015f;
             SetNoteShaderConstants(context, noteConstants);
 
-            context.ClearRenderTargetView(target, new Color4(0.6f, 0, 0, 0));
+            context.ClearRenderTargetView(target, new Color4(0, 0, 0, 0.6f));
+
+            var colors = File.MidiNoteColors;
 
             for (int black = 0; black < 2; black++)
             {
-                Parallel.For(0, 256, new ParallelOptions() { MaxDegreeOfParallelism = 3 }, k =>
+                Parallel.For(0, 256, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
                 {
-                    var rn = renderNotes[k];
                     if ((blackKeys[k] && black == 1) || (!blackKeys[k] && black == 0)) return;
-                    int nid = 0;
-                    int noff = 0;
-                    Note[] notes = File.Notes[k];
-                    while (noff != notes.Length && notes[noff].start < renderCutoff)
+                    unsafe
                     {
-                        var n = notes[noff++];
-                        rn[nid++] = new RenderNote()
+                        RenderNote* rn = stackalloc RenderNote[noteBufferLength];
+                        //var rn = new RenderNote[noteBufferLength];
+                        int nid = 0;
+                        int noff = 0;
+                        Note[] notes = File.Notes[k];
+                        while (noff != notes.Length && notes[noff].start < renderCutoff)
                         {
-                            start = (float)((n.start - time) / timeScale),
-                            end = (float)((n.end - time) / timeScale),
-                            color = new NoteCol()
+                            var n = notes[noff++];
+                            rn[nid++] = new RenderNote()
                             {
-                                r = 0,
-                                g = 1,
-                                b = 1,
-                                a = 1,
-                                r2 = 0,
-                                g2 = 1,
-                                b2 = 1,
-                                a2 = 1
+                                start = (float)((n.start - time) / timeScale),
+                                end = (float)((n.end - time) / timeScale),
+                                color = colors[n.colorPointer]
+                            };
+                            if (nid == noteBufferLength)
+                            {
+                                FlushNoteBuffer(context, k, (IntPtr)rn, nid);
+                                nid = 0;
                             }
-                        };
-                        if (nid == renderNotes.Length)
-                        {
-                            FlushNoteBuffer(context, k, rn, nid);
-                            nid = 0;
                         }
+                        FlushNoteBuffer(context, k, (IntPtr)rn, nid);
                     }
-                    FlushNoteBuffer(context, k, rn, nid);
                 });
             }
+            context.Flush();
         }
 
         void FlushNoteBuffer(DeviceContext context, int key, RenderNote[] notes, int count)
@@ -216,17 +213,46 @@ namespace Kiva_MIDI
             if (count == 0) return;
             lock (context)
             {
-                var data = context.MapSubresource(noteBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None).Data;
+                DataStream data;
+                context.MapSubresource(noteBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
                 data.Position = 0;
                 data.WriteRange(notes, 0, count);
+                data.WriteRange(notes, 0, count);
                 context.UnmapSubresource(noteBuffer, 0);
-                context.InputAssembler.SetPrimitiveTopology(PrimitiveTopology.PointList);
+                context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
                 context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 40, 0));
                 noteConstants.NoteLeft = (float)x1array[key];
                 noteConstants.NoteRight = (float)(x1array[key] + wdtharray[key]);
                 SetNoteShaderConstants(context, noteConstants);
                 context.Draw(count, 0);
             }
+        }
+
+        unsafe void FlushNoteBuffer(DeviceContext context, int key, IntPtr notes, int count)
+        {
+            if (count == 0) return;
+            lock (context)
+            {
+                DataStream data;
+                context.MapSubresource(noteBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
+                data.Position = 0;
+                data.WriteRange(notes, count * sizeof(RenderNote));
+                context.UnmapSubresource(noteBuffer, 0);
+                context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
+                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 40, 0));
+                noteConstants.NoteLeft = (float)x1array[key];
+                noteConstants.NoteRight = (float)(x1array[key] + wdtharray[key]);
+                SetNoteShaderConstants(context, noteConstants);
+                context.Draw(count, 0);
+            }
+        }
+
+        private DeviceContext GetInternalContext(Device device)
+        {
+            var props = device.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var prop = device.GetType().GetField("Context", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            DeviceContext context = prop.GetValue(device) as DeviceContext;
+            return context;
         }
 
         public void Dispose()

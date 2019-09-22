@@ -17,6 +17,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SharpDX.Direct3D;
+using SharpDX.Direct3D9;
+using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.WPF;
 
@@ -196,9 +198,10 @@ namespace Kiva_MIDI
 
             FPS = new FPS();
             var scene = new Scene() { Renderer = new D3D11(), FPS = FPS };
-            dxview11.Renderer = scene;
+            dx11img.Renderer = scene;
 
-            var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
+            //var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
+            var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
             file.Parse();
 
             scene.File = file;

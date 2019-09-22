@@ -66,8 +66,6 @@ namespace Kiva_MIDI
 
         public void RenderScene(DrawEventArgs args)
         {
-            Renderer.Device.ImmediateContext.ClearRenderTargetView(Renderer.RenderTargetView, new Color4(0.6f, 0, 0, 0));
-
             render.Render(Renderer.Device, Renderer.RenderTargetView, args);
             FPS.AddFrame(args.TotalTime);
         }
