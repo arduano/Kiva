@@ -202,16 +202,22 @@ namespace Kiva_MIDI
             dx11img.Renderer = scene;
 
             //var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
-            var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
+            //var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
+            var file = new MIDIFile("E:\\Midi\\[Black MIDI]scarlet_zone-& The Young Descendant of Tepes V.2.mid");
             file.Parse();
 
             scene.File = file;
             scene.Time = Time;
+
+            timeSlider.Maximum = file.MidiLength;
+
             Time.Play();
 
             CompositionTarget.Rendering += (s, e) =>
             {
                 fpsLabel.Content = FPS.Value;
+                ignoreTimeSliderChange = true;
+                timeSlider.Value = Time.GetTime();
             };
         }
         public FPS FPS { get; set; }
@@ -253,10 +259,19 @@ namespace Kiva_MIDI
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
-            if(e.Property == WindowStateProperty)
+            if (e.Property == WindowStateProperty)
             {
                 if (WindowState != WindowState.Minimized) WindowStyle = WindowStyle.None;
             }
+        }
+
+        bool ignoreTimeSliderChange = false;
+        private void TimeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (timeSlider == null) return;
+            if (!ignoreTimeSliderChange)
+                Time.Navigate(timeSlider.Value);
+            ignoreTimeSliderChange = false;
         }
     }
 }

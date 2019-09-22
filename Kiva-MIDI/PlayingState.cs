@@ -36,5 +36,11 @@ namespace Kiva_MIDI
             if (Paused) return MIDITime;
             return MIDITime + (DateTime.Now - Time).TotalSeconds;
         }
+
+        public void Navigate(double time)
+        {
+            Time = DateTime.Now;
+            MIDITime = time;
+        }
     }
 }

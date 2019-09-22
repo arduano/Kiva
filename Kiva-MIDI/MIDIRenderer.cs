@@ -124,7 +124,7 @@ namespace Kiva_MIDI
             context.InputAssembler.InputLayout = noteLayout;
 
             double time = Time.GetTime();
-            double timeScale = 3;
+            double timeScale = 0.3;
             double renderCutoff = time + timeScale;
             int firstNote = 0;
             int lastNote = 128;
@@ -173,6 +173,7 @@ namespace Kiva_MIDI
             context.ClearRenderTargetView(target, new Color4(0, 0, 0, 0.6f));
 
             var colors = File.MidiNoteColors;
+            var lastTime = File.lastRenderTime;
 
             for (int black = 0; black < 2; black++)
             {
@@ -183,11 +184,35 @@ namespace Kiva_MIDI
                     {
                         RenderNote* rn = stackalloc RenderNote[noteBufferLength];
                         int nid = 0;
-                        int noff = 0;
+                        int noff = File.FirstRenderNote[k];
                         Note[] notes = File.Notes[k];
+                        if (lastTime > time)
+                        {
+                            for (noff = 0; noff < notes.Length; noff++)
+                            {
+                                if (notes[noff].end > time)
+                                {
+                                    File.FirstRenderNote[k] = noff;
+                                    break;
+                                }
+                            }
+                        }
+                        else if (lastTime < time)
+                        {
+                            for (; noff < notes.Length; noff++)
+                            {
+                                if (notes[noff].end > time)
+                                {
+                                    File.FirstRenderNote[k] = noff;
+                                    break;
+                                }
+                            }
+                        }
                         while (noff != notes.Length && notes[noff].start < renderCutoff)
                         {
                             var n = notes[noff++];
+                            if (n.end < time) continue;
+                            //if (n.end - n.start > 10.1) continue;
                             rn[nid++] = new RenderNote()
                             {
                                 start = (float)((n.start - time) / timeScale),
@@ -204,6 +229,8 @@ namespace Kiva_MIDI
                     }
                 });
             }
+
+            File.lastRenderTime = time;
             context.Flush();
         }
 

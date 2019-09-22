@@ -66,15 +66,17 @@ namespace Kiva_MIDI
         TempoEvent[] globalTempos;
 
         //Persistent values
-        public MIDIEvent[] MIDIEvents = null;
-        public Note[][] Notes = new Note[256][];
-        public int[] NoteReadProgresses = new int[256];
-        public int lastRenderTime = 0;
-        public NoteCol[] MidiNoteColors = null;
+        public MIDIEvent[] MIDIEvents { get; private set; } = null;
+        public Note[][] Notes { get; private set; } = new Note[256][];
+        public int[] FirstRenderNote { get; private set; } = new int[256];
+        public double lastRenderTime { get; set; } = 0;
+        public NoteCol[] MidiNoteColors { get; private set; } = null;
+        public double MidiLength { get; private set; } = 0;
 
-        public ushort division;
-        public int trackcount;
-        public ushort format;
+
+        public ushort division { get; private set; }
+        public int trackcount { get; private set; }
+        public ushort format { get; private set; }
 
         Stream MidiFileReader;
         string filepath;
@@ -144,6 +146,7 @@ namespace Kiva_MIDI
                 p.PrepareForSecondPass();
             }
             SecondPassParse();
+            MidiLength = parsers.Select(p => p.trackSeconds).Max();
             foreach (var p in parsers) p.Dispose();
             parsers = null;
             globalTempos = null;

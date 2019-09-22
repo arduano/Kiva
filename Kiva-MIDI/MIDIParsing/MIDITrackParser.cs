@@ -91,14 +91,10 @@ namespace Kiva_MIDI
                     currGlobalTempoID++;
                 }
                 v += (trackTimep2 - t) * tempoMultiplier;
-                if (v < 0)
-                { }
                 return v;
             }
             else
             {
-                if (val * tempoMultiplier < 0)
-                { }
                 return val * tempoMultiplier;
             }
         }
