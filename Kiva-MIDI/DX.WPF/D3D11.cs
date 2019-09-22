@@ -47,8 +47,8 @@ namespace Kiva_MIDI
             Set(ref device, null);
             Set(ref renderTarget, null);
             Set(ref renderTargetView, null);
-            Set(ref depthStencil, null);
-            Set(ref depthStencilView, null);
+            //Set(ref depthStencil, null);
+            //Set(ref depthStencilView, null);
         }
 
         public Device Device { get { return device.GetOrThrow(); } }
@@ -59,8 +59,8 @@ namespace Kiva_MIDI
 
         protected Texture2D renderTarget;
         protected RenderTargetView renderTargetView;
-        protected Texture2D depthStencil;
-        protected DepthStencilView depthStencilView;
+        //protected Texture2D depthStencil;
+        //protected DepthStencilView depthStencilView;
 
         #region RenderTargetOptionFlags
 
@@ -104,8 +104,8 @@ namespace Kiva_MIDI
             Set(ref renderTarget, new Texture2D(this.device, desc));
             Set(ref renderTargetView, new RenderTargetView(this.device, this.renderTarget));
 
-            Set(ref depthStencil, DXUtils.CreateTexture2D(this.device, w, h, BindFlags.DepthStencil, Format.D24_UNorm_S8_UInt));
-            Set(ref depthStencilView, new DepthStencilView(this.device, depthStencil));
+            //Set(ref depthStencil, DXUtils.CreateTexture2D(this.device, w, h, BindFlags.DepthStencil, Format.D24_UNorm_S8_UInt));
+            //Set(ref depthStencilView, new DepthStencilView(this.device, depthStencil));
 
             device.ImmediateContext.Rasterizer.SetViewports(new RawViewportF[] { new RawViewportF() {
                 X = 0,
@@ -115,13 +115,14 @@ namespace Kiva_MIDI
                 MinDepth = 0.0f,
                 MaxDepth = 1.0f
             } });
-            device.ImmediateContext.OutputMerger.SetRenderTargets(depthStencilView, renderTargetView);
+            //device.ImmediateContext.OutputMerger.SetRenderTargets(depthStencilView, renderTargetView);
+            device.ImmediateContext.OutputMerger.SetRenderTargets(renderTargetView);
         }
 
         public override void BeginRender(DrawEventArgs args)
         {
             device.GetOrThrow();
-            Device.ImmediateContext.ClearDepthStencilView(this.DepthStencilView, DepthStencilClearFlags.Depth, 1.0f, 0);
+            //Device.ImmediateContext.ClearDepthStencilView(this.DepthStencilView, DepthStencilClearFlags.Depth, 1.0f, 0);
         }
 
         public override void EndRender(DrawEventArgs args)
@@ -140,8 +141,8 @@ namespace Kiva_MIDI
         public Texture2D RenderTarget { get { return Prepared(ref renderTarget); } }
         public RenderTargetView RenderTargetView { get { return Prepared(ref renderTargetView); } }
 
-        public Texture2D DepthStencil { get { return Prepared(ref depthStencil); } }
-        public DepthStencilView DepthStencilView { get { return Prepared(ref depthStencilView); } }
+        //public Texture2D DepthStencil { get { return Prepared(ref depthStencil); } }
+        //public DepthStencilView DepthStencilView { get { return Prepared(ref depthStencilView); } }
 
         public override System.Windows.Media.Imaging.WriteableBitmap ToImage() { return null; }
     }
