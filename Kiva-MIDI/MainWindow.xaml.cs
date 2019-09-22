@@ -197,6 +197,7 @@ namespace Kiva_MIDI
             };
 
             FPS = new FPS();
+            Time = new PlayingState();
             var scene = new Scene() { Renderer = new D3D11(), FPS = FPS };
             dx11img.Renderer = scene;
 
@@ -205,6 +206,8 @@ namespace Kiva_MIDI
             file.Parse();
 
             scene.File = file;
+            scene.Time = Time;
+            Time.Play();
 
             CompositionTarget.Rendering += (s, e) =>
             {
@@ -212,8 +215,7 @@ namespace Kiva_MIDI
             };
         }
         public FPS FPS { get; set; }
-
-        Stopwatch fpsTime = new Stopwatch();
+        public PlayingState Time { get; set; }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

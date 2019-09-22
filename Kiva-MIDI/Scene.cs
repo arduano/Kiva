@@ -29,6 +29,12 @@ namespace Kiva_MIDI
             set => render.File = value;
         }
 
+        public PlayingState Time
+        {
+            get => render.Time;
+            set => render.Time = value;
+        }
+
         public virtual D3D11 Renderer
         {
             get { return context; }

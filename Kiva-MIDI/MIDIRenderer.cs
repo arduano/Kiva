@@ -36,7 +36,7 @@ namespace Kiva_MIDI
         }
 
         public MIDIFile File { get; set; }
-        public PlayingState Time { get; set; }
+        public PlayingState Time { get; set; } = new PlayingState();
 
         ShaderManager notesShader;
         InputLayout noteLayout;
@@ -123,11 +123,11 @@ namespace Kiva_MIDI
             var context = device.ImmediateContext;
             context.InputAssembler.InputLayout = noteLayout;
 
-            double time = 0;
-            double timeScale = 400;
+            double time = Time.GetTime();
+            double timeScale = 3;
             double renderCutoff = time + timeScale;
             int firstNote = 0;
-            int lastNote = 127;
+            int lastNote = 128;
             int kbfirstNote = firstNote;
             int kblastNote = lastNote;
             if (blackKeys[firstNote]) kbfirstNote--;
@@ -176,13 +176,12 @@ namespace Kiva_MIDI
 
             for (int black = 0; black < 2; black++)
             {
-                Parallel.For(0, 256, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
+                Parallel.For(firstNote, lastNote, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
                 {
                     if ((blackKeys[k] && black == 1) || (!blackKeys[k] && black == 0)) return;
                     unsafe
                     {
                         RenderNote* rn = stackalloc RenderNote[noteBufferLength];
-                        //var rn = new RenderNote[noteBufferLength];
                         int nid = 0;
                         int noff = 0;
                         Note[] notes = File.Notes[k];
@@ -206,26 +205,6 @@ namespace Kiva_MIDI
                 });
             }
             context.Flush();
-        }
-
-        void FlushNoteBuffer(DeviceContext context, int key, RenderNote[] notes, int count)
-        {
-            if (count == 0) return;
-            lock (context)
-            {
-                DataStream data;
-                context.MapSubresource(noteBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
-                data.Position = 0;
-                data.WriteRange(notes, 0, count);
-                data.WriteRange(notes, 0, count);
-                context.UnmapSubresource(noteBuffer, 0);
-                context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
-                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 40, 0));
-                noteConstants.NoteLeft = (float)x1array[key];
-                noteConstants.NoteRight = (float)(x1array[key] + wdtharray[key]);
-                SetNoteShaderConstants(context, noteConstants);
-                context.Draw(count, 0);
-            }
         }
 
         unsafe void FlushNoteBuffer(DeviceContext context, int key, IntPtr notes, int count)

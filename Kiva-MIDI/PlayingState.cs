@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Kiva_MIDI
 {
-    class PlayingState
+    public class PlayingState
     {
-        public DateTime Time { get; set; }
-        public double MIDITime { get; set; }
-        public bool Paused { get; set; }
+        public DateTime Time { get; set; } = DateTime.Now;
+        public double MIDITime { get; set; } = 0;
+        public bool Paused { get; set; } = true;
 
         public void Pause()
         {
