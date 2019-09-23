@@ -35,6 +35,11 @@ namespace Kiva_MIDI
             set => render.Time = value;
         }
 
+        public long LastRenderedNoteCount
+        {
+            get => render.LastRenderedNoteCount;
+        }
+
         public virtual D3D11 Renderer
         {
             get { return context; }

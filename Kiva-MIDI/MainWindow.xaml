@@ -29,7 +29,6 @@
                     <RowDefinition Height="33*"/>
                     <RowDefinition Height="38*"/>
                 </Grid.RowDefinitions>
-                <Label Name="fpsLabel" Grid.RowSpan="2"></Label>
                 <!--<Image HorizontalAlignment="Center" Width="40" Height="Auto" Margin="5" Source="i2m.png"/>-->
                 <DockPanel HorizontalAlignment="Right" Margin="0,0,10,23" Grid.RowSpan="2" Width="52">
                     <Button Style="{StaticResource WindowButton}" Focusable="False" Name="ExitButton" Background="Red" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="ExitButton_Click"></Button>
@@ -53,10 +52,16 @@
             </Grid>
         </Border>
         <Grid Name="glContainer">
-            <!--<local:DXImage x:Name="dx11img">
-            </local:DXImage>-->
-            <local:DXElement x:Name="dx11img">
-            </local:DXElement>
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="100">
+                <Grid.Background>
+                    <SolidColorBrush Color="Black" Opacity=".5"/>
+                </Grid.Background>
+                <StackPanel>
+                    <Label Foreground="White" Name="fpsLabel"></Label>
+                    <Label Foreground="White" Name="renderNcLabel"></Label>
+                </StackPanel>
+            </Grid>
+            <local:DXElement x:Name="dx11img"/>
         </Grid>
     </DockPanel>
 </Window>

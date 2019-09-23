@@ -96,10 +96,13 @@
     <Compile Include="FastList.cs" />
     <Compile Include="FPS.cs" />
     <Compile Include="DX.WPF\IDirect3D.cs" />
+    <Compile Include="KDMAPI.cs" />
+    <Compile Include="KDMAPIPlayer.cs" />
     <Compile Include="MIDIParsing\BufferByteReader.cs" />
     <Compile Include="Disposer.cs" />
     <Compile Include="MIDIFile.cs" />
     <Compile Include="MIDIParsing\MIDITrackParser.cs" />
+    <Compile Include="MIDIParsing\SkipIterator.cs" />
     <Compile Include="MIDIRenderer.cs" />
     <Compile Include="PlayingState.cs" />
     <Compile Include="Scene.cs" />

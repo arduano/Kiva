@@ -186,6 +186,7 @@ namespace Kiva_MIDI
             DependencyProperty.Register("ChromeVisibility", typeof(Visibility), typeof(MainWindow), new PropertyMetadata(Visibility.Visible));
 
 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -204,7 +205,12 @@ namespace Kiva_MIDI
             //var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
             //var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
             var file = new MIDIFile("E:\\Midi\\[Black MIDI]scarlet_zone-& The Young Descendant of Tepes V.2.mid");
+            //var file = new MIDIFile("E:\\Midi\\Septette For The Dead Princess 442 MILLION.mid");
             file.Parse();
+            var player = new KDMAPIPlayer();
+            player.File = file;
+            player.Time = Time;
+            player.RunPlayer();
 
             scene.File = file;
             scene.Time = Time;
@@ -215,7 +221,8 @@ namespace Kiva_MIDI
 
             CompositionTarget.Rendering += (s, e) =>
             {
-                fpsLabel.Content = FPS.Value;
+                fpsLabel.Content = "FPS: " + FPS.Value.ToString("#,##0.0");
+                renderNcLabel.Content = "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0");
                 ignoreTimeSliderChange = true;
                 timeSlider.Value = Time.GetTime();
             };
@@ -253,6 +260,25 @@ namespace Kiva_MIDI
             if (e.Key == Key.Escape && Fullscreen)
             {
                 SetFullscreen(!_fullscreen);
+            }
+            if(e.Key == Key.Right)
+            {
+                double time = Time.GetTime() + 5;
+                time = Math.Max(time, timeSlider.Minimum);
+                time = Math.Min(time, timeSlider.Maximum);
+                Time.Navigate(time);
+            }
+            if(e.Key == Key.Left)
+            {
+                double time = Time.GetTime() - 5;
+                time = Math.Max(time, timeSlider.Minimum);
+                time = Math.Min(time, timeSlider.Maximum);
+                Time.Navigate(time);
+            }
+            if(e.Key == Key.Space)
+            {
+                if (Time.Paused) Time.Play();
+                else Time.Pause();
             }
         }
 

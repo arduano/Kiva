@@ -38,6 +38,8 @@ namespace Kiva_MIDI
         public MIDIFile File { get; set; }
         public PlayingState Time { get; set; } = new PlayingState();
 
+        public long LastRenderedNoteCount { get; private set; } = 0;
+
         ShaderManager notesShader;
         InputLayout noteLayout;
         InputLayout keyLayout;
@@ -172,65 +174,81 @@ namespace Kiva_MIDI
 
             context.ClearRenderTargetView(target, new Color4(0, 0, 0, 0.6f));
 
-            var colors = File.MidiNoteColors;
-            var lastTime = File.lastRenderTime;
-
-            for (int black = 0; black < 2; black++)
+            if (File != null)
             {
-                Parallel.For(firstNote, lastNote, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
-                {
-                    if ((blackKeys[k] && black == 1) || (!blackKeys[k] && black == 0)) return;
-                    unsafe
-                    {
-                        RenderNote* rn = stackalloc RenderNote[noteBufferLength];
-                        int nid = 0;
-                        int noff = File.FirstRenderNote[k];
-                        Note[] notes = File.Notes[k];
-                        if (lastTime > time)
-                        {
-                            for (noff = 0; noff < notes.Length; noff++)
-                            {
-                                if (notes[noff].end > time)
-                                {
-                                    File.FirstRenderNote[k] = noff;
-                                    break;
-                                }
-                            }
-                        }
-                        else if (lastTime < time)
-                        {
-                            for (; noff < notes.Length; noff++)
-                            {
-                                if (notes[noff].end > time)
-                                {
-                                    File.FirstRenderNote[k] = noff;
-                                    break;
-                                }
-                            }
-                        }
-                        while (noff != notes.Length && notes[noff].start < renderCutoff)
-                        {
-                            var n = notes[noff++];
-                            if (n.end < time) continue;
-                            //if (n.end - n.start > 10.1) continue;
-                            rn[nid++] = new RenderNote()
-                            {
-                                start = (float)((n.start - time) / timeScale),
-                                end = (float)((n.end - time) / timeScale),
-                                color = colors[n.colorPointer]
-                            };
-                            if (nid == noteBufferLength)
-                            {
-                                FlushNoteBuffer(context, k, (IntPtr)rn, nid);
-                                nid = 0;
-                            }
-                        }
-                        FlushNoteBuffer(context, k, (IntPtr)rn, nid);
-                    }
-                });
-            }
+                var colors = File.MidiNoteColors;
+                var lastTime = File.lastRenderTime;
 
-            File.lastRenderTime = time;
+                long notesRendered = 0;
+                object addLock = new object();
+
+                for (int black = 0; black < 2; black++)
+                {
+                    Parallel.For(firstNote, lastNote, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
+                    {
+                        if ((blackKeys[k] && black == 0) || (!blackKeys[k] && black == 1)) return;
+                        long _notesRendered = 0;
+                        unsafe
+                        {
+                            RenderNote* rn = stackalloc RenderNote[noteBufferLength];
+                            int nid = 0;
+                            int noff = File.FirstRenderNote[k];
+                            Note[] notes = File.Notes[k];
+                            if (lastTime > time)
+                            {
+                                for (noff = 0; noff < notes.Length; noff++)
+                                {
+                                    if (notes[noff].end > time)
+                                    {
+                                        File.FirstRenderNote[k] = noff;
+                                        break;
+                                    }
+                                }
+                            }
+                            else if (lastTime < time)
+                            {
+                                for (; noff < notes.Length; noff++)
+                                {
+                                    if (notes[noff].end > time)
+                                    {
+                                        File.FirstRenderNote[k] = noff;
+                                        break;
+                                    }
+                                }
+                            }
+                            while (noff != notes.Length && notes[noff].start < renderCutoff)
+                            {
+                                var n = notes[noff++];
+                                if (n.end < time) continue;
+                                notesRendered++;
+                                rn[nid++] = new RenderNote()
+                                {
+                                    start = (float)((n.start - time) / timeScale),
+                                    end = (float)((n.end - time) / timeScale),
+                                    color = colors[n.colorPointer]
+                                };
+                                if (nid == noteBufferLength)
+                                {
+                                    FlushNoteBuffer(context, k, (IntPtr)rn, nid);
+                                    nid = 0;
+                                }
+                            }
+                            FlushNoteBuffer(context, k, (IntPtr)rn, nid);
+                            lock (addLock)
+                            {
+                                notesRendered += _notesRendered;
+                            }
+                        }
+                    });
+                }
+
+                LastRenderedNoteCount = notesRendered;
+                File.lastRenderTime = time;
+            }
+            else
+            {
+                LastRenderedNoteCount = 0;
+            }
             context.Flush();
         }
 

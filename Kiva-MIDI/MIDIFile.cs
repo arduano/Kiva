@@ -66,7 +66,7 @@ namespace Kiva_MIDI
         TempoEvent[] globalTempos;
 
         //Persistent values
-        public MIDIEvent[] MIDIEvents { get; private set; } = null;
+        public MIDIEvent[][] MIDIEvents { get; private set; } = null;
         public Note[][] Notes { get; private set; } = new Note[256][];
         public int[] FirstRenderNote { get; private set; } = new int[256];
         public double lastRenderTime { get; set; } = 0;
@@ -202,6 +202,15 @@ namespace Kiva_MIDI
                 }
             });
             int keysMerged = 0;
+            var eventMerger = Task.Run(() =>
+            {
+                int count = Environment.ProcessorCount;
+                //count = 1;
+                MIDIEvents = new MIDIEvent[count][];
+                Parallel.For(0, count, i => {
+                    MIDIEvents[i] = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => new SkipIterator<MIDIEvent>(p.Events, i, count)).ToArray(), e => e.time).ToArray();
+                });
+            });
             Parallel.For(0, 256, (i) =>
             {
                 Notes[i] = TimedMerger<Note>.MergeMany(parsers.Select(p => p.Notes[i]).ToArray(), n => n.start).ToArray();
@@ -211,12 +220,14 @@ namespace Kiva_MIDI
                     Console.WriteLine("Merged key " + keysMerged + "/" + 256);
                 }
             });
+            Console.WriteLine("Merging events...");
+            eventMerger.GetAwaiter().GetResult();
         }
 
         void SetColors()
         {
             MidiNoteColors = new NoteCol[trackcount * 16];
-            for(int i = 0; i < MidiNoteColors.Length; i++)
+            for (int i = 0; i < MidiNoteColors.Length; i++)
             {
                 int r, g, b;
                 HsvToRgb((i * 40) % 360, 1, 1, out r, out g, out b);
@@ -325,9 +336,6 @@ namespace Kiva_MIDI
             b = Clamp((int)(B * 255.0));
         }
 
-        /// <summary>
-        /// Clamp a value to 0-255
-        /// </summary>
         int Clamp(int i)
         {
             if (i < 0) return 0;
