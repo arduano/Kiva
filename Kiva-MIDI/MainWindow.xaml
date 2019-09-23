@@ -5,63 +5,66 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kiva_MIDI"
         xmlns:i="clr-namespace:System.Windows.Interop;assembly=PresentationCore"
-        xmlns:wpf="clr-namespace:SharpDX.WPF"
         mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
         Name="mainWindow"
-        Title="MainWindow" WindowStyle="None" Height="450" Width="800" Loaded="Window_Loaded" SnapsToDevicePixels="True" PreviewKeyDown="MainWindow_PreviewKeyDown">
+        Title="MainWindow" WindowStyle="None" Height="450" Width="800" 
+        Loaded="Window_Loaded" SnapsToDevicePixels="True" PreviewKeyDown="MainWindow_PreviewKeyDown" 
+        AllowDrop="True" PreviewDrop="MainWindow_PreviewDrop" PreviewDragEnter="MainWindow_PreviewDragEnter" PreviewDragLeave="MainWindow_PreviewDragLeave">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <BitmapImage x:Key="Icon" UriSource="i2m.png" />
                 </ResourceDictionary>
-                <ResourceDictionary Source="WindowButtonTemplate.xaml"/>
+                <ResourceDictionary Source="ButtonTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="{Binding ActualHeight,ElementName=titlebar}"/>
     </WindowChrome.WindowChrome>
-    <DockPanel LastChildFill="True">
-        <Border Visibility="{Binding ChromeVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Background="#0068c9" DockPanel.Dock="Top" Height="71" x:Name="titlebar">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="33*"/>
-                    <RowDefinition Height="38*"/>
-                </Grid.RowDefinitions>
-                <!--<Image HorizontalAlignment="Center" Width="40" Height="Auto" Margin="5" Source="i2m.png"/>-->
-                <DockPanel HorizontalAlignment="Right" Margin="0,0,10,23" Grid.RowSpan="2" Width="52">
-                    <Button Style="{StaticResource WindowButton}" Focusable="False" Name="ExitButton" Background="Red" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="ExitButton_Click"></Button>
-                    <Button Style="{StaticResource WindowButton}" Focusable="False" Name="MinimiseButton" Background="Orange" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinimiseButton_Click"></Button>
-                </DockPanel>
-                <Grid Grid.RowSpan="2">
-                    <Grid VerticalAlignment="Top" HorizontalAlignment="Left" WindowChrome.IsHitTestVisibleInChrome="True">
-                        <!--<Button Style="{StaticResource MenuButtonStyle}" Click="MenuButton_Click" Visibility="Collapsed">
-                            <Grid>
-                                <Label>
-                                    File
-                                </Label>
-                                <Popup StaysOpen="False">
-                                    <Button>Test</Button>
-                                </Popup>
-                            </Grid>
-                        </Button>-->
-                    </Grid>
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <Border Visibility="{Binding ChromeVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Background="#0068c9" DockPanel.Dock="Top" Height="69" x:Name="titlebar">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <!--<Image HorizontalAlignment="Center" Width="40" Height="Auto" Margin="5" Source="i2m.png"/>-->
+                    <DockPanel HorizontalAlignment="Right" Margin="0,0,10,23" Grid.RowSpan="2" Width="52">
+                        <Button Style="{StaticResource WindowButton}" Focusable="False" Name="ExitButton" Background="Red" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="ExitButton_Click"></Button>
+                        <Button Style="{StaticResource WindowButton}" Focusable="False" Name="MinimiseButton" Background="Orange" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinimiseButton_Click"></Button>
+                    </DockPanel>
+                    <DockPanel LastChildFill="False">
+                        <Button Name="pauseButton" PreviewMouseDown="PauseButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
+                            <Image HorizontalAlignment="Center" Height="Auto" Margin="5" Source="Material.WPF/pause.png"/>
+                        </Button>
+                        <Button Name="playButton" PreviewMouseDown="PlayButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
+                            <Image HorizontalAlignment="Center" Height="Auto" Margin="5" Source="Material.WPF/play.png"/>
+                        </Button>
+                    </DockPanel>
+                    <Slider Name="timeSlider" Margin="10,8,10,7" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged" VerticalAlignment="Center"/>
                 </Grid>
-                <Slider Name="timeSlider" Margin="10,0" Grid.Row="1" Height="20" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged"/>
+            </Border>
+            <Grid Name="glContainer">
+                <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="100">
+                    <Grid.Background>
+                        <SolidColorBrush Color="Black" Opacity=".5"/>
+                    </Grid.Background>
+                    <StackPanel>
+                        <Label Foreground="White" Name="fpsLabel"></Label>
+                        <Label Foreground="White" Name="renderNcLabel"></Label>
+                    </StackPanel>
+                </Grid>
+                <local:DXElement x:Name="dx11img"/>
             </Grid>
-        </Border>
-        <Grid Name="glContainer">
-            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="100">
-                <Grid.Background>
-                    <SolidColorBrush Color="Black" Opacity=".5"/>
-                </Grid.Background>
-                <StackPanel>
-                    <Label Foreground="White" Name="fpsLabel"></Label>
-                    <Label Foreground="White" Name="renderNcLabel"></Label>
-                </StackPanel>
-            </Grid>
-            <local:DXElement x:Name="dx11img"/>
-        </Grid>
-    </DockPanel>
+        </DockPanel>
+        <Rectangle Name="dropHighlight" Fill="White" Visibility="Hidden" Opacity="0"/>
+    </Grid>
 </Window>

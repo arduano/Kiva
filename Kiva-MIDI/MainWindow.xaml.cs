@@ -185,7 +185,8 @@ namespace Kiva_MIDI
         public static readonly DependencyProperty ChromeVisibilityProperty =
             DependencyProperty.Register("ChromeVisibility", typeof(Visibility), typeof(MainWindow), new PropertyMetadata(Visibility.Visible));
 
-
+        Scene scene;
+        KDMAPIPlayer player;
 
         public MainWindow()
         {
@@ -199,25 +200,15 @@ namespace Kiva_MIDI
 
             FPS = new FPS();
             Time = new PlayingState();
-            var scene = new Scene() { Renderer = new D3D11(), FPS = FPS };
+            Time.PauseChanged += PauseChanged;
+            PauseChanged();
+            scene = new Scene() { Renderer = new D3D11(), FPS = FPS };
             dx11img.Renderer = scene;
-
-            //var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
-            //var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
-            var file = new MIDIFile("E:\\Midi\\[Black MIDI]scarlet_zone-& The Young Descendant of Tepes V.2.mid");
-            //var file = new MIDIFile("E:\\Midi\\Septette For The Dead Princess 442 MILLION.mid");
-            file.Parse();
-            var player = new KDMAPIPlayer();
-            player.File = file;
-            player.Time = Time;
-            player.RunPlayer();
-
-            scene.File = file;
             scene.Time = Time;
 
-            timeSlider.Maximum = file.MidiLength;
-
-            Time.Play();
+            player = new KDMAPIPlayer();
+            player.RunPlayer();
+            player.Time = Time;
 
             CompositionTarget.Rendering += (s, e) =>
             {
@@ -229,6 +220,26 @@ namespace Kiva_MIDI
         }
         public FPS FPS { get; set; }
         public PlayingState Time { get; set; }
+
+        void LoadMidi(string filename)
+        {
+            Time.Reset();
+            player.File = null;
+            scene.File = null;
+            GC.Collect(2, GCCollectionMode.Forced);
+
+            var file = new MIDIFile(filename);
+            //var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
+            //var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
+            //var file = new MIDIFile("E:\\Midi\\[Black MIDI]scarlet_zone-& The Young Descendant of Tepes V.2.mid");
+            //var file = new MIDIFile("E:\\Midi\\Septette For The Dead Princess 442 MILLION.mid");
+            file.Parse();
+            player.File = file;
+            scene.File = file;
+            timeSlider.Maximum = file.MidiLength;
+
+            Time.Play();
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -261,23 +272,26 @@ namespace Kiva_MIDI
             {
                 SetFullscreen(!_fullscreen);
             }
-            if(e.Key == Key.Right)
+            if (e.Key == Key.Right)
             {
                 double time = Time.GetTime() + 5;
                 time = Math.Max(time, timeSlider.Minimum);
                 time = Math.Min(time, timeSlider.Maximum);
                 Time.Navigate(time);
             }
-            if(e.Key == Key.Left)
+            if (e.Key == Key.Left)
             {
                 double time = Time.GetTime() - 5;
                 time = Math.Max(time, timeSlider.Minimum);
                 time = Math.Min(time, timeSlider.Maximum);
                 Time.Navigate(time);
             }
-            if(e.Key == Key.Space)
+            if (e.Key == Key.Space)
             {
-                if (Time.Paused) Time.Play();
+                if (Time.Paused)
+                {
+                    if (scene.File != null) Time.Play();
+                }
                 else Time.Pause();
             }
         }
@@ -298,6 +312,56 @@ namespace Kiva_MIDI
             if (!ignoreTimeSliderChange)
                 Time.Navigate(timeSlider.Value);
             ignoreTimeSliderChange = false;
+        }
+
+        void PauseChanged()
+        {
+            if (Time.Paused)
+            {
+                pauseButton.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
+                playButton.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+            }
+            else
+            {
+                pauseButton.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                playButton.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
+            }
+        }
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Time.Paused)
+                Time.Pause();
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (scene.File != null)
+                if (Time.Paused)
+                    Time.Play();
+        }
+
+        private void MainWindow_PreviewDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Length > 0)
+                {
+                    dropHighlight.Visibility = Visibility.Hidden;
+                    LoadMidi(files[0]);
+                }
+            }
+        }
+
+        private void MainWindow_PreviewDragEnter(object sender, DragEventArgs e)
+        {
+            dropHighlight.Visibility = Visibility.Visible;
+        }
+
+        private void MainWindow_PreviewDragLeave(object sender, DragEventArgs e)
+        {
+            dropHighlight.Visibility = Visibility.Hidden;
         }
     }
 }

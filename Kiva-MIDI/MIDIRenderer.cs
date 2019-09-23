@@ -220,7 +220,7 @@ namespace Kiva_MIDI
                             {
                                 var n = notes[noff++];
                                 if (n.end < time) continue;
-                                notesRendered++;
+                                _notesRendered++;
                                 rn[nid++] = new RenderNote()
                                 {
                                     start = (float)((n.start - time) / timeScale),

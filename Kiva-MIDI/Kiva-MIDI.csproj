@@ -37,7 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>Kiva_MIDI.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cyotek.Drawing.BitmapFont, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
@@ -98,6 +98,7 @@
     <Compile Include="DX.WPF\IDirect3D.cs" />
     <Compile Include="KDMAPI.cs" />
     <Compile Include="KDMAPIPlayer.cs" />
+    <Compile Include="Material.WPF\RippleEffectDecorator.cs" />
     <Compile Include="MIDIParsing\BufferByteReader.cs" />
     <Compile Include="Disposer.cs" />
     <Compile Include="MIDIFile.cs" />
@@ -107,6 +108,9 @@
     <Compile Include="PlayingState.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="MIDIParsing\TimedMerger.cs" />
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShaderManager.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -120,7 +124,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="WindowButtonTemplate.xaml">
+    <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ButtonTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -153,6 +161,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Material.WPF\play.png" />
+    <Resource Include="Material.WPF\pause.png" />
     <Content Include="Notes.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

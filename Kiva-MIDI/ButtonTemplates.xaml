@@ -61,4 +61,21 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="TransparentButtonStyle" TargetType="ContentControl">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Grid Background="{TemplateBinding Background}">
+                        <local:RippleEffectDecorator ExpandTime="0.2" FadeTime="0.2">
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="Center"
+                           VerticalAlignment="Center" Name="content"/>
+                            </Grid>
+                        </local:RippleEffectDecorator>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -9,10 +9,35 @@ namespace Kiva_MIDI
 {
     class KDMAPIPlayer : IDisposable
     {
-        public MIDIFile File { get; set; }
+        public MIDIFile File
+        {
+            get => file;
+            set
+            {
+                Task.Run(() =>
+                {
+                    lock (this)
+                    {
+                        if (file != null)
+                        {
+                            file = null;
+                            lock (tasks)
+                            {
+                                foreach (var t in tasks) t.GetAwaiter().GetResult();
+                                tasks.Clear();
+                            }
+                        }
+                        file = value;
+                    }
+                });
+            }
+        }
+        MIDIFile file = null;
         public PlayingState Time { get; set; } = new PlayingState();
         bool disposed = false;
         Task playerThread = null;
+
+        List<Task> tasks = new List<Task>();
 
         public void Dispose()
         {
@@ -28,16 +53,20 @@ namespace Kiva_MIDI
                 KDMAPI.InitializeKDMAPIStream();
                 while (!disposed)
                 {
-                    SpinWait.SpinUntil(() => File != null || disposed);
+                    SpinWait.SpinUntil(() => file != null || disposed);
                     try
                     {
                         object l = new object();
-                        List<Task> tasks = new List<Task>();
-                        for (int i = 0; i < File.MIDIEvents.Length; i++)
+                        for (int i = 0; i < file.MIDIEvents.Length; i++)
                         {
                             tasks.Add(RunPlayerThread(i, l));
                         }
-                        foreach (var t in tasks) t.GetAwaiter().GetResult();
+                        lock (tasks)
+                        {
+                            foreach (var t in tasks) t.GetAwaiter().GetResult();
+                            lock (tasks)
+                                tasks.Clear();
+                        }
                     }
                     catch { }
                 }
@@ -49,16 +78,25 @@ namespace Kiva_MIDI
         {
             return Task.Run(() =>
             {
-                var events = File.MIDIEvents[i];
+                var events = file.MIDIEvents[i];
                 int evid = 0;
                 double lastTime = 0;
-                while (File != null)
+                bool changed = false;
+                Action onChanged = () => changed = true;
+                Time.TimeChanged += onChanged;
+                while (file != null)
                 {
-                    if (Time.Paused) SpinWait.SpinUntil(() => !Time.Paused);
-                    double time = Time.GetTime();
-                    if (time < lastTime)
+                reset:
+                    while (Time.Paused)
                     {
+                        Thread.Sleep(50);
+                    }
+                    double time = Time.GetTime();
+                    if (changed || lastTime > time)
+                    {
+                        KDMAPI.ResetKDMAPIStream();
                         evid = GetEventPos(events, time);
+                        changed = false;
                     }
                     lastTime = time;
                     evid++;
@@ -66,27 +104,28 @@ namespace Kiva_MIDI
                     {
                         var ev = events[evid];
                         var delay = ev.time - time;
-                        if (delay > 0.5) SpinWait.SpinUntil(() =>
+                        while (delay > 0.2)
                         {
-                            time = ev.time - Time.GetTime();
-                            return time > 0.5;
-                        });
-                        if (delay > 0) Thread.Sleep(new TimeSpan((long)(delay * 10000000)));
-                        if (delay < -10)
-                        {
-                            lastTime = ev.time;
-                            evid = GetEventPos(events, time);
-                            continue;
+                            Thread.Sleep(20);
+                            delay = ev.time - Time.GetTime();
+                            if (changed) break;
                         }
-                        if (delay < -0.01) while (evid < events.Length && (events[evid].time - time < -3)) KDMAPI.SendDirectData(events[evid++].data);
+                        if (changed) goto reset;
+                        if (delay > 0) Thread.Sleep(new TimeSpan((long)(delay * 10000000)));
+                        if (delay < -0.05)
+                            while (evid < events.Length && (events[evid].time - time < -0.05)) KDMAPI.SendDirectData(events[evid++].data);
                         else
                             KDMAPI.SendDirectData(ev.data);
                     }
                     else
                     {
-                        SpinWait.SpinUntil(() => Time.GetTime() < time);
+                        while(Time.GetTime() > events[events.Length - 1].time)
+                        {
+                            Thread.Sleep(50);
+                        }
                     }
                 }
+                Time.TimeChanged -= onChanged;
             });
         }
 
@@ -101,7 +140,7 @@ namespace Kiva_MIDI
                 {
                     max = mid - 1;
                 }
-                else if (events[mid + 1].time < time)
+                else if (mid + 1 != events.Length && events[mid + 1].time < time)
                 {
                     min = mid + 1;
                 }
