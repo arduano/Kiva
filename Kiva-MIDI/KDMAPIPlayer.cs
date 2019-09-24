@@ -78,6 +78,7 @@ namespace Kiva_MIDI
         {
             return Task.Run(() =>
             {
+                Console.WriteLine("started player " + i);
                 var events = file.MIDIEvents[i];
                 int evid = 0;
                 double lastTime = 0;
@@ -87,11 +88,15 @@ namespace Kiva_MIDI
                 while (file != null)
                 {
                 reset:
-                    while (Time.Paused)
-                    {
-                        Thread.Sleep(50);
-                    }
                     double time = Time.GetTime();
+                    if (Time.Paused)
+                    {
+                        evid = GetEventPos(events, time);
+                        while (Time.Paused)
+                        {
+                            Thread.Sleep(50);
+                        }
+                    }
                     if (changed || lastTime > time)
                     {
                         KDMAPI.ResetKDMAPIStream();
@@ -99,7 +104,6 @@ namespace Kiva_MIDI
                         changed = false;
                     }
                     lastTime = time;
-                    evid++;
                     if (evid < events.Length)
                     {
                         var ev = events[evid];
@@ -123,7 +127,9 @@ namespace Kiva_MIDI
                         {
                             Thread.Sleep(50);
                         }
+                        evid = GetEventPos(events, time);
                     }
+                    evid++;
                 }
                 Time.TimeChanged -= onChanged;
             });
@@ -131,6 +137,8 @@ namespace Kiva_MIDI
 
         int GetEventPos(MIDIEvent[] events, double time)
         {
+            if (time < events[0].time) return 0;
+            if (time > events[events.Length - 1].time) return events.Length;
             int min = 0;
             int max = events.Length - 1;
             while (min <= max)

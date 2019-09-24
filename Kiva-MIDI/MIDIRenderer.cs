@@ -13,6 +13,8 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using SharpDX.Direct3D;
 using System.Collections.Concurrent;
+using IO = System.IO;
+using System.Reflection;
 
 namespace Kiva_MIDI
 {
@@ -55,11 +57,24 @@ namespace Kiva_MIDI
 
         public MIDIRenderer(Device device)
         {
+            string noteShaderData;
+            if (IO.File.Exists("Notes.fx"))
+            {
+                noteShaderData = IO.File.ReadAllText("Notes.fx");
+            }
+            else
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var names = assembly.GetManifestResourceNames();
+                using (var stream = assembly.GetManifestResourceStream("Kiva_MIDI.Notes.fx"))
+                using (var reader = new IO.StreamReader(stream))
+                    noteShaderData = reader.ReadToEnd();
+            }
             notesShader = new ShaderManager(
                 device,
-                ShaderBytecode.CompileFromFile("Notes.fx", "VS_Note", "vs_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.CompileFromFile("Notes.fx", "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.CompileFromFile("Notes.fx", "GS_Note", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+                ShaderBytecode.Compile(noteShaderData, "VS_Note", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "GS_Note", "gs_4_0", ShaderFlags.None, EffectFlags.None)
             );
 
             noteLayout = new InputLayout(device, ShaderSignature.GetInputSignature(notesShader.vertexShaderByteCode), new[] {

@@ -4,24 +4,25 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kiva_MIDI
 {
     [StructLayout(LayoutKind.Sequential)]
-    struct NoteCol
+    public struct NoteCol
     {
         public float r, g, b, a;
         public float r2, g2, b2, a2;
     }
 
-    interface ITimed
+    public interface ITimed
     {
         double Time { get; }
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct Note
+    public struct Note
     {
         public double start, end;
         public int colorPointer;
@@ -29,41 +30,55 @@ namespace Kiva_MIDI
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct MIDIEvent
+    public struct MIDIEvent
     {
         public double time;
         public uint data;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct ColorEvent
+    public struct ColorEvent
     {
         public double time;
         public NoteCol color;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct TempoEvent
+    public struct TempoEvent
     {
         public long time;
         public int tempo;
     }
 
-    enum ParsingStage
+    public enum ParsingStage
     {
         Opening,
         FirstPass,
         SecondPass,
-        Merging
+        MergingKeys,
+        MergingEvents,
     }
 
-    class MIDIFile
+    public class MIDILoaderSettings
+    {
+        public MIDILoaderSettings()
+        {
+        }
+        public byte EventVelocityThreshold { get; set; } = 0;
+        public byte NoteVelocityThreshold { get; set; } = 0;
+        public int EventPlayerThreads { get; set; } = Environment.ProcessorCount;
+    }
+
+    public class MIDIFile
     {
         List<long> trackBeginnings = new List<long>();
         List<uint> trackLengths = new List<uint>();
 
         MIDITrackParser[] parsers;
         TempoEvent[] globalTempos;
+
+        public event Action ParseFinished;
+        public event Action ParseCancelled;
 
         //Persistent values
         public MIDIEvent[][] MIDIEvents { get; private set; } = null;
@@ -72,17 +87,27 @@ namespace Kiva_MIDI
         public double lastRenderTime { get; set; } = 0;
         public NoteCol[] MidiNoteColors { get; private set; } = null;
         public double MidiLength { get; private set; } = 0;
+        public int FirstKey { get; private set; } = 0;
+        public int LastKey { get; private set; } = 255;
 
+        public ParsingStage ParseStage { get; private set; } = ParsingStage.Opening;
+        public double ParseNumber { get; private set; }
+        public string ParseStatusText { get; private set; }
 
         public ushort division { get; private set; }
         public int trackcount { get; private set; }
         public ushort format { get; private set; }
 
         Stream MidiFileReader;
-        string filepath;
+        MIDILoaderSettings loaderSettings;
 
-        public MIDIFile(string path)
+        string filepath;
+        CancellationToken cancel;
+
+        public MIDIFile(string path, MIDILoaderSettings settings, CancellationToken cancel)
         {
+            loaderSettings = settings;
+            this.cancel = cancel;
             filepath = path;
         }
 
@@ -133,29 +158,41 @@ namespace Kiva_MIDI
             trackLengths.Add(length);
             MidiFileReader.Position += length;
             trackcount++;
+            ParseStatusText = "Checking MIDI\nFound " + trackcount + " tracks";
             Console.WriteLine("Track " + trackcount + ", Size " + length);
         }
 
         public void Parse()
         {
-            Open();
-            FirstPassParse();
-            foreach (var p in parsers)
+            try
             {
-                p.globaTempos = globalTempos;
-                p.PrepareForSecondPass();
+                Open();
+                FirstPassParse();
+                foreach (var p in parsers)
+                {
+                    p.globaTempos = globalTempos;
+                    p.PrepareForSecondPass();
+                }
+                SecondPassParse();
+                MidiLength = parsers.Select(p => p.trackSeconds).Max();
+                foreach (var p in parsers) p.Dispose();
+                parsers = null;
+                globalTempos = null;
+                trackBeginnings = null;
+                trackLengths = null;
+                MidiFileReader.Dispose();
+                MidiFileReader = null;
+                GC.Collect();
+                cancel.ThrowIfCancellationRequested();
+                SetColors();
+                ParseFinished?.Invoke();
             }
-            SecondPassParse();
-            MidiLength = parsers.Select(p => p.trackSeconds).Max();
-            foreach (var p in parsers) p.Dispose();
-            parsers = null;
-            globalTempos = null;
-            trackBeginnings = null;
-            trackLengths = null;
-            MidiFileReader.Dispose();
-            MidiFileReader = null;
-            GC.Collect();
-            SetColors();
+            catch (OperationCanceledException)
+            {
+                MidiFileReader.Close();
+                MidiFileReader.Dispose();
+                ParseCancelled?.Invoke();
+            }
         }
 
         void Open()
@@ -165,6 +202,8 @@ namespace Kiva_MIDI
             while (MidiFileReader.Position < MidiFileReader.Length)
             {
                 ParseTrackChunk();
+                ParseNumber += 2;
+                cancel.ThrowIfCancellationRequested();
             }
             parsers = new MIDITrackParser[trackcount];
         }
@@ -173,17 +212,21 @@ namespace Kiva_MIDI
         {
             object l = new object();
             int tracksParsed = 0;
-            Parallel.For(0, parsers.Length, (i) =>
+            ParseStage = ParsingStage.FirstPass;
+            Parallel.For(0, parsers.Length, new ParallelOptions() { CancellationToken = cancel }, (i) =>
             {
                 var reader = new BufferByteReader(MidiFileReader, 10000, trackBeginnings[i], trackLengths[i]);
-                parsers[i] = new MIDITrackParser(reader, division, i);
+                parsers[i] = new MIDITrackParser(reader, division, i, loaderSettings);
                 parsers[i].FirstPassParse();
                 lock (l)
                 {
                     tracksParsed++;
+                    ParseNumber += 20;
+                    ParseStatusText = "Analyzing MIDI\nTracks " + tracksParsed + " of " + parsers.Length;
                     Console.WriteLine("Pass 1 Parsed track " + tracksParsed + "/" + parsers.Length);
                 }
             });
+            cancel.ThrowIfCancellationRequested();
             var temposMerge = TimedMerger<TempoEvent>.MergeMany(parsers.Select(p => p.Tempos).ToArray(), t => t.time);
             globalTempos = temposMerge.Cast<TempoEvent>().ToArray();
         }
@@ -192,36 +235,57 @@ namespace Kiva_MIDI
         {
             object l = new object();
             int tracksParsed = 0;
+            ParseStage = ParsingStage.SecondPass;
             Parallel.For(0, parsers.Length, (i) =>
             {
                 parsers[i].SecondPassParse();
                 lock (l)
                 {
                     tracksParsed++;
+                    ParseNumber += 20;
+                    ParseStatusText = "Loading MIDI\nTracks " + tracksParsed + " of " + parsers.Length;
                     Console.WriteLine("Pass 2 Parsed track " + tracksParsed + "/" + parsers.Length);
                 }
             });
+            cancel.ThrowIfCancellationRequested();
             int keysMerged = 0;
             var eventMerger = Task.Run(() =>
             {
-                int count = Environment.ProcessorCount;
-                //count = 1;
+                int count = loaderSettings.EventPlayerThreads;
                 MIDIEvents = new MIDIEvent[count][];
-                Parallel.For(0, count, i => {
-                    MIDIEvents[i] = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => new SkipIterator<MIDIEvent>(p.Events, i, count)).ToArray(), e => e.time).ToArray();
+                Parallel.For(0, count, new ParallelOptions() { CancellationToken = cancel }, i =>
+                {
+                    try
+                    {
+                        MIDIEvents[i] = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => new SkipIterator<MIDIEvent>(p.Events, i, count)).ToArray(), e =>
+                        {
+                            return e.time;
+                        }).ToArray();
+                    }
+                    catch (OperationCanceledException)
+                    {
+                    }
                 });
             });
-            Parallel.For(0, 256, (i) =>
+            cancel.ThrowIfCancellationRequested();
+            ParseStage = ParsingStage.MergingKeys;
+            Parallel.For(0, 256, new ParallelOptions() { CancellationToken = cancel }, (i) =>
             {
                 Notes[i] = TimedMerger<Note>.MergeMany(parsers.Select(p => p.Notes[i]).ToArray(), n => n.start).ToArray();
                 lock (l)
                 {
                     keysMerged++;
+                    ParseNumber += 10;
+                    ParseStatusText = "Merging Notes\nMerged keys " + keysMerged + " of " + 256;
                     Console.WriteLine("Merged key " + keysMerged + "/" + 256);
                 }
             });
+            cancel.ThrowIfCancellationRequested();
+            ParseStatusText = "Merging Events...";
+            ParseStage = ParsingStage.MergingEvents;
             Console.WriteLine("Merging events...");
             eventMerger.GetAwaiter().GetResult();
+            ParseStatusText = "Done!";
         }
 
         void SetColors()

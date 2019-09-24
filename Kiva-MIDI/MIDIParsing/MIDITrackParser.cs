@@ -8,6 +8,11 @@ namespace Kiva_MIDI
 {
     class MIDITrackParser : IDisposable
     {
+        struct UnendedNote
+        {
+            public int id;
+            public byte vel;
+        }
         BufferByteReader reader;
 
         public FastList<TempoEvent> Tempos = new FastList<TempoEvent>();
@@ -21,19 +26,25 @@ namespace Kiva_MIDI
         long trackTimep2 = 0;
         public double trackSeconds = 0;
         int ppq;
-        FastList<int>[] UnendedNotes = null;
+        FastList<UnendedNote>[] UnendedNotes = null;
         public Note[][] Notes = new Note[256][];
         public MIDIEvent[] Events = null;
         int currEventIndex = 0;
         int[] currNoteIndexes = new int[256];
+
+        public int FirstKey;
+        public int LastKey;
 
         int track;
 
         int currGlobalTempoID = 0;
         double tempoMultiplier;
 
-        public MIDITrackParser(BufferByteReader reader, int ppq, int track)
+        MIDILoaderSettings settings;
+
+        public MIDITrackParser(BufferByteReader reader, int ppq, int track, MIDILoaderSettings settings)
         {
+            this.settings = settings;
             this.reader = reader;
             this.ppq = ppq;
             this.track = track;
@@ -102,7 +113,15 @@ namespace Kiva_MIDI
         byte prevCommand = 0;
         public void FirstPassParse()
         {
-            try
+            UnendedNotes = new FastList<UnendedNote>[256 * 16];
+            for (int i = 0; i < 256 * 16; i++)
+            {
+                UnendedNotes[i] = new FastList<UnendedNote>();
+            }
+            byte eventThresh = settings.EventVelocityThreshold;
+            byte noteThresh = settings.NoteVelocityThreshold;
+            if (noteThresh > eventThresh) noteThresh = eventThresh;
+            //try
             {
                 while (true)
                 {
@@ -123,10 +142,24 @@ namespace Kiva_MIDI
                         byte vel = reader.ReadFast();
                         if (vel != 0)
                         {
-                            noteCount++;
-                            noteCounts[note]++;
+                            if (vel >= noteThresh)
+                            {
+                                noteCount++;
+                                noteCounts[note]++;
+                            }
+                            if (vel >= eventThresh)
+                                midiEventCount++;
+                            UnendedNotes[note * 16 + channel].Add(new UnendedNote() { vel = vel });
                         }
-                        midiEventCount++;
+                        else
+                        {
+                            var un = UnendedNotes[note * 16 + channel];
+                            if (!un.ZeroLen)
+                            {
+                                if (un.Pop().vel >= eventThresh)
+                                    midiEventCount++;
+                            }
+                        }
                         continue;
                     }
                     else if (comm == 0b10000000)
@@ -134,7 +167,12 @@ namespace Kiva_MIDI
                         byte channel = (byte)(command & 0b00001111);
                         byte note = reader.Read();
                         byte vel = reader.ReadFast();
-                        midiEventCount++;
+                        var un = UnendedNotes[note * 16 + channel];
+                        if (!un.ZeroLen)
+                        {
+                            if (un.Pop().vel >= eventThresh)
+                                midiEventCount++;
+                        }
                         continue;
                     }
                     else if (comm == 0b10100000)
@@ -346,7 +384,8 @@ namespace Kiva_MIDI
                     }
                 }
             }
-            catch { }
+            //catch { }
+            UnendedNotes = null;
         }
 
         public void PrepareForSecondPass()
@@ -361,12 +400,15 @@ namespace Kiva_MIDI
 
         public void SecondPassParse()
         {
-            UnendedNotes = new FastList<int>[256 * 16];
+            byte eventThresh = settings.EventVelocityThreshold;
+            byte noteThresh = settings.NoteVelocityThreshold;
+            if (noteThresh > eventThresh) noteThresh = eventThresh;
+            UnendedNotes = new FastList<UnendedNote>[256 * 16];
             for (int i = 0; i < 256 * 16; i++)
             {
-                UnendedNotes[i] = new FastList<int>();
+                UnendedNotes[i] = new FastList<UnendedNote>();
             }
-            try
+            //try
             {
                 while (true)
                 {
@@ -385,25 +427,49 @@ namespace Kiva_MIDI
                         byte channel = (byte)(command & 0b00001111);
                         byte note = reader.Read();
                         byte vel = reader.ReadFast();
-                        Events[currEventIndex++] = new MIDIEvent()
-                        {
-                            time = trackSeconds,
-                            data = (uint)(command | (note << 8) | (vel << 16))
-                        };
                         if (vel == 0)
                         {
                             var un = UnendedNotes[note * 16 + channel];
                             if (!un.ZeroLen)
-                                Notes[note][un.Pop()].end = trackSeconds;
+                            {
+                                var n = un.Pop();
+                                if (n.id != -1)
+                                {
+                                    Notes[note][n.id].end = trackSeconds;
+                                    if (n.vel >= eventThresh)
+                                    {
+                                        Events[currEventIndex++] = new MIDIEvent()
+                                        {
+                                            time = trackSeconds,
+                                            data = (uint)(command | (note << 8) | (vel << 16))
+                                        };
+                                    }
+                                }
+                            }
                         }
                         else
                         {
-                            UnendedNotes[note * 16 + channel].Add(currNoteIndexes[note]);
-                            Notes[note][currNoteIndexes[note]++] = new Note()
+                            if (vel >= noteThresh)
                             {
-                                start = trackSeconds,
-                                colorPointer = track * 16 + channel
-                            };
+                                UnendedNotes[note * 16 + channel].Add(new UnendedNote() { id = currNoteIndexes[note], vel = vel });
+                                Notes[note][currNoteIndexes[note]++] = new Note()
+                                {
+                                    start = trackSeconds,
+                                    colorPointer = track * 16 + channel
+                                };
+                                if (vel >= eventThresh)
+                                {
+                                    Events[currEventIndex++] = new MIDIEvent()
+                                    {
+                                        time = trackSeconds,
+                                        data = (uint)(command | (note << 8) | (vel << 16))
+                                    };
+                                }
+                            }
+                            else
+                            {
+                                UnendedNotes[note * 16 + channel].Add(new UnendedNote() { id = -1 });
+                            }
                         }
                         continue;
                     }
@@ -412,14 +478,24 @@ namespace Kiva_MIDI
                         byte channel = (byte)(command & 0b00001111);
                         byte note = reader.Read();
                         byte vel = reader.ReadFast();
-                        Events[currEventIndex++] = new MIDIEvent()
-                        {
-                            time = trackSeconds,
-                            data = (uint)(command | (note << 8) | (vel << 16))
-                        };
                         var un = UnendedNotes[note * 16 + channel];
                         if (!un.ZeroLen)
-                            Notes[note][un.Pop()].end = trackSeconds;
+                        {
+                            var n = un.Pop();
+                            if (n.id != -1)
+                            {
+                                Notes[note][n.id].end = trackSeconds;
+                                if (n.vel >= eventThresh)
+                                {
+                                    Events[currEventIndex++] = new MIDIEvent()
+                                    {
+                                        time = trackSeconds,
+                                        data = (uint)(command | (note << 8) | (vel << 16))
+                                    };
+                                }
+                                else { }
+                            }
+                        }
                         continue;
                     }
                     else if (comm == 0b10100000)
@@ -671,14 +747,17 @@ namespace Kiva_MIDI
                     }
                 }
             }
-            catch { }
-            for (int i = 0; i < 256; i++)
-            {
-                while (!UnendedNotes[i].ZeroLen)
+            //catch { }
+            for (int note = 0; note < 256; note++)
+                for (int channel = 0; channel < 16; channel++)
                 {
-                    Notes[i][UnendedNotes[i].Pop()].end = trackSeconds;
+                    while (!UnendedNotes[note * 16 + channel].ZeroLen)
+                    {
+                        var n = UnendedNotes[note * 16 + channel].Pop();
+                        if (n.id != -1)
+                            Notes[note][n.id].end = trackSeconds;
+                    }
                 }
-            }
             UnendedNotes = null;
         }
 

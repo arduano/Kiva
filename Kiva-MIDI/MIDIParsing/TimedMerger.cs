@@ -18,7 +18,9 @@ namespace Kiva_MIDI
                 this.t1 = t1.GetEnumerator();
                 this.t2 = t2.GetEnumerator();
                 if (!this.t1.MoveNext()) t1Ended = true;
+                else t1t = getTime(this.t1.Current);
                 if (!this.t2.MoveNext()) t2Ended = true;
+                else t2t = getTime(this.t2.Current);
             }
 
             public T Current { get; set; }
@@ -28,6 +30,7 @@ namespace Kiva_MIDI
             object IEnumerator.Current => Current;
 
             IEnumerator<T> t1, t2;
+            double t1t, t2t;
 
             Func<T, double> getTime;
 
@@ -42,6 +45,7 @@ namespace Kiva_MIDI
                     {
                         Current = t2.Current;
                         if (!t2.MoveNext()) t2Ended = true;
+                        else t2t = getTime(t2.Current);
                     }
                 }
                 else
@@ -50,18 +54,21 @@ namespace Kiva_MIDI
                     {
                         Current = t1.Current;
                         if (!t1.MoveNext()) t1Ended = true;
+                        else t1t = getTime(t1.Current);
                     }
                     else
                     {
-                        if (getTime(t2.Current) < getTime(t1.Current))
+                        if (t2t < t1t)
                         {
                             Current = t2.Current;
                             if (!t2.MoveNext()) t2Ended = true;
+                            else t2t = getTime(t2.Current);
                         }
                         else
                         {
                             Current = t1.Current;
                             if (!t1.MoveNext()) t1Ended = true;
+                            else t1t = getTime(t1.Current);
                         }
                     }
                 }

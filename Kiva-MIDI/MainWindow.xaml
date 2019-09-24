@@ -12,15 +12,12 @@
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"        
         Name="mainWindow"
-        Title="MainWindow" WindowStyle="None" Height="450" Width="800" 
+        Title="MainWindow" WindowStyle="None" Height="700" Width="1200" 
         Loaded="Window_Loaded" SnapsToDevicePixels="True" PreviewKeyDown="MainWindow_PreviewKeyDown" 
-        AllowDrop="True" PreviewDrop="MainWindow_PreviewDrop" PreviewDragEnter="MainWindow_PreviewDragEnter" PreviewDragLeave="MainWindow_PreviewDragLeave">
+        AllowDrop="True" PreviewDrop="MainWindow_PreviewDrop" PreviewDragEnter="MainWindow_PreviewDragEnter" PreviewDragLeave="MainWindow_PreviewDragLeave" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <BitmapImage x:Key="Icon" UriSource="i2m.png" />
-                </ResourceDictionary>
                 <ResourceDictionary Source="ButtonTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -65,6 +62,6 @@
                 <local:DXElement x:Name="dx11img"/>
             </Grid>
         </DockPanel>
-        <Rectangle Name="dropHighlight" Fill="White" Visibility="Hidden" Opacity="0"/>
+        <Rectangle Name="dropHighlight" Fill="White" Visibility="Hidden" Opacity="0.3"/>
     </Grid>
 </Window>

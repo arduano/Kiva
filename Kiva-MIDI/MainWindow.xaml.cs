@@ -228,17 +228,36 @@ namespace Kiva_MIDI
             scene.File = null;
             GC.Collect(2, GCCollectionMode.Forced);
 
-            var file = new MIDIFile(filename);
+
+            var form = new LoadingMidiForm(filename);
+            form.ParseFinished += () =>
+            {
+                var file = form.LoadedFile;
+                Dispatcher.Invoke(() =>
+                {
+                    player.File = file;
+                    scene.File = file;
+                    timeSlider.Maximum = file.MidiLength;
+                    form.Close();
+                    form.Dispose();
+                    GC.Collect(2, GCCollectionMode.Forced);
+                    Time.Play();
+                });
+            };
+            form.ParseCancelled += () =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    form.Close();
+                    form.Dispose();
+                    GC.Collect(2, GCCollectionMode.Forced);
+                });
+            };
+            form.ShowDialog();
             //var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
             //var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
             //var file = new MIDIFile("E:\\Midi\\[Black MIDI]scarlet_zone-& The Young Descendant of Tepes V.2.mid");
             //var file = new MIDIFile("E:\\Midi\\Septette For The Dead Princess 442 MILLION.mid");
-            file.Parse();
-            player.File = file;
-            scene.File = file;
-            timeSlider.Maximum = file.MidiLength;
-
-            Time.Play();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -348,8 +367,13 @@ namespace Kiva_MIDI
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 if (files.Length > 0)
                 {
-                    dropHighlight.Visibility = Visibility.Hidden;
-                    LoadMidi(files[0]);
+                    Task.Run(() => {
+                        Thread.Sleep(500);
+                        Dispatcher.Invoke(() => {
+                            dropHighlight.Visibility = Visibility.Hidden;
+                            LoadMidi(files[0]);
+                        });
+                    });
                 }
             }
         }
