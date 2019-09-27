@@ -214,7 +214,6 @@ namespace Kiva_MIDI
             {
                 fpsLabel.Content = "FPS: " + FPS.Value.ToString("#,##0.0");
                 renderNcLabel.Content = "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0");
-                ignoreTimeSliderChange = true;
                 timeSlider.Value = Time.GetTime();
             };
         }
@@ -324,13 +323,14 @@ namespace Kiva_MIDI
             }
         }
 
-        bool ignoreTimeSliderChange = false;
         private void TimeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+        }
+
+        private void TimeSlider_UserValueChanged(object sender, double e)
+        {
             if (timeSlider == null) return;
-            if (!ignoreTimeSliderChange)
-                Time.Navigate(timeSlider.Value);
-            ignoreTimeSliderChange = false;
+            Time.Navigate(timeSlider.Value);
         }
 
         void PauseChanged()
@@ -367,9 +367,11 @@ namespace Kiva_MIDI
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 if (files.Length > 0)
                 {
-                    Task.Run(() => {
+                    Task.Run(() =>
+                    {
                         Thread.Sleep(500);
-                        Dispatcher.Invoke(() => {
+                        Dispatcher.Invoke(() =>
+                        {
                             dropHighlight.Visibility = Visibility.Hidden;
                             LoadMidi(files[0]);
                         });

@@ -78,7 +78,6 @@ namespace Kiva_MIDI
         {
             return Task.Run(() =>
             {
-                Console.WriteLine("started player " + i);
                 var events = file.MIDIEvents[i];
                 int evid = 0;
                 double lastTime = 0;

@@ -45,8 +45,10 @@
                         <Button Name="playButton" PreviewMouseDown="PlayButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
                             <Image HorizontalAlignment="Center" Height="Auto" Margin="5" Source="Material.WPF/play.png"/>
                         </Button>
+                        <!--<local:NumberSelect Width="93" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Margin="0,4"/>-->
                     </DockPanel>
-                    <Slider Name="timeSlider" Margin="10,8,10,7" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged" VerticalAlignment="Center"/>
+                    <!--<Slider Name="timeSlider" Margin="10,8,10,7" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged" VerticalAlignment="Center"/>-->
+                    <local:BetterSlider x:Name="timeSlider" UserValueChanged="TimeSlider_UserValueChanged" Margin="10,0,10,0" Minimum="0" Maximum="3" Value="1" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True"/>
                 </Grid>
             </Border>
             <Grid Name="glContainer">

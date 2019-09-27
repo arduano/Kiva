@@ -191,6 +191,8 @@ namespace Kiva_MIDI
 
             if (File != null)
             {
+                File.SetColorEvents(time);
+
                 var colors = File.MidiNoteColors;
                 var lastTime = File.lastRenderTime;
 
@@ -264,7 +266,7 @@ namespace Kiva_MIDI
             {
                 LastRenderedNoteCount = 0;
             }
-            context.Flush();
+            //context.Flush();
         }
 
         unsafe void FlushNoteBuffer(DeviceContext context, int key, IntPtr notes, int count)

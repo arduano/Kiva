@@ -22,12 +22,14 @@ namespace Kiva_MIDI
         int midiEventCount = 0;
         public int[] noteCounts = new int[256];
         public int[] colorEventCounts = new int[16];
+        public int[] currColorEventIndx = new int[16];
         long trackTimep1 = 0;
         long trackTimep2 = 0;
         public double trackSeconds = 0;
         int ppq;
         FastList<UnendedNote>[] UnendedNotes = null;
         public Note[][] Notes = new Note[256][];
+        public ColorEvent[][] ColorEvents = new ColorEvent[16][];
         public MIDIEvent[] Events = null;
         int currEventIndex = 0;
         int[] currNoteIndexes = new int[256];
@@ -271,7 +273,7 @@ namespace Kiva_MIDI
                                     if (reader.Read() == 0x0F)
                                     {
                                         byte channel = reader.Read();
-                                        if (channel < 16 || channel == 7F)
+                                        if (channel < 16 || channel == 0x7F)
                                         {
                                             if (reader.Read() == 0x00)
                                             {
@@ -394,6 +396,10 @@ namespace Kiva_MIDI
             for (int i = 0; i < 256; i++)
             {
                 Notes[i] = new Note[noteCounts[i]];
+            }
+            for(int i = 0; i < 16; i++)
+            {
+                ColorEvents[i] = new ColorEvent[colorEventCounts[i]];
             }
             Events = new MIDIEvent[midiEventCount];
         }
@@ -618,7 +624,7 @@ namespace Kiva_MIDI
                                     if (reader.Read() == 0x0F)
                                     {
                                         byte channel = reader.Read();
-                                        if (channel < 16 || channel == 7F)
+                                        if (channel < 16 || channel == 0x7F)
                                         {
                                             if (reader.Read() == 0x00)
                                             {
@@ -644,11 +650,18 @@ namespace Kiva_MIDI
                                                 if (channel == 0x7F)
                                                 {
                                                     for (int i = 0; i < 16; i++)
-                                                        colorEventCounts[i]++;
+                                                        ColorEvents[i][currColorEventIndx[i]++] = new ColorEvent()
+                                                        {
+                                                            time = trackSeconds,
+                                                            color = col
+                                                        };
                                                 }
                                                 else
                                                 {
-                                                    colorEventCounts[channel]++;
+                                                    ColorEvents[channel][currColorEventIndx[channel]++] = new ColorEvent() {
+                                                        time = trackSeconds,
+                                                        color = col
+                                                    };
                                                 }
                                             }
                                             else reader.Skip(size - 4);

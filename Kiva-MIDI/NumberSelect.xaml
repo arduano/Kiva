@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="Kiva_MIDI.NumberSelect"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Kiva_MIDI"
+             mc:Ignorable="d" >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ButtonTemplates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid ClipToBounds="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="0,0,3,0">
+            <TextBox ClipToBounds="True" x:Name="textBox" Padding="0,0.5,0,-0.5" TextWrapping="Wrap"
+                 Text="{Binding Value}"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 RenderTransformOrigin="0.5,0.5" TextChanged="TextBox_TextChanged" TextInput="TextBox_TextInput" FontFamily="Roboto" FontSize="16">
+                <TextBox.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="-0.843"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="-0.235"/>
+                    </TransformGroup>
+                </TextBox.RenderTransform>
+            </TextBox>
+            <Rectangle Fill="Black" Height="1" VerticalAlignment="Bottom"/>
+        </Grid>
+        <Grid Grid.Column="1" Width="25" Height="25" Grid.ColumnSpan="2" Margin="0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Padding="0,0,0.3,0" Style="{StaticResource TransparentButtonStyle}" Background="#33FFFFFF" Height="Auto" Margin="0" Click="Button_Click">
+                <Button.Content>
+                    <Label Padding="0,0,0,0" Margin="0,-6,0,0" FontWeight="Bold">︿</Label>
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="1" Style="{StaticResource TransparentButtonStyle}" Padding="0,0,0.3,0" Background="#33FFFFFF" Height="Auto" Margin="0" Click="Button_Click_1">
+                <Button.Content>
+                    <Label Padding="0,0,0,0" Margin="0,-0,0,0" FontWeight="Bold">﹀</Label>
+                </Button.Content>
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

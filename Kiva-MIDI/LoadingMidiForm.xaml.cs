@@ -36,6 +36,8 @@ namespace Kiva_MIDI
         public event Action ParseFinished;
         public event Action ParseCancelled;
 
+        bool cancelling = false;
+
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
             var hwnd = new WindowInteropHelper((Window)sender).Handle;
@@ -56,6 +58,7 @@ namespace Kiva_MIDI
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             cancel.Cancel();
+            cancelling = true;
         }
 
         VelocityDrivenAnimation rotate = new VelocityDrivenAnimation();
@@ -70,8 +73,8 @@ namespace Kiva_MIDI
 
             var settings = new MIDILoaderSettings()
             {
-                NoteVelocityThreshold = 0,
-                EventVelocityThreshold = 10,
+                NoteVelocityThreshold = 20,
+                EventVelocityThreshold = 20,
                 EventPlayerThreads = 1
             };
             LoadedFile = new MIDIFile(filepath, settings, cancel.Token);
@@ -100,7 +103,10 @@ namespace Kiva_MIDI
         {
             try
             {
-                loadingText.Text = LoadedFile.ParseStatusText;
+                if (cancelling)
+                    loadingText.Text = "Cancelling...";
+                else
+                    loadingText.Text = LoadedFile.ParseStatusText;
                 memoryText.Text = "RAM: " + (Process.GetCurrentProcess().PrivateMemorySize64 / 1000000.0).ToString("#.##") + "MB";
                 if (rotateProgress != LoadedFile.ParseNumber)
                 {

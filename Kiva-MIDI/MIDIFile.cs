@@ -16,11 +16,6 @@ namespace Kiva_MIDI
         public float r2, g2, b2, a2;
     }
 
-    public interface ITimed
-    {
-        double Time { get; }
-    }
-
     [StructLayout(LayoutKind.Sequential)]
     public struct Note
     {
@@ -59,16 +54,6 @@ namespace Kiva_MIDI
         MergingEvents,
     }
 
-    public class MIDILoaderSettings
-    {
-        public MIDILoaderSettings()
-        {
-        }
-        public byte EventVelocityThreshold { get; set; } = 0;
-        public byte NoteVelocityThreshold { get; set; } = 0;
-        public int EventPlayerThreads { get; set; } = Environment.ProcessorCount;
-    }
-
     public class MIDIFile
     {
         List<long> trackBeginnings = new List<long>();
@@ -85,7 +70,10 @@ namespace Kiva_MIDI
         public Note[][] Notes { get; private set; } = new Note[256][];
         public int[] FirstRenderNote { get; private set; } = new int[256];
         public double lastRenderTime { get; set; } = 0;
+        public NoteCol[] OriginalMidiNoteColors { get; private set; } = null;
         public NoteCol[] MidiNoteColors { get; private set; } = null;
+        public int[] LastColorEvent;
+        public ColorEvent[][] ColorEvents;
         public double MidiLength { get; private set; } = 0;
         public int FirstKey { get; private set; } = 0;
         public int LastKey { get; private set; } = 255;
@@ -280,6 +268,9 @@ namespace Kiva_MIDI
                     Console.WriteLine("Merged key " + keysMerged + "/" + 256);
                 }
             });
+            List<ColorEvent[]> ce = new List<ColorEvent[]>();
+            foreach (var p in parsers) ce.AddRange(p.ColorEvents);
+            ColorEvents = ce.ToArray();
             cancel.ThrowIfCancellationRequested();
             ParseStatusText = "Merging Events...";
             ParseStage = ParsingStage.MergingEvents;
@@ -291,11 +282,13 @@ namespace Kiva_MIDI
         void SetColors()
         {
             MidiNoteColors = new NoteCol[trackcount * 16];
-            for (int i = 0; i < MidiNoteColors.Length; i++)
+            OriginalMidiNoteColors = new NoteCol[trackcount * 16];
+            LastColorEvent = new int[trackcount * 16];
+            for (int i = 0; i < OriginalMidiNoteColors.Length; i++)
             {
                 int r, g, b;
                 HsvToRgb((i * 40) % 360, 1, 1, out r, out g, out b);
-                MidiNoteColors[i] = new NoteCol()
+                OriginalMidiNoteColors[i] = new NoteCol()
                 {
                     r = r / 255.0f,
                     g = g / 255.0f,
@@ -307,6 +300,46 @@ namespace Kiva_MIDI
                     a2 = 1
                 };
             }
+        }
+
+        public void SetColorEvents(double time)
+        {
+            Parallel.For(0, MidiNoteColors.Length, i => {
+                MidiNoteColors[i] = OriginalMidiNoteColors[i];
+                var ce = ColorEvents[i];
+                var last = LastColorEvent[i];
+                if (ce.Length == 0) return;
+                if (ce.First().time > time)
+                {
+                    LastColorEvent[i] = 0;
+                    return;
+                }
+                if ( ce.Last().time <= time)
+                {
+                    MidiNoteColors[i] = ce.Last().color;
+                    return;
+                }
+                if (ce[last].time < time)
+                {
+                    for (int j = last; j < ce.Length; j++)
+                        if (ce[j + 1].time > time)
+                        {
+                            LastColorEvent[i] = j;
+                            MidiNoteColors[i] = ce[j].color;
+                            return;
+                        }
+                }
+                else
+                {
+                    for (int j = last; j >= 0; j--)
+                        if (ce[j].time <= time)
+                        {
+                            LastColorEvent[i] = j;
+                            MidiNoteColors[i] = ce[j].color;
+                            return;
+                        }
+                }
+            });
         }
 
         void HsvToRgb(double h, double S, double V, out int r, out int g, out int b)
