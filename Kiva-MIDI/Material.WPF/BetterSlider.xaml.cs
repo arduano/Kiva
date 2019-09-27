@@ -123,6 +123,7 @@ namespace Kiva_MIDI
             Value = e.GetPosition(barGrid).X / barGrid.ActualWidth * (Maximum - Minimum) + Minimum;
             UserValueChanged?.Invoke(this, Value);
             AddRipple();
+            this.Focus();
         }
 
         private void ClickerGrid_MouseMove(object sender, MouseEventArgs e)

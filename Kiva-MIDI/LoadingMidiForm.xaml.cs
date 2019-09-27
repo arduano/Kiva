@@ -73,7 +73,7 @@ namespace Kiva_MIDI
 
             var settings = new MIDILoaderSettings()
             {
-                NoteVelocityThreshold = 20,
+                NoteVelocityThreshold = 0,
                 EventVelocityThreshold = 20,
                 EventPlayerThreads = 1
             };

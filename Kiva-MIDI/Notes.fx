@@ -45,8 +45,8 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	float4 cl = n.colorl;
 	float4 cr = n.colorr;
-	cl.xyz *= 0.5f;
-	cr.xyz *= 0.5f;
+	cl.xyz *= 0.3f;
+	cr.xyz *= 0.3f;
 	cl.xyz += 0.1f;
 	cr.xyz -= 0.3f;
 	cl.xyz = clamp(cl.xyz, 0, 1);

@@ -204,6 +204,7 @@ namespace Kiva_MIDI
             PauseChanged();
             scene = new Scene() { Renderer = new D3D11(), FPS = FPS };
             dx11img.Renderer = scene;
+            dx11img.MouseDown += (s, e) => Focus();
             scene.Time = Time;
 
             player = new KDMAPIPlayer();
@@ -282,36 +283,7 @@ namespace Kiva_MIDI
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
-            {
-                SetFullscreen(!Fullscreen);
-            }
-            if (e.Key == Key.Escape && Fullscreen)
-            {
-                SetFullscreen(!_fullscreen);
-            }
-            if (e.Key == Key.Right)
-            {
-                double time = Time.GetTime() + 5;
-                time = Math.Max(time, timeSlider.Minimum);
-                time = Math.Min(time, timeSlider.Maximum);
-                Time.Navigate(time);
-            }
-            if (e.Key == Key.Left)
-            {
-                double time = Time.GetTime() - 5;
-                time = Math.Max(time, timeSlider.Minimum);
-                time = Math.Min(time, timeSlider.Maximum);
-                Time.Navigate(time);
-            }
-            if (e.Key == Key.Space)
-            {
-                if (Time.Paused)
-                {
-                    if (scene.File != null) Time.Play();
-                }
-                else Time.Pause();
-            }
+
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -388,6 +360,40 @@ namespace Kiva_MIDI
         private void MainWindow_PreviewDragLeave(object sender, DragEventArgs e)
         {
             dropHighlight.Visibility = Visibility.Hidden;
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SetFullscreen(!Fullscreen);
+            }
+            if (e.Key == Key.Escape && Fullscreen)
+            {
+                SetFullscreen(!_fullscreen);
+            }
+            if (e.Key == Key.Right)
+            {
+                double time = Time.GetTime() + 5;
+                time = Math.Max(time, timeSlider.Minimum);
+                time = Math.Min(time, timeSlider.Maximum);
+                Time.Navigate(time);
+            }
+            if (e.Key == Key.Left)
+            {
+                double time = Time.GetTime() - 5;
+                time = Math.Max(time, timeSlider.Minimum);
+                time = Math.Min(time, timeSlider.Maximum);
+                Time.Navigate(time);
+            }
+            if (e.Key == Key.Space)
+            {
+                if (Time.Paused)
+                {
+                    if (scene.File != null) Time.Play();
+                }
+                else Time.Pause();
+            }
         }
     }
 }

@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Kiva_MIDI"
+             TextOptions.TextRenderingMode="Aliased"
+             KeyDown="UserControl_KeyDown"
              mc:Ignorable="d" >
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,11 +20,10 @@
             <ColumnDefinition Width="25"/>
         </Grid.ColumnDefinitions>
         <Grid Margin="0,0,3,0">
-            <TextBox ClipToBounds="True" x:Name="textBox" Padding="0,0.5,0,-0.5" TextWrapping="Wrap"
-                 Text="{Binding Value}"
+            <TextBox ClipToBounds="True" x:Name="textBox" Padding="0,1,0,0" TextWrapping="Wrap"
                  Background="Transparent"
                  BorderThickness="0"
-                 RenderTransformOrigin="0.5,0.5" TextChanged="TextBox_TextChanged" TextInput="TextBox_TextInput" FontFamily="Roboto" FontSize="16">
+                 RenderTransformOrigin="0.5,0.5" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus" TextInput="TextBox_TextInput" FontSize="16">
                 <TextBox.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>

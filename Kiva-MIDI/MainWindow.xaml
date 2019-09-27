@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Name="mainWindow"
         Title="MainWindow" WindowStyle="None" Height="700" Width="1200" 
-        Loaded="Window_Loaded" SnapsToDevicePixels="True" PreviewKeyDown="MainWindow_PreviewKeyDown" 
+        Loaded="Window_Loaded" SnapsToDevicePixels="True" PreviewKeyDown="MainWindow_PreviewKeyDown"  KeyDown="MainWindow_KeyDown"
         AllowDrop="True" PreviewDrop="MainWindow_PreviewDrop" PreviewDragEnter="MainWindow_PreviewDragEnter" PreviewDragLeave="MainWindow_PreviewDragLeave" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
@@ -45,7 +45,7 @@
                         <Button Name="playButton" PreviewMouseDown="PlayButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
                             <Image HorizontalAlignment="Center" Height="Auto" Margin="5" Source="Material.WPF/play.png"/>
                         </Button>
-                        <!--<local:NumberSelect Width="93" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Margin="0,4"/>-->
+                        <local:NumberSelect Width="93" Maximum="100" Minimum="0" DecimalPoints="2" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Margin="0,4"/>
                     </DockPanel>
                     <!--<Slider Name="timeSlider" Margin="10,8,10,7" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged" VerticalAlignment="Center"/>-->
                     <local:BetterSlider x:Name="timeSlider" UserValueChanged="TimeSlider_UserValueChanged" Margin="10,0,10,0" Minimum="0" Maximum="3" Value="1" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True"/>
@@ -61,7 +61,7 @@
                         <Label Foreground="White" Name="renderNcLabel"></Label>
                     </StackPanel>
                 </Grid>
-                <local:DXElement x:Name="dx11img"/>
+                <local:DXElement x:Name="dx11img" Focusable="True"/>
             </Grid>
         </DockPanel>
         <Rectangle Name="dropHighlight" Fill="White" Visibility="Hidden" Opacity="0.3"/>

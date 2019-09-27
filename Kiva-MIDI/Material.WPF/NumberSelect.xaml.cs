@@ -57,18 +57,22 @@ namespace Kiva_MIDI
         {
             InitializeComponent();
 
-            this.DataContext = this;
             prevText = Value.ToString();
             textBox.Text = prevText;
         }
 
+        bool ignoreChange = false;
         void UpdateValue()
         {
-            var d = Value;
-            d = Decimal.Round(d, DecimalPoints);
-            if (d < Minimum) d = Minimum;
-            if (d > Maximum) d = Maximum;
-            if (d != Value) Value = d;
+            if (!ignoreChange)
+            {
+                var d = Value;
+                d = Decimal.Round(d, DecimalPoints);
+                if (d < Minimum) d = Minimum;
+                if (d > Maximum) d = Maximum;
+                if (d != Value) Value = d;
+            }
+            ignoreChange = false;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -79,14 +83,45 @@ namespace Kiva_MIDI
                 decimal d = Decimal.Round(_d, DecimalPoints);
                 if (d < Minimum) d = Minimum;
                 if (d > Maximum) d = Maximum;
-                if (_d != d)
-                {
-                    textBox.Text = d.ToString();
-                    textBox.SelectionStart = textBox.Text.Length;
-                }
                 else
                 {
                     var old = Value;
+                    if (d != old)
+                    {
+                        ignoreChange = true;
+                        Value = d;
+                        try
+                        {
+                            RaiseEvent(new RoutedPropertyChangedEventArgs<decimal>(old, d, ValueChangedEvent));
+                        }
+                        catch { }
+                    }
+                }
+            }
+            catch
+            {
+                if(textBox.Text != "")
+                    textBox.Text = prevText;
+            }
+            prevText = textBox.Text;
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            CheckAndSave();
+        }
+
+        void CheckAndSave()
+        {
+            try
+            {
+                decimal _d = Convert.ToDecimal(textBox.Text);
+                decimal d = Decimal.Round(_d, DecimalPoints);
+                if (d < Minimum) d = Minimum;
+                if (d > Maximum) d = Maximum;
+                var old = Value;
+                if (d != old)
+                {
                     Value = d;
                     try
                     {
@@ -95,10 +130,8 @@ namespace Kiva_MIDI
                     catch { }
                 }
             }
-            catch
-            {
-                textBox.Text = prevText;
-            }
+            catch { }
+            textBox.Text = Value.ToString();
         }
 
         private void TextBox_TextInput(object sender, TextCompositionEventArgs e)
@@ -128,6 +161,14 @@ namespace Kiva_MIDI
             textBox.Text = Value.ToString();
             if (old != d)
                 RaiseEvent(new RoutedPropertyChangedEventArgs<decimal>(old, d, ValueChangedEvent));
+        }
+
+        private void UserControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                CheckAndSave();
+            }
         }
     }
 }
