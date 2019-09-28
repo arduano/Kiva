@@ -188,6 +188,8 @@ namespace Kiva_MIDI
         Scene scene;
         KDMAPIPlayer player;
 
+        Settings settings = new Settings();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -202,7 +204,7 @@ namespace Kiva_MIDI
             Time = new PlayingState();
             Time.PauseChanged += PauseChanged;
             PauseChanged();
-            scene = new Scene() { Renderer = new D3D11(), FPS = FPS };
+            scene = new Scene(settings) { Renderer = new D3D11(), FPS = FPS };
             dx11img.Renderer = scene;
             dx11img.MouseDown += (s, e) => Focus();
             scene.Time = Time;
@@ -210,6 +212,14 @@ namespace Kiva_MIDI
             player = new KDMAPIPlayer();
             player.RunPlayer();
             player.Time = Time;
+
+            speedSlider.nudToSlider = v => Math.Log(v, 2);
+            speedSlider.sliderToNud = v => Math.Pow(2, v);
+            sizeSlider.nudToSlider = v => Math.Log(v, 2);
+            sizeSlider.sliderToNud = v => Math.Pow(2, v);
+
+            speedSlider.Value = settings.Volatile.Speed;
+            sizeSlider.Value = settings.Volatile.Size;
 
             CompositionTarget.Rendering += (s, e) =>
             {
@@ -393,6 +403,22 @@ namespace Kiva_MIDI
                     if (scene.File != null) Time.Play();
                 }
                 else Time.Pause();
+            }
+        }
+
+        private void SpeedSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (IsInitialized) { 
+                settings.Volatile.Speed = speedSlider.Value;
+                Time.ChangeSpeed(settings.Volatile.Speed);
+            }
+        }
+
+        private void SizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (IsInitialized)
+            {
+                settings.Volatile.Size = sizeSlider.Value;
             }
         }
     }

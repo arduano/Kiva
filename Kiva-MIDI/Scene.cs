@@ -22,6 +22,7 @@ namespace Kiva_MIDI
         public FPS FPS { get; set; }
 
         MIDIRenderer render;
+        public Settings Settings { get; set; }
 
         public MIDIFile File
         {
@@ -60,6 +61,11 @@ namespace Kiva_MIDI
         }
         D3D11 context;
 
+        public Scene(Settings settings)
+        {
+            Settings = settings;
+        }
+
         void ContextRendering(object aCtx, DrawEventArgs args) { RenderScene(args); }
 
         protected void Attach()
@@ -67,7 +73,7 @@ namespace Kiva_MIDI
             if (Renderer == null)
                 return;
 
-            render = new MIDIRenderer(Renderer.Device);
+            render = new MIDIRenderer(Renderer.Device, Settings);
         }
 
         protected void Detach()

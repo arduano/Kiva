@@ -66,11 +66,24 @@ namespace Kiva_MIDI
         {
             if (!ignoreChange)
             {
-                var d = Value;
-                d = Decimal.Round(d, DecimalPoints);
-                if (d < Minimum) d = Minimum;
-                if (d > Maximum) d = Maximum;
-                if (d != Value) Value = d;
+                try
+                {
+                    decimal old = Value;
+                    decimal d = Decimal.Round(old, DecimalPoints);
+                    if (d < Minimum) d = Minimum;
+                    if (d > Maximum) d = Maximum;
+                    if (d != old)
+                    {
+                        Value = d;
+                    }
+                    try
+                    {
+                        RaiseEvent(new RoutedPropertyChangedEventArgs<decimal>(old, d, ValueChangedEvent));
+                    }
+                    catch { }
+                }
+                catch { }
+                textBox.Text = Value.ToString();
             }
             ignoreChange = false;
         }
@@ -168,7 +181,23 @@ namespace Kiva_MIDI
             if(e.Key == Key.Enter)
             {
                 CheckAndSave();
+                e.Handled = true;
+                Keyboard.ClearFocus();
+
+                FrameworkElement parent = (FrameworkElement)textBox.Parent;
+                while (parent != null && parent is IInputElement && !((IInputElement)parent).Focusable)
+                {
+                    parent = (FrameworkElement)parent.Parent;
+                }
+
+                DependencyObject scope = FocusManager.GetFocusScope(textBox);
+                FocusManager.SetFocusedElement(scope, parent as IInputElement);
             }
+        }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space) e.Handled = false;
         }
     }
 }

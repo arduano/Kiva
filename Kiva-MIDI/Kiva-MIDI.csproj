@@ -162,16 +162,21 @@
     <Compile Include="MIDIParsing\MIDITrackParser.cs" />
     <Compile Include="MIDIParsing\SkipIterator.cs" />
     <Compile Include="MIDIRenderer.cs" />
-    <Compile Include="NumberSelect.xaml.cs">
+    <Compile Include="Material.WPF\NumberSelect.xaml.cs">
       <DependentUpon>NumberSelect.xaml</DependentUpon>
     </Compile>
     <Compile Include="PlayingState.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="MIDIParsing\TimedMerger.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShaderManager.cs" />
+    <Compile Include="Material.WPF\ValueSlider.xaml.cs">
+      <DependentUpon>ValueSlider.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VolatileSettings.cs" />
     <Page Include="LoadingMidiForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -192,7 +197,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="NumberSelect.xaml">
+    <Page Include="Material.WPF\NumberSelect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -201,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ButtonTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Material.WPF\ValueSlider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

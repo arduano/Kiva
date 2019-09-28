@@ -11,6 +11,7 @@ namespace Kiva_MIDI
         public DateTime Time { get; private set; } = DateTime.Now;
         public double MIDITime { get; private set; } = 0;
         public bool Paused { get; private set; } = true;
+        public double Speed { get; private set; } = 1;
 
         public event Action TimeChanged;
         public event Action PauseChanged;
@@ -18,7 +19,7 @@ namespace Kiva_MIDI
         public void Pause()
         {
             if (Paused) return;
-            MIDITime += (DateTime.Now - Time).TotalSeconds;
+            MIDITime += (DateTime.Now - Time).TotalSeconds * Speed;
             var pause = Paused;
             Paused = true;
             TimeChanged?.Invoke();
@@ -45,7 +46,7 @@ namespace Kiva_MIDI
         public double GetTime()
         {
             if (Paused) return MIDITime;
-            return MIDITime + (DateTime.Now - Time).TotalSeconds;
+            return MIDITime + (DateTime.Now - Time).TotalSeconds * Speed;
         }
 
         public void Navigate(double time)
@@ -53,6 +54,13 @@ namespace Kiva_MIDI
             Time = DateTime.Now;
             MIDITime = time;
             TimeChanged?.Invoke();
+        }
+
+        public void ChangeSpeed(double speed)
+        {
+            MIDITime = GetTime();
+            Time = DateTime.Now;
+            Speed = speed;
         }
     }
 }

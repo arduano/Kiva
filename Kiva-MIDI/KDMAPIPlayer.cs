@@ -106,11 +106,11 @@ namespace Kiva_MIDI
                     if (evid < events.Length)
                     {
                         var ev = events[evid];
-                        var delay = ev.time - time;
+                        var delay = (ev.time - time) / Time.Speed;
                         while (delay > 0.2)
                         {
                             Thread.Sleep(20);
-                            delay = ev.time - Time.GetTime();
+                            delay = (ev.time - Time.GetTime()) / Time.Speed;
                             if (changed) break;
                         }
                         if (changed) goto reset;

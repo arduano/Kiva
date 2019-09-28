@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ButtonTemplates.xaml"/>
+                <ResourceDictionary Source="../ButtonTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -23,7 +23,8 @@
             <TextBox ClipToBounds="True" x:Name="textBox" Padding="0,1,0,0" TextWrapping="Wrap"
                  Background="Transparent"
                  BorderThickness="0"
-                 RenderTransformOrigin="0.5,0.5" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus" TextInput="TextBox_TextInput" FontSize="16">
+                 KeyDown="TextBox_KeyDown"
+                     RenderTransformOrigin="0.5,0.5" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus" TextInput="TextBox_TextInput" FontSize="16">
                 <TextBox.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>

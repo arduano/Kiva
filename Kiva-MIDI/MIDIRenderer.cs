@@ -55,8 +55,11 @@ namespace Kiva_MIDI
         bool[] blackKeys = new bool[257];
         int[] keynum = new int[257];
 
-        public MIDIRenderer(Device device)
+        Settings settings;
+
+        public MIDIRenderer(Device device, Settings settings)
         {
+            this.settings = settings;
             string noteShaderData;
             if (IO.File.Exists("Notes.fx"))
             {
@@ -141,7 +144,7 @@ namespace Kiva_MIDI
             context.InputAssembler.InputLayout = noteLayout;
 
             double time = Time.GetTime();
-            double timeScale = 0.3;
+            double timeScale = settings.Volatile.Size;
             double renderCutoff = time + timeScale;
             int firstNote = 0;
             int lastNote = 128;
