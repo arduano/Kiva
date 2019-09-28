@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kiva_MIDI"
         mc:Ignorable="d"
-        Title="LoadingMidiForm" WindowStyle="None" Height="350" Width="250" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        KeyDown="Window_KeyDown"
+        Title="LoadingMidiForm" WindowStyle="None" Height="374" Width="274" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,23 +18,52 @@
         <WindowChrome CaptionHeight="{Binding ActualHeight,ElementName=content}"/>
     </WindowChrome.WindowChrome>
     <Grid Name="content" Background="#0D47A1">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="248*"/>
-            <RowDefinition Height="41*"/>
-            <RowDefinition Height="22*"/>
-            <RowDefinition Height="31*"/>
-        </Grid.RowDefinitions>
-        <Image Source="logo.png" x:Name="rotateLogo" Margin="20" RenderTransformOrigin="0.5,0.5">
-            <Image.RenderTransform>
-                <RotateTransform Angle="0"/>
-            </Image.RenderTransform>
-        </Image>
-        <TextBox Grid.Row="1" TextWrapping="Wrap" Name="loadingText" Background="Transparent" BorderThickness="0" TextAlignment="Center"
+        <Grid Name="loadProgessScreen"  Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="248*"/>
+                <RowDefinition Height="41*"/>
+                <RowDefinition Height="22*"/>
+                <RowDefinition Height="31*"/>
+            </Grid.RowDefinitions>
+            <Image Source="logo.png" x:Name="rotateLogo" Margin="20" RenderTransformOrigin="0.5,0.5">
+                <Image.RenderTransform>
+                    <RotateTransform Angle="0"/>
+                </Image.RenderTransform>
+            </Image>
+            <TextBox Grid.Row="1" TextWrapping="Wrap" Name="loadingText" Background="Transparent" BorderThickness="0" TextAlignment="Center"
                  FontSize="14" Foreground="White"/>
-        <TextBox Grid.Row="2" TextWrapping="Wrap" Name="memoryText" Background="Transparent" BorderThickness="0" TextAlignment="Center"
+            <TextBox Grid.Row="2" TextWrapping="Wrap" Name="memoryText" Background="Transparent" BorderThickness="0" TextAlignment="Center"
                  FontSize="10" Foreground="White"/>
-        <Button Content="Cancel" Foreground="White" Name="cancelButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TransparentButtonStyle}" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="80" Height="26" Click="CancelButton_Click" Margin="81,1,81,4">
-
-        </Button>
+            <Button Content="Cancel" Foreground="White" Name="cancelButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TransparentButtonStyle}" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="80" Height="26" Click="CancelButton_Click" Margin="81,1,81,4"/>
+        </Grid>
+        <Border Name="loadSettingsScreen" Padding="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="99*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="5*"/>
+                </Grid.RowDefinitions>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Label FontSize="16" Foreground="White" HorizontalAlignment="Center">Visible Note Threshold</Label>
+                    <local:NumberSelect x:Name="visibleThresh" ValueChanged="VisibleThresh_ValueChanged" WindowChrome.IsHitTestVisibleInChrome="True" Minimum="0" Maximum="127" Width="80" VerticalAlignment="Center"/>
+                    <TextBox FontSize="10" Foreground="White" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center">
+                        Threshold of the visible notes. Change this from 0 if you want to see the melody without the note art.
+                    </TextBox>
+                    <Label FontSize="16" Foreground="White" HorizontalAlignment="Center">Audio Note Threshold</Label>
+                    <local:NumberSelect x:Name="audioThresh" ValueChanged="AudioThresh_ValueChanged" WindowChrome.IsHitTestVisibleInChrome="True" Minimum="0" Maximum="127" Width="80" VerticalAlignment="Center"/>
+                    <TextBox FontSize="10" Foreground="White" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center">
+                        Prevent events with low velocity from being loaded into ram and being played. Faster load times, less lag.
+                    </TextBox>
+                    <Label FontSize="16" Foreground="White" HorizontalAlignment="Center">Audio Player Threads</Label>
+                    <local:NumberSelect Value="1" x:Name="audioThreads" ValueChanged="AudioThreads_ValueChanged" WindowChrome.IsHitTestVisibleInChrome="True" Minimum="1" Maximum="1" Width="80" VerticalAlignment="Center"/>
+                    <TextBox FontSize="10" Foreground="White" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center">
+                        Faster load times when merging events, faster performance when playing. But can sometimes miss notes. Recommended for massive midis.
+                    </TextBox>
+                    <Button Content="Save As Defaults" Focusable="False" Foreground="White" Name="saveDefaults" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TransparentButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="110" Height="26" Grid.Row="1" Margin="0,10,0,0" Click="SaveDefaults_Click" />
+                </StackPanel>
+                <Button Content="Continue" Foreground="White" Name="continueButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TransparentButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="80" Height="26" Grid.Row="1" Click="ContinueButton_Click" />
+                <Label Content="(or press any key)" HorizontalAlignment="Center" FontSize="9" Padding="0" Grid.Row="1" Foreground="White" VerticalAlignment="Center" Height="12" Margin="0,28,0,5" Width="70" Grid.RowSpan="2"/>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

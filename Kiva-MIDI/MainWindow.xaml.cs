@@ -239,7 +239,7 @@ namespace Kiva_MIDI
             GC.Collect(2, GCCollectionMode.Forced);
 
 
-            var form = new LoadingMidiForm(filename);
+            var form = new LoadingMidiForm(filename, settings);
             form.ParseFinished += () =>
             {
                 var file = form.LoadedFile;

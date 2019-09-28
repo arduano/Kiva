@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kiva_MIDI
 {
-    public class VolatileSettings
+    public class GeneralSettings
     {
-        public double Speed { get; set; } = 1;
-        public double Size { get; set; } = 0.25;
     }
 }

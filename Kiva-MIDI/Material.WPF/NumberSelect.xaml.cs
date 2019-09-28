@@ -51,6 +51,8 @@ namespace Kiva_MIDI
             ((NumberSelect)sender).UpdateValue();
         }
 
+        public bool TextFocused => textBox.IsFocused;
+
         string prevText = "";
 
         public NumberSelect()
@@ -197,7 +199,6 @@ namespace Kiva_MIDI
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Space) e.Handled = false;
         }
     }
 }

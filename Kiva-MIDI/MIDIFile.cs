@@ -246,9 +246,9 @@ namespace Kiva_MIDI
                     try
                     {
                         MIDIEvents[i] = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => new SkipIterator<MIDIEvent>(p.Events, i, count)).ToArray(), e =>
-                        {
-                            return e.time;
-                        }).ToArray();
+                    {
+                        return e.time;
+                    }).ToArray();
                     }
                     catch (OperationCanceledException)
                     {
@@ -304,7 +304,8 @@ namespace Kiva_MIDI
 
         public void SetColorEvents(double time)
         {
-            Parallel.For(0, MidiNoteColors.Length, i => {
+            Parallel.For(0, MidiNoteColors.Length, i =>
+            {
                 MidiNoteColors[i] = OriginalMidiNoteColors[i];
                 var ce = ColorEvents[i];
                 var last = LastColorEvent[i];
@@ -314,7 +315,7 @@ namespace Kiva_MIDI
                     LastColorEvent[i] = 0;
                     return;
                 }
-                if ( ce.Last().time <= time)
+                if (ce.Last().time <= time)
                 {
                     MidiNoteColors[i] = ce.Last().color;
                     return;

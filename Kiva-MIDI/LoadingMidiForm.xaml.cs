@@ -37,6 +37,7 @@ namespace Kiva_MIDI
         public event Action ParseCancelled;
 
         bool cancelling = false;
+        bool loading = false;
 
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
@@ -48,11 +49,14 @@ namespace Kiva_MIDI
         double rotateProgress = 0;
 
         string filepath;
+        Settings settings;
+        MIDILoaderSettings loaderSettings;
 
-        public LoadingMidiForm(string filepath)
+        public LoadingMidiForm(string filepath, Settings settings)
         {
             InitializeComponent();
             this.filepath = filepath;
+            this.settings = settings;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -68,16 +72,27 @@ namespace Kiva_MIDI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
             Window_SourceInitialized(this, null);
+            audioThreads.Maximum = Environment.ProcessorCount;
 
-            var settings = new MIDILoaderSettings()
-            {
-                NoteVelocityThreshold = 0,
-                EventVelocityThreshold = 20,
-                EventPlayerThreads = 1
-            };
-            LoadedFile = new MIDIFile(filepath, settings, cancel.Token);
+            loaderSettings = settings.GetMIDILoaderSettings();
+            var ls = loaderSettings.Clone();
+
+            audioThresh.Value = ls.EventVelocityThreshold;
+            visibleThresh.Value = ls.NoteVelocityThreshold;
+            audioThreads.Value = ls.EventPlayerThreads;
+
+            visibleThresh.Maximum = audioThresh.Value;
+        }
+
+        void ContinueLoading()
+        {
+            if (loading) return;
+            loading = true;
+            Keyboard.ClearFocus();
+            loadSettingsScreen.Visibility = Visibility.Collapsed;
+            loadProgessScreen.Visibility = Visibility.Visible;
+            LoadedFile = new MIDIFile(filepath, loaderSettings, cancel.Token);
             LoadedFile.ParseFinished += () =>
             {
                 ParseFinished?.Invoke();
@@ -128,6 +143,43 @@ namespace Kiva_MIDI
                 this.LoadedFile = null;
             }
             catch { }
+        }
+
+        private void SaveDefaults_Click(object sender, RoutedEventArgs e)
+        {
+            settings.UpdateMIDILoaderSettings(loaderSettings);
+        }
+
+        private void ContinueButton_Click(object sender, RoutedEventArgs e)
+        {
+            ContinueLoading();
+        }
+
+        private void VisibleThresh_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+        {
+            if (IsInitialized)
+                loaderSettings.NoteVelocityThreshold = (byte)visibleThresh.Value;
+        }
+
+        private void AudioThresh_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+        {
+            if (IsInitialized)
+            {
+                loaderSettings.EventVelocityThreshold = (byte)audioThresh.Value;
+                visibleThresh.Maximum = audioThresh.Value;
+            }
+        }
+
+        private void AudioThreads_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+        {
+            if (IsInitialized)
+                loaderSettings.EventPlayerThreads = (int)audioThreads.Value;
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (audioThresh.TextFocused || visibleThresh.TextFocused || audioThreads.TextFocused) return;
+            ContinueLoading();
         }
     }
 
