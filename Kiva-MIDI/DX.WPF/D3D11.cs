@@ -59,6 +59,7 @@ namespace Kiva_MIDI
 
         protected Texture2D renderTarget;
         protected RenderTargetView renderTargetView;
+        protected Texture2D renderTargetCopy;
         //protected Texture2D depthStencil;
         //protected DepthStencilView depthStencilView;
 
@@ -103,6 +104,7 @@ namespace Kiva_MIDI
             };
             Set(ref renderTarget, new Texture2D(this.device, desc));
             Set(ref renderTargetView, new RenderTargetView(this.device, this.renderTarget));
+            Set(ref renderTargetCopy, new Texture2D(this.device, desc));
 
             //Set(ref depthStencil, DXUtils.CreateTexture2D(this.device, w, h, BindFlags.DepthStencil, Format.D24_UNorm_S8_UInt));
             //Set(ref depthStencilView, new DepthStencilView(this.device, depthStencil));
@@ -128,6 +130,7 @@ namespace Kiva_MIDI
         public override void EndRender(DrawEventArgs args)
         {
             Device.ImmediateContext.Flush();
+            Device.ImmediateContext.CopyResource(renderTarget, renderTargetCopy);
         }
 
         protected T Prepared<T>(ref T property)
@@ -138,7 +141,7 @@ namespace Kiva_MIDI
             return property;
         }
 
-        public Texture2D RenderTarget { get { return Prepared(ref renderTarget); } }
+        public Texture2D RenderTarget { get { return Prepared(ref renderTargetCopy); } }
         public RenderTargetView RenderTargetView { get { return Prepared(ref renderTargetView); } }
 
         //public Texture2D DepthStencil { get { return Prepared(ref depthStencil); } }
