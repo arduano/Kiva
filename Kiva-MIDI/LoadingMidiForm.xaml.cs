@@ -73,6 +73,11 @@ namespace Kiva_MIDI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Window_SourceInitialized(this, null);
+            Focus();
+            Topmost = true;
+            Topmost = false;
+            BringIntoView();
+
             audioThreads.Maximum = Environment.ProcessorCount;
 
             loaderSettings = settings.GetMIDILoaderSettings();

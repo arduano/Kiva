@@ -117,6 +117,7 @@ namespace Kiva_MIDI
                         grid.Children.Remove(ellipse);
                     });
                 });
+                e.Handled = false;
             };
         }
     }

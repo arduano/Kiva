@@ -21,13 +21,12 @@ namespace Kiva_MIDI
     {
         public double start, end;
         public int colorPointer;
-        public int skip;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct MIDIEvent
     {
-        public double time;
+        public float time;
         public uint data;
     }
 
@@ -260,6 +259,7 @@ namespace Kiva_MIDI
             Parallel.For(0, 256, new ParallelOptions() { CancellationToken = cancel }, (i) =>
             {
                 Notes[i] = TimedMerger<Note>.MergeMany(parsers.Select(p => p.Notes[i]).ToArray(), n => n.start).ToArray();
+                foreach (var p in parsers) p.Notes[i] = null;
                 lock (l)
                 {
                     keysMerged++;
