@@ -15,6 +15,7 @@ using SharpDX.Direct3D;
 using System.Collections.Concurrent;
 using IO = System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Kiva_MIDI
 {
@@ -56,6 +57,10 @@ namespace Kiva_MIDI
         int[] keynum = new int[257];
 
         Settings settings;
+
+        ConcurrentQueue<RenderNote[]>[] noteRenderQueue = new ConcurrentQueue<RenderNote[]>[257];
+        bool renderThreadStarted = false;
+        DeviceContext storedContext;
 
         public MIDIRenderer(Device device, Settings settings)
         {
@@ -142,6 +147,13 @@ namespace Kiva_MIDI
         {
             var context = device.ImmediateContext;
             context.InputAssembler.InputLayout = noteLayout;
+
+            if (!renderThreadStarted)
+            {
+                storedContext = context;
+                Task.Factory.StartNew(() => { FlushNoteBufferThread(storedContext); });
+                renderThreadStarted = true;
+            }
 
             double time = Time.GetTime();
             double timeScale = settings.Volatile.Size;
@@ -249,11 +261,11 @@ namespace Kiva_MIDI
                                 };
                                 if (nid == noteBufferLength)
                                 {
-                                    FlushNoteBuffer(context, k, (IntPtr)rn, nid);
+                                    PushNoteBuffer(k, (IntPtr)rn, nid);
                                     nid = 0;
                                 }
                             }
-                            FlushNoteBuffer(context, k, (IntPtr)rn, nid);
+                            PushNoteBuffer(k, (IntPtr)rn, nid);
                             lock (addLock)
                             {
                                 notesRendered += _notesRendered;
@@ -272,22 +284,41 @@ namespace Kiva_MIDI
             //context.Flush();
         }
 
-        unsafe void FlushNoteBuffer(DeviceContext context, int key, IntPtr notes, int count)
+        unsafe void PushNoteBuffer(int key, IntPtr data, int count)
         {
+            // we need to reallocate and copy the data, since it was previously allocated on the stack
             if (count == 0) return;
-            lock (context)
+            RenderNote[] noteArray = new RenderNote[count];
+            fixed (RenderNote* noteArrayPtr = noteArray) {
+                Unsafe.CopyBlock((void*)noteArrayPtr, (void*)data, Convert.ToUInt32(count * sizeof(RenderNote)));
+            }
+            noteRenderQueue[key].Enqueue(noteArray);
+        }
+
+        unsafe void FlushNoteBufferThread(DeviceContext context)
+        {
+            while (true)
             {
-                DataStream data;
-                context.MapSubresource(noteBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
-                data.Position = 0;
-                data.WriteRange(notes, count * sizeof(RenderNote));
-                context.UnmapSubresource(noteBuffer, 0);
-                context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
-                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 40, 0));
-                noteConstants.NoteLeft = (float)x1array[key];
-                noteConstants.NoteRight = (float)(x1array[key] + wdtharray[key]);
-                SetNoteShaderConstants(context, noteConstants);
-                context.Draw(count, 0);
+                for (int i = 0; i < 257; i++)
+                {
+                    if (noteRenderQueue[i].IsEmpty)
+                        continue;
+                    DataStream data;
+                    context.MapSubresource(noteBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
+                    data.Position = 0;
+                    noteRenderQueue[i].TryDequeue(out RenderNote[] noteArray);
+                    fixed (RenderNote* notes = noteArray)
+                    {
+                        data.WriteRange((IntPtr)notes, noteArray.Length * sizeof(RenderNote));
+                    };
+                    context.UnmapSubresource(noteBuffer, 0);
+                    context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
+                    context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 40, 0));
+                    noteConstants.NoteLeft = (float)x1array[i];
+                    noteConstants.NoteRight = (float)(x1array[i] + wdtharray[i]);
+                    SetNoteShaderConstants(context, noteConstants);
+                    context.Draw(noteArray.Length, 0);
+                }
             }
         }
 
