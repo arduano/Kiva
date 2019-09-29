@@ -43,8 +43,8 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 	float borderLeft = NoteLeft + NoteBorder;
 	float borderRight = NoteRight - NoteBorder;
 
-    float4 colorlConv = float4((float)(n.colorl << 24 & 0xff000000) / 255.0, (float)(n.colorl << 16 & 0xff0000) / 255.0, (float)(n.colorl << 8 & 0xff00) / 255.0, (float)(n.colorl & 0xff) / 255.0);
-    float4 colorrConv = float4((float)(n.colorr << 24 & 0xff000000) / 255.0, (float)(n.colorr << 16 & 0xff0000) / 255.0, (float)(n.colorr << 8 & 0xff00) / 255.0, (float)(n.colorr & 0xff) / 255.0);
+    float4 colorlConv = float4((float)(n.colorl >> 24 & 0xff) / 255.0, (float)(n.colorl >> 16 & 0xff) / 255.0, (float)(n.colorl >> 8 & 0xff) / 255.0, (float)(n.colorl & 0xff) / 255.0);
+    float4 colorrConv = float4((float)(n.colorr >> 24 & 0xff) / 255.0, (float)(n.colorr >> 16 & 0xff) / 255.0, (float)(n.colorr >> 8 & 0xff) / 255.0, (float)(n.colorr & 0xff) / 255.0);
 
 	float4 cl = colorlConv;
     float4 cr = colorrConv;
