@@ -181,6 +181,7 @@
     <Compile Include="Material.WPF\ValueSlider.xaml.cs">
       <DependentUpon>ValueSlider.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VelocityEase.cs" />
     <Compile Include="VolatileSettings.cs" />
     <Page Include="LoadingMidiForm.xaml">
       <SubType>Designer</SubType>
@@ -259,6 +260,9 @@
       <Project>{fdfedb9d-fb0a-4903-a5f9-afae133f48eb}</Project>
       <Name>BetterWPF</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="kiva.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />

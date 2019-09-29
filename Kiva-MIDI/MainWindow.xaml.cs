@@ -221,11 +221,16 @@ namespace Kiva_MIDI
             speedSlider.Value = settings.Volatile.Speed;
             sizeSlider.Value = settings.Volatile.Size;
 
+            versionLabel.Content = Settings.VersionName;
+
             CompositionTarget.Rendering += (s, e) =>
             {
-                fpsLabel.Content = "FPS: " + FPS.Value.ToString("#,##0.0");
-                renderNcLabel.Content = "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0");
+                var renderText = "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" + 
+                                 "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0");
+                renderInfo.Text = renderText;
+                //renderNcLabel.Content = 
                 timeSlider.Value = Time.GetTime();
+                rotateLogo.Angle = timeSlider.Value * 4;
             };
         }
         public FPS FPS { get; set; }

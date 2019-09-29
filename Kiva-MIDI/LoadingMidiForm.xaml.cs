@@ -77,6 +77,8 @@ namespace Kiva_MIDI
             Topmost = true;
             Topmost = false;
             BringIntoView();
+            Activate();
+            Keyboard.Focus(this);
 
             audioThreads.Maximum = Environment.ProcessorCount;
 
@@ -152,7 +154,10 @@ namespace Kiva_MIDI
 
         private void SaveDefaults_Click(object sender, RoutedEventArgs e)
         {
+            saveDefaults.Focus();
             settings.UpdateMIDILoaderSettings(loaderSettings);
+            continueButton.Focus();
+            Keyboard.Focus(continueButton);
         }
 
         private void ContinueButton_Click(object sender, RoutedEventArgs e)

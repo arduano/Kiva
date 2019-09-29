@@ -52,6 +52,9 @@ namespace Kiva_MIDI
         int noteBufferLength = 1 << 10;
         Buffer noteBuffer;
 
+        VelocityEase dynamicState = new VelocityEase(0) { Duration = 0.7 };
+        bool dynamicState88 = false;
+
         bool[] blackKeys = new bool[257];
         int[] keynum = new int[257];
 
@@ -148,6 +151,12 @@ namespace Kiva_MIDI
             double renderCutoff = time + timeScale;
             int firstNote = 0;
             int lastNote = 128;
+            if (settings.General.KeyRange == KeyRangeTypes.KeyDynamic ||
+                settings.General.KeyRange == KeyRangeTypes.Key128)
+            {
+                firstNote = 0;
+                lastNote = 128;
+            }
             int kbfirstNote = firstNote;
             int kblastNote = lastNote;
             if (blackKeys[firstNote]) kbfirstNote--;
@@ -202,12 +211,28 @@ namespace Kiva_MIDI
                 long notesRendered = 0;
                 object addLock = new object();
 
+                int firstRenderKey = 256;
+                int lastRenderKey = -1;
+
+                double ds = dynamicState.GetValue();
+
                 for (int black = 0; black < 2; black++)
                 {
                     Parallel.For(firstNote, lastNote, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
                     {
                         if ((blackKeys[k] && black == 0) || (!blackKeys[k] && black == 1)) return;
                         long _notesRendered = 0;
+                        float left = (float)x1array[k];
+                        float right = (float)(x1array[k] + wdtharray[k]);
+                        if (settings.General.KeyRange == KeyRangeTypes.KeyDynamic)
+                        {
+                            float kleft = (float)x1array[21];
+                            float kright = (float)x1array[108] + (float)wdtharray[108];
+                            float leftScaled = (left - kleft) / (kright - kleft);
+                            float rightScaled = (right - kleft) / (kright - kleft);
+                            left = (float)(leftScaled * ds + left * (1 - ds));
+                            right = (float)(rightScaled * ds + right * (1 - ds));
+                        }
                         unsafe
                         {
                             RenderNote* rn = stackalloc RenderNote[noteBufferLength];
@@ -249,17 +274,38 @@ namespace Kiva_MIDI
                                 };
                                 if (nid == noteBufferLength)
                                 {
-                                    FlushNoteBuffer(context, k, (IntPtr)rn, nid);
+                                    FlushNoteBuffer(context, left, right, (IntPtr)rn, nid);
                                     nid = 0;
                                 }
                             }
-                            FlushNoteBuffer(context, k, (IntPtr)rn, nid);
+                            FlushNoteBuffer(context, left, right, (IntPtr)rn, nid);
                             lock (addLock)
                             {
                                 notesRendered += _notesRendered;
+                                if (_notesRendered > 0)
+                                {
+                                    if (firstRenderKey > k) firstRenderKey = k;
+                                    if (lastRenderKey < k) lastRenderKey = k;
+                                }
                             }
                         }
                     });
+                }
+                if (firstRenderKey < 21 || lastRenderKey > 109)
+                {
+                    if (dynamicState88)
+                    {
+                        dynamicState.SetEnd(0);
+                        dynamicState88 = false;
+                    }
+                }
+                else
+                {
+                    if (!dynamicState88)
+                    {
+                        dynamicState.SetEnd(1);
+                        dynamicState88 = true;
+                    }
                 }
 
                 LastRenderedNoteCount = notesRendered;
@@ -272,7 +318,7 @@ namespace Kiva_MIDI
             //context.Flush();
         }
 
-        unsafe void FlushNoteBuffer(DeviceContext context, int key, IntPtr notes, int count)
+        unsafe void FlushNoteBuffer(DeviceContext context, float left, float right, IntPtr notes, int count)
         {
             if (count == 0) return;
             lock (context)
@@ -284,8 +330,8 @@ namespace Kiva_MIDI
                 context.UnmapSubresource(noteBuffer, 0);
                 context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
                 context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 40, 0));
-                noteConstants.NoteLeft = (float)x1array[key];
-                noteConstants.NoteRight = (float)(x1array[key] + wdtharray[key]);
+                noteConstants.NoteLeft = left;
+                noteConstants.NoteRight = right;
                 SetNoteShaderConstants(context, noteConstants);
                 context.Draw(count, 0);
             }

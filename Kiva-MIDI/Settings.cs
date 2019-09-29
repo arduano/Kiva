@@ -14,7 +14,7 @@ namespace Kiva_MIDI
         class loadingSettings { public dynamic version, midi, general; };
         class versionSettings { public string version; };
 
-        public static readonly string VersionName = "1.0";
+        public static readonly string VersionName = "Beta";
         public static readonly string SettingsVersion = "1";
         public string InstallPath;
         static readonly string SettingsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva/Settings");
@@ -24,6 +24,7 @@ namespace Kiva_MIDI
         string generalPath;
 
         public VolatileSettings Volatile { get; set; } = new VolatileSettings();
+        public GeneralSettings General { get; set; } = new GeneralSettings();
         MIDILoaderSettings loaderSettings;
 
         public MIDILoaderSettings GetMIDILoaderSettings()

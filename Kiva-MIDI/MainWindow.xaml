@@ -66,8 +66,21 @@
                         <SolidColorBrush Color="Black" Opacity=".5"/>
                     </Grid.Background>
                     <StackPanel>
-                        <Label Foreground="White" Name="fpsLabel"></Label>
-                        <Label Foreground="White" Name="renderNcLabel"></Label>
+                        <DockPanel Background="Transparent" Cursor="Hand">
+                            <Image Source="logo.png" RenderOptions.BitmapScalingMode="HighQuality" Width="30" Height="30" Margin="3" RenderTransformOrigin="0.5,0.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform x:Name="rotateLogo" Angle="0"/>
+                                </Image.RenderTransform>
+                            </Image>
+                            <Image Source="kiva.png" RenderOptions.BitmapScalingMode="HighQuality" Width="70" Height="30" Margin="3"/>
+                            <Label Name="versionLabel" Foreground="White" VerticalAlignment="Bottom" FontSize="16" Padding="2" Margin="0,0,5,0">
+                                v1.0
+                            </Label>
+                        </DockPanel>
+                        <StackPanel Name="infoPanel">
+                            <TextBlock Foreground="White" Name="renderInfo" Padding="5"></TextBlock>
+                            <TextBlock Foreground="White" Name="midiInfo"></TextBlock>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
                 <local:DXElement x:Name="dx11img" Focusable="True"/>
