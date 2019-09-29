@@ -283,7 +283,7 @@ namespace Kiva_MIDI
                 data.WriteRange(notes, count * sizeof(RenderNote));
                 context.UnmapSubresource(noteBuffer, 0);
                 context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
-                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 40, 0));
+                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 16, 0));
                 noteConstants.NoteLeft = (float)x1array[key];
                 noteConstants.NoteRight = (float)(x1array[key] + wdtharray[key]);
                 SetNoteShaderConstants(context, noteConstants);
