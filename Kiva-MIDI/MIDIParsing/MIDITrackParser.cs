@@ -629,23 +629,38 @@ namespace Kiva_MIDI
                                             if (reader.Read() == 0x00)
                                             {
                                                 var col = new NoteCol();
+                                                /*
                                                 col.r = reader.Read() / 255.0f;
                                                 col.g = reader.Read() / 255.0f;
                                                 col.b = reader.Read() / 255.0f;
                                                 col.a = reader.Read() / 255.0f;
+                                                */
+                                                col.rgba = (uint)((reader.Read() << 24) & 0xff000000) |
+                                                           (uint)((reader.Read() << 16) & 0xff0000) |
+                                                           (uint)((reader.Read() << 8) & 0xff00) |
+                                                           (uint)(reader.Read() & 0xff);
                                                 if (size == 8)
                                                 {
+                                                    /*
                                                     col.r2 = col.r;
                                                     col.g2 = col.g;
                                                     col.b2 = col.b;
                                                     col.a2 = col.a;
+                                                    */
+                                                    col.rgba2 = col.rgba;
                                                 }
                                                 else
                                                 {
+                                                    /*
                                                     col.r2 = reader.Read() / 255.0f;
                                                     col.g2 = reader.Read() / 255.0f;
                                                     col.b2 = reader.Read() / 255.0f;
                                                     col.a2 = reader.Read() / 255.0f;
+                                                    */
+                                                    col.rgba2 = (uint)((reader.Read() << 24) & 0xff000000) |
+                                                                (uint)((reader.Read() << 16) & 0xff0000) |
+                                                                (uint)((reader.Read() << 8) & 0xff00) |
+                                                                (uint)(reader.Read() & 0xff);
                                                 }
                                                 if (channel == 0x7F)
                                                 {

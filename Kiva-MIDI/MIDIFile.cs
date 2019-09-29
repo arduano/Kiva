@@ -12,8 +12,10 @@ namespace Kiva_MIDI
     [StructLayout(LayoutKind.Sequential)]
     public struct NoteCol
     {
-        public float r, g, b, a;
-        public float r2, g2, b2, a2;
+        //public float r, g, b, a;
+        //public float r2, g2, b2, a2;
+        public uint rgba;
+        public uint rgba2;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -290,6 +292,7 @@ namespace Kiva_MIDI
                 HsvToRgb((i * 40) % 360, 1, 1, out r, out g, out b);
                 OriginalMidiNoteColors[i] = new NoteCol()
                 {
+                    /*
                     r = r / 255.0f,
                     g = g / 255.0f,
                     b = b / 255.0f,
@@ -298,6 +301,15 @@ namespace Kiva_MIDI
                     g2 = g / 255.0f,
                     b2 = b / 255.0f,
                     a2 = 1
+                    */
+                    rgba = (uint)((r << 24) & 0xff000000) +
+                           (uint)((g << 16) & 0xff0000) +
+                           (uint)((b << 8) & 0xff00) +
+                           255,
+                    rgba2 = (uint)((r << 24) & 0xff000000) +
+                            (uint)((g << 16) & 0xff0000) +
+                            (uint)((b << 8) & 0xff00) +
+                            255,
                 };
             }
         }

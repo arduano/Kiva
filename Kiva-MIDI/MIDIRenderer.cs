@@ -83,8 +83,8 @@ namespace Kiva_MIDI
             noteLayout = new InputLayout(device, ShaderSignature.GetInputSignature(notesShader.vertexShaderByteCode), new[] {
                 new InputElement("START",0,Format.R32_Float,0,0),
                 new InputElement("END",0,Format.R32_Float,4,0),
-                new InputElement("COLORL",0,Format.R32G32B32A32_Float,8,0),
-                new InputElement("COLORR",0,Format.R32G32B32A32_Float,24,0),
+                new InputElement("COLORL",0,Format.R32_UInt,8,0),
+                new InputElement("COLORR",0,Format.R32_UInt,12,0),
             });
 
             noteConstants = new NotesGlobalConstants()
