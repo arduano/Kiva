@@ -16,6 +16,7 @@ using System.Collections.Concurrent;
 using IO = System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Kiva_MIDI
 {
@@ -64,6 +65,11 @@ namespace Kiva_MIDI
 
         public MIDIRenderer(Device device, Settings settings)
         {
+            for (int i = 0; i < 257; i++)
+            {
+                noteRenderQueue[i] = new ConcurrentQueue<RenderNote[]>();
+            }
+
             this.settings = settings;
             string noteShaderData;
             if (IO.File.Exists("Notes.fx"))
@@ -292,6 +298,7 @@ namespace Kiva_MIDI
             fixed (RenderNote* noteArrayPtr = noteArray) {
                 Unsafe.CopyBlock((void*)noteArrayPtr, (void*)data, Convert.ToUInt32(count * sizeof(RenderNote)));
             }
+            //SpinWait.SpinUntil(() => { return noteRenderQueue[key].Count < 1024; });
             noteRenderQueue[key].Enqueue(noteArray);
         }
 
@@ -301,12 +308,11 @@ namespace Kiva_MIDI
             {
                 for (int i = 0; i < 257; i++)
                 {
-                    if (noteRenderQueue[i].IsEmpty)
+                    if (!noteRenderQueue[i].TryDequeue(out RenderNote[] noteArray))
                         continue;
                     DataStream data;
                     context.MapSubresource(noteBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
                     data.Position = 0;
-                    noteRenderQueue[i].TryDequeue(out RenderNote[] noteArray);
                     fixed (RenderNote* notes = noteArray)
                     {
                         data.WriteRange((IntPtr)notes, noteArray.Length * sizeof(RenderNote));
