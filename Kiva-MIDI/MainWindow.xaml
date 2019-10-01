@@ -16,7 +16,7 @@
         Loaded="Window_Loaded" SnapsToDevicePixels="True" PreviewKeyDown="MainWindow_PreviewKeyDown"  KeyDown="MainWindow_KeyDown"
         AllowDrop="True" PreviewDrop="MainWindow_PreviewDrop" PreviewDragEnter="MainWindow_PreviewDragEnter" 
         PreviewDragLeave="MainWindow_PreviewDragLeave" WindowStartupLocation="CenterScreen"
-        Focusable="True">
+        Focusable="True" Closing="MainWindow_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -41,11 +41,17 @@
                         <Button Style="{StaticResource WindowButton}" Focusable="False" Name="MinimiseButton" Background="Orange" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinimiseButton_Click"></Button>
                     </DockPanel>
                     <DockPanel LastChildFill="False">
+                        <Button Name="openButton" PreviewMouseDown="OpenButton_PreviewMouseDown" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
+                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="7" Source="Material.WPF/open.png"/>
+                        </Button>
                         <Button Name="pauseButton" PreviewMouseDown="PauseButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
                             <Image HorizontalAlignment="Center" Height="Auto" Margin="5" Source="Material.WPF/pause.png"/>
                         </Button>
                         <Button Name="playButton" PreviewMouseDown="PlayButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
-                            <Image HorizontalAlignment="Center" Height="Auto" Margin="5" Source="Material.WPF/play.png"/>
+                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="5" Source="Material.WPF/play.png"/>
+                        </Button>
+                        <Button Name="settingsButton" PreviewMouseDown="SettingsButton_PreviewMouseDown" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
+                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="7" Source="Material.WPF/settings.png"/>
                         </Button>
                         <DockPanel Margin="5,0" WindowChrome.IsHitTestVisibleInChrome="True">
                             <Label FontSize="16" VerticalAlignment="Center" Padding="5,0,5,3" Margin="0,0,5,0">Speed:</Label>
@@ -55,12 +61,15 @@
                             <Label FontSize="16" VerticalAlignment="Center" Padding="5,0,5,3" Margin="0,0,5,0">Size:</Label>
                             <local:ValueSlider ValueChanged="SizeSlider_ValueChanged" x:Name="sizeSlider" Width="220" Minimum="-4" Maximum="3" TrueMin="0.01" TrueMax="1000" DecimalPoints="2" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
                         </DockPanel>
+                        <local:BetterRadio Text="Test asdf" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
+                        <local:BetterRadio Text="Test asdf" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
+                        <local:BetterRadio Text="Test asdf" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
                     </DockPanel>
                     <!--<Slider Name="timeSlider" Margin="10,8,10,7" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged" VerticalAlignment="Center"/>-->
                     <local:BetterSlider x:Name="timeSlider" UserValueChanged="TimeSlider_UserValueChanged" Margin="10,0,10,0" Minimum="0" Maximum="3" Value="1" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True"/>
                 </Grid>
             </Border>
-            <Grid Name="glContainer">
+            <Grid Name="glContainer" MouseDown="GlContainer_MouseDown">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="100">
                     <Grid.Background>
                         <SolidColorBrush Color="Black" Opacity=".5"/>
@@ -83,7 +92,7 @@
                         </StackPanel>
                     </StackPanel>
                 </Grid>
-                <local:DXElement x:Name="dx11img" Focusable="True"/>
+                <local:DXElement x:Name="dx11img"/>
             </Grid>
         </DockPanel>
         <Rectangle Name="dropHighlight" Fill="White" Visibility="Hidden" Opacity="0.3"/>

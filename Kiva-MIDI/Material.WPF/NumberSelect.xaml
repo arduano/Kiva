@@ -42,12 +42,12 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Padding="0,0,0.3,0" Style="{StaticResource TransparentButtonStyle}" Background="#33FFFFFF" Height="Auto" Margin="0" Click="Button_Click">
+            <Button Name="upArrow" FontSize="12" Padding="0,0,0.3,0" Style="{StaticResource TransparentButtonStyle}" Background="#33FFFFFF" Height="Auto" Margin="0" Click="Button_Click">
                 <Button.Content>
                     <Label Padding="0,0,0,0" Margin="0,-6,0,0" FontWeight="Bold">︿</Label>
                 </Button.Content>
             </Button>
-            <Button Grid.Row="1" Style="{StaticResource TransparentButtonStyle}" Padding="0,0,0.3,0" Background="#33FFFFFF" Height="Auto" Margin="0" Click="Button_Click_1">
+            <Button Name="downArrow" FontSize="12" Grid.Row="1" Style="{StaticResource TransparentButtonStyle}" Padding="0,0,0.3,0" Background="#33FFFFFF" Height="Auto" Margin="0" Click="Button_Click_1">
                 <Button.Content>
                     <Label Padding="0,0,0,0" Margin="0,-0,0,0" FontWeight="Bold">﹀</Label>
                 </Button.Content>

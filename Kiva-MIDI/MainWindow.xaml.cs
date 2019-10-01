@@ -21,12 +21,13 @@ using SharpDX.Direct3D9;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.WPF;
+using Microsoft.Win32;
 
 namespace Kiva_MIDI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    /// </summary>E:\Programming\Personal\2019\Kiva\Kiva-MIDI\MainWindow.xaml
 
     public partial class MainWindow : Window
     {
@@ -190,10 +191,11 @@ namespace Kiva_MIDI
 
         Settings settings = new Settings();
 
+        SettingsWindow settingsWindow = null;
+
         public MainWindow()
         {
             InitializeComponent();
-            AllowsTransparency = false;
             SourceInitialized += (s, e) =>
             {
                 IntPtr handle = (new WindowInteropHelper(this)).Handle;
@@ -425,6 +427,38 @@ namespace Kiva_MIDI
             {
                 settings.Volatile.Size = sizeSlider.Value;
             }
+        }
+
+        private void OpenButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var open = new OpenFileDialog();
+            open.Filter = "Midi files (*.mid)|*.mid";
+            if ((bool)open.ShowDialog())
+            {
+                LoadMidi(open.FileName);
+            }
+        }
+
+        private void SettingsButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (settingsWindow != null && settingsWindow.IsVisible) return;
+            settingsWindow = new SettingsWindow(settings);
+            settingsWindow.Owner = this;
+            settingsWindow.Show();
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            player.File = null;
+            scene.File = null;
+        }
+
+        private void GlContainer_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.Focus(this);
+            this.Focus();
+            DependencyObject scope = FocusManager.GetFocusScope(this);
+            FocusManager.SetFocusedElement(scope, this as IInputElement);
         }
     }
 }

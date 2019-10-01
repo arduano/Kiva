@@ -81,7 +81,7 @@ namespace Kiva_MIDI
                 var events = file.MIDIEvents[i];
                 int evid = 0;
                 double lastTime = 0;
-                bool changed = false;
+                bool changed = true;
                 Action onChanged = () => changed = true;
                 Time.TimeChanged += onChanged;
                 while (file != null)

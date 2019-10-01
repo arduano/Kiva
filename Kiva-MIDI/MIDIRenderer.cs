@@ -52,7 +52,7 @@ namespace Kiva_MIDI
         int noteBufferLength = 1 << 10;
         Buffer noteBuffer;
 
-        VelocityEase dynamicState = new VelocityEase(0) { Duration = 0.7 };
+        VelocityEase dynamicState = new VelocityEase(0) { Duration = 0.7, Slope = 4 };
         bool dynamicState88 = false;
 
         bool[] blackKeys = new bool[257];
@@ -156,6 +156,16 @@ namespace Kiva_MIDI
             {
                 firstNote = 0;
                 lastNote = 128;
+            }
+            else if (settings.General.KeyRange == KeyRangeTypes.Key256)
+            {
+                firstNote = 0;
+                lastNote = 256;
+            }
+            else if (settings.General.KeyRange == KeyRangeTypes.Key88)
+            {
+                firstNote = 21;
+                lastNote = 108;
             }
             int kbfirstNote = firstNote;
             int kblastNote = lastNote;

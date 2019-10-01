@@ -96,6 +96,9 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Sanford.Multimedia.Midi, Version=6.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sanford.Multimedia.Midi.6.6.0\lib\net20\Sanford.Multimedia.Midi.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -136,6 +139,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Material.WPF\BetterRadio.xaml.cs">
+      <DependentUpon>BetterRadio.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Material.WPF\BetterCheckbox.xaml.cs">
+      <DependentUpon>BetterCheckbox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DX.WPF\D3D.cs" />
     <Compile Include="DX.WPF\D3D11.cs" />
     <Compile Include="DX.WPF\D3D11Image.cs" />
@@ -174,8 +183,11 @@
     <Compile Include="Scene.cs" />
     <Compile Include="MIDIParsing\TimedMerger.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\VisualSettings.xaml.cs">
+      <DependentUpon>VisualSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShaderManager.cs" />
     <Compile Include="Material.WPF\ValueSlider.xaml.cs">
@@ -183,6 +195,14 @@
     </Compile>
     <Compile Include="VelocityEase.cs" />
     <Compile Include="VolatileSettings.cs" />
+    <Page Include="Material.WPF\BetterRadio.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Material.WPF\BetterCheckbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoadingMidiForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -207,7 +227,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="Settings\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -216,6 +236,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Material.WPF\ValueSlider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\VisualSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -263,6 +287,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="kiva.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Material.WPF\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Material.WPF\open.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />

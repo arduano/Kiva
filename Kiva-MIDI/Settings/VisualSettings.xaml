@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="Kiva_MIDI.VisualSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Kiva_MIDI"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Padding="10">
+            <StackPanel>
+                <Label FontSize="14">Keyboard Key Range</Label>
+                <local:BetterRadio RadioChecked="RangeChanged" x:Name="key88Range" Height="26" Text="88 Keys"/>
+                <local:BetterRadio RadioChecked="RangeChanged" x:Name="key128Range" Height="26" Text="126 Keys"/>
+                <local:BetterRadio RadioChecked="RangeChanged" x:Name="key256Range" Height="26" Text="256 Keys"/>
+                <local:BetterRadio RadioChecked="RangeChanged" x:Name="midiRange" Height="26" Text="MIDI's Key Range"/>
+                <local:BetterRadio RadioChecked="RangeChanged" x:Name="dynamicRange" Height="26" Text="Dynamic 88-128 Range"/>
+                <DockPanel Margin="0">
+                    <local:BetterRadio RadioChecked="RangeChanged" x:Name="customRange" ParentDepth="2" Height="26" Text="Custom" Margin="0,0,10,0"/>
+                    <local:NumberSelect IsEnabled="{Binding ElementName=customRange, Path=IsChecked}" Width="70" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                    <Label FontSize="14">To</Label>
+                    <local:NumberSelect IsEnabled="{Binding ElementName=customRange, Path=IsChecked}" Width="70" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                </DockPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

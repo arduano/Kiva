@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BetterWPF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,6 +62,10 @@ namespace Kiva_MIDI
 
             prevText = Value.ToString();
             textBox.Text = prevText;
+
+            upArrow.SetBinding(IsEnabledProperty, new BBinding(IsEnabledProperty, this));
+            downArrow.SetBinding(IsEnabledProperty, new BBinding(IsEnabledProperty, this));
+            textBox.SetBinding(IsEnabledProperty, new BBinding(IsEnabledProperty, this));
         }
 
         bool ignoreChange = false;
