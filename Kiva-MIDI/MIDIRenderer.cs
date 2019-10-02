@@ -37,6 +37,30 @@ namespace Kiva_MIDI
             public NoteCol color;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        struct RenderKey
+        {
+            float left;
+            float right;
+            float distance;
+            public NoteCol color;
+            short meta;
+
+            void MarkPressed(bool ispressed)
+            {
+                meta = (short)(meta & 0b10111111);
+                if (ispressed)
+                    meta = (short)(meta | 0b01);
+            }
+
+            void MarkBlack(bool black)
+            {
+                meta = (short)(meta & 0b01111111);
+                if (black)
+                    meta = (short)(meta | 0b1);
+            }
+        }
+
         public MIDIFile File { get; set; }
         public PlayingState Time { get; set; } = new PlayingState();
 
