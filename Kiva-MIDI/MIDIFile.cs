@@ -16,6 +16,14 @@ namespace Kiva_MIDI
         //public float r2, g2, b2, a2;
         public uint rgba;
         public uint rgba2;
+
+        public static uint Compress(byte r, byte g, byte b, byte a)
+        {
+            return (uint)((r << 24) & 0xff000000) |
+                       (uint)((g << 16) & 0xff0000) |
+                       (uint)((b << 8) & 0xff00) |
+                       (uint)(a & 0xff);
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -295,24 +303,8 @@ namespace Kiva_MIDI
                 HsvToRgb((i * 40) % 360, 1, 1, out r, out g, out b);
                 OriginalMidiNoteColors[i] = new NoteCol()
                 {
-                    /*
-                    r = r / 255.0f,
-                    g = g / 255.0f,
-                    b = b / 255.0f,
-                    a = 1,
-                    r2 = r / 255.0f,
-                    g2 = g / 255.0f,
-                    b2 = b / 255.0f,
-                    a2 = 1
-                    */
-                    rgba = (uint)((r << 24) & 0xff000000) +
-                           (uint)((g << 16) & 0xff0000) +
-                           (uint)((b << 8) & 0xff00) +
-                           255,
-                    rgba2 = (uint)((r << 24) & 0xff000000) +
-                            (uint)((g << 16) & 0xff0000) +
-                            (uint)((b << 8) & 0xff00) +
-                            255,
+                    rgba = NoteCol.Compress((byte)r, (byte)g, (byte)b, 255),
+                    rgba2 = NoteCol.Compress((byte)r, (byte)g, (byte)b, 255),
                 };
             }
         }
