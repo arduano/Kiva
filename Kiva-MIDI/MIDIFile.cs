@@ -74,8 +74,8 @@ namespace Kiva_MIDI
         public int[] LastColorEvent;
         public ColorEvent[][] ColorEvents;
         public double MidiLength { get; private set; } = 0;
-        public int FirstKey { get; private set; } = 0;
-        public int LastKey { get; private set; } = 255;
+        public int FirstKey { get; private set; } = 255;
+        public int LastKey { get; private set; } = 0;
 
         public ParsingStage ParseStage { get; private set; } = ParsingStage.Opening;
         public double ParseNumber { get; private set; }
@@ -211,6 +211,9 @@ namespace Kiva_MIDI
                     ParseNumber += 20;
                     ParseStatusText = "Analyzing MIDI\nTracks " + tracksParsed + " of " + parsers.Length;
                     Console.WriteLine("Pass 1 Parsed track " + tracksParsed + "/" + parsers.Length);
+
+                    if (FirstKey > parsers[i].FirstKey) FirstKey = parsers[i].FirstKey;
+                    if (LastKey < parsers[i].LastKey) LastKey = parsers[i].LastKey;
                 }
             });
             cancel.ThrowIfCancellationRequested();

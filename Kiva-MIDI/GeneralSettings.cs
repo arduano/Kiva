@@ -19,5 +19,7 @@ namespace Kiva_MIDI
     public class GeneralSettings
     {
         public KeyRangeTypes KeyRange { get; set; } = KeyRangeTypes.KeyDynamic;
+        public int CustomFirstKey { get; set; } = 0;
+        public int CustomLastKey { get; set; } = 127;
     }
 }

@@ -52,7 +52,7 @@ namespace Kiva_MIDI
         int noteBufferLength = 1 << 10;
         Buffer noteBuffer;
 
-        VelocityEase dynamicState = new VelocityEase(0) { Duration = 0.7, Slope = 4 };
+        VelocityEase dynamicState = new VelocityEase(0) { Duration = 0.7, Slope = 3, Supress = 2 };
         bool dynamicState88 = false;
 
         bool[] blackKeys = new bool[257];
@@ -126,6 +126,42 @@ namespace Kiva_MIDI
                 if (blackKeys[i]) keynum[i] = b++;
                 else keynum[i] = w++;
             }
+
+
+            int firstNote = 0;
+            int lastNote = 256;
+
+            double wdth;
+
+            double knmfn = keynum[firstNote];
+            double knmln = keynum[lastNote - 1];
+            if (blackKeys[firstNote]) knmfn = keynum[firstNote - 1] + 0.5;
+            if (blackKeys[lastNote - 1]) knmln = keynum[lastNote] - 0.5;
+            for (int i = 0; i < 257; i++)
+            {
+                if (!blackKeys[i])
+                {
+                    x1array[i] = (float)(keynum[i] - knmfn) / (knmln - knmfn + 1);
+                    wdtharray[i] = 1.0f / (knmln - knmfn + 1);
+                }
+                else
+                {
+                    int _i = i + 1;
+                    wdth = 0.6f / (knmln - knmfn + 1);
+                    int bknum = keynum[i] % 5;
+                    double offset = wdth / 2;
+                    if (bknum == 0 || bknum == 2)
+                    {
+                        offset *= 1.3;
+                    }
+                    else if (bknum == 1 || bknum == 4)
+                    {
+                        offset *= 0.7;
+                    }
+                    x1array[i] = (float)(keynum[_i] - knmfn) / (knmln - knmfn + 1) - offset;
+                    wdtharray[i] = wdth;
+                }
+            }
         }
 
         void SetNoteShaderConstants(DeviceContext context, NotesGlobalConstants constants)
@@ -167,42 +203,24 @@ namespace Kiva_MIDI
                 firstNote = 21;
                 lastNote = 108;
             }
+            else if (settings.General.KeyRange == KeyRangeTypes.Custom)
+            {
+                firstNote = settings.General.CustomFirstKey;
+                lastNote = settings.General.CustomLastKey + 1;
+            }
+            else if (settings.General.KeyRange == KeyRangeTypes.KeyMIDI)
+            {
+                if (File != null)
+                {
+                    firstNote = File.FirstKey;
+                    lastNote = File.LastKey + 1;
+                }
+            }
             int kbfirstNote = firstNote;
             int kblastNote = lastNote;
             if (blackKeys[firstNote]) kbfirstNote--;
             if (blackKeys[lastNote - 1]) kblastNote++;
 
-            double wdth;
-
-            double knmfn = keynum[firstNote];
-            double knmln = keynum[lastNote - 1];
-            if (blackKeys[firstNote]) knmfn = keynum[firstNote - 1] + 0.5;
-            if (blackKeys[lastNote - 1]) knmln = keynum[lastNote] - 0.5;
-            for (int i = 0; i < 257; i++)
-            {
-                if (!blackKeys[i])
-                {
-                    x1array[i] = (float)(keynum[i] - knmfn) / (knmln - knmfn + 1);
-                    wdtharray[i] = 1.0f / (knmln - knmfn + 1);
-                }
-                else
-                {
-                    int _i = i + 1;
-                    wdth = 0.6f / (knmln - knmfn + 1);
-                    int bknum = keynum[i] % 5;
-                    double offset = wdth / 2;
-                    if (bknum == 0 || bknum == 2)
-                    {
-                        offset *= 1.3;
-                    }
-                    else if (bknum == 1 || bknum == 4)
-                    {
-                        offset *= 0.7;
-                    }
-                    x1array[i] = (float)(keynum[_i] - knmfn) / (knmln - knmfn + 1) - offset;
-                    wdtharray[i] = wdth;
-                }
-            }
 
             notesShader.SetShaders(context);
             noteConstants.ScreenAspect = (float)(args.RenderSize.Height / args.RenderSize.Width);
@@ -225,6 +243,19 @@ namespace Kiva_MIDI
                 int lastRenderKey = -1;
 
                 double ds = dynamicState.GetValue();
+                if (ds < 0) ds = 0;
+                if (ds > 1) ds = 1;
+
+                double fullLeft = x1array[firstNote];
+                double fullRight = x1array[lastNote - 1] + wdtharray[lastNote - 1];
+                if (settings.General.KeyRange == KeyRangeTypes.KeyDynamic)
+                {
+                    double kleft = x1array[21];
+                    double kright = x1array[108] + wdtharray[108];
+                    fullLeft = fullLeft * (1 - ds) + kleft * ds;
+                    fullRight = fullRight * (1 - ds) + kright * ds;
+                }
+                double fullWidth = fullRight - fullLeft;
 
                 for (int black = 0; black < 2; black++)
                 {
@@ -232,17 +263,8 @@ namespace Kiva_MIDI
                     {
                         if ((blackKeys[k] && black == 0) || (!blackKeys[k] && black == 1)) return;
                         long _notesRendered = 0;
-                        float left = (float)x1array[k];
-                        float right = (float)(x1array[k] + wdtharray[k]);
-                        if (settings.General.KeyRange == KeyRangeTypes.KeyDynamic)
-                        {
-                            float kleft = (float)x1array[21];
-                            float kright = (float)x1array[108] + (float)wdtharray[108];
-                            float leftScaled = (left - kleft) / (kright - kleft);
-                            float rightScaled = (right - kleft) / (kright - kleft);
-                            left = (float)(leftScaled * ds + left * (1 - ds));
-                            right = (float)(rightScaled * ds + right * (1 - ds));
-                        }
+                        float left = (float)((x1array[k] - fullLeft) / fullWidth);
+                        float right = (float)((x1array[k] + wdtharray[k] - fullLeft) / fullWidth);
                         unsafe
                         {
                             RenderNote* rn = stackalloc RenderNote[noteBufferLength];

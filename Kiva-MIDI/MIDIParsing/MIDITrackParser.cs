@@ -115,6 +115,8 @@ namespace Kiva_MIDI
         byte prevCommand = 0;
         public void FirstPassParse()
         {
+            int firstKey = 255;
+            int lastKey = 0;
             UnendedNotes = new FastList<UnendedNote>[256 * 16];
             for (int i = 0; i < 256 * 16; i++)
             {
@@ -148,6 +150,8 @@ namespace Kiva_MIDI
                             {
                                 noteCount++;
                                 noteCounts[note]++;
+                                if (firstKey > note) firstKey = note;
+                                if (lastKey < note) lastKey = note;
                             }
                             if (vel >= eventThresh)
                                 midiEventCount++;
@@ -388,6 +392,8 @@ namespace Kiva_MIDI
             }
             //catch { }
             UnendedNotes = null;
+            FirstKey = firstKey;
+            LastKey = lastKey;
         }
 
         public void PrepareForSecondPass()

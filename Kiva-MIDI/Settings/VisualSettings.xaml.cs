@@ -45,6 +45,9 @@ namespace Kiva_MIDI
             if (range == KeyRangeTypes.KeyMIDI) midiRange.IsChecked = true;
             if (range == KeyRangeTypes.KeyDynamic) dynamicRange.IsChecked = true;
             if (range == KeyRangeTypes.Custom) customRange.IsChecked = true;
+
+            firstKey.Value = settings.General.CustomFirstKey;
+            lastKey.Value = settings.General.CustomLastKey;
         }
 
         private void RangeChanged(object sender, RoutedEventArgs e)
@@ -56,6 +59,18 @@ namespace Kiva_MIDI
             if (sender == midiRange) settings.General.KeyRange = KeyRangeTypes.KeyMIDI;
             if (sender == dynamicRange) settings.General.KeyRange = KeyRangeTypes.KeyDynamic;
             if (sender == customRange) settings.General.KeyRange = KeyRangeTypes.Custom;
+        }
+
+        private void FirstKey_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+        {
+            if (!IsInitialized) return;
+            settings.General.CustomFirstKey = (int)firstKey.Value;
+        }
+
+        private void LastKey_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+        {
+            if (!IsInitialized) return;
+            settings.General.CustomLastKey = (int)lastKey.Value;
         }
     }
 }

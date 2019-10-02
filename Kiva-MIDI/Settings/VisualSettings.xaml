@@ -15,15 +15,15 @@
             <StackPanel>
                 <Label FontSize="14">Keyboard Key Range</Label>
                 <local:BetterRadio RadioChecked="RangeChanged" x:Name="key88Range" Height="26" Text="88 Keys"/>
-                <local:BetterRadio RadioChecked="RangeChanged" x:Name="key128Range" Height="26" Text="126 Keys"/>
+                <local:BetterRadio RadioChecked="RangeChanged" x:Name="key128Range" Height="26" Text="128 Keys"/>
                 <local:BetterRadio RadioChecked="RangeChanged" x:Name="key256Range" Height="26" Text="256 Keys"/>
                 <local:BetterRadio RadioChecked="RangeChanged" x:Name="midiRange" Height="26" Text="MIDI's Key Range"/>
                 <local:BetterRadio RadioChecked="RangeChanged" x:Name="dynamicRange" Height="26" Text="Dynamic 88-128 Range"/>
                 <DockPanel Margin="0">
                     <local:BetterRadio RadioChecked="RangeChanged" x:Name="customRange" ParentDepth="2" Height="26" Text="Custom" Margin="0,0,10,0"/>
-                    <local:NumberSelect IsEnabled="{Binding ElementName=customRange, Path=IsChecked}" Width="70" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                    <local:NumberSelect x:Name="firstKey" Minimum="0" ValueChanged="FirstKey_ValueChanged" Maximum="{Binding ElementName=lastKey, Path=Value}" IsEnabled="{Binding ElementName=customRange, Path=IsChecked}" Width="70" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                     <Label FontSize="14">To</Label>
-                    <local:NumberSelect IsEnabled="{Binding ElementName=customRange, Path=IsChecked}" Width="70" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                    <local:NumberSelect x:Name="lastKey" Maximum="256" ValueChanged="LastKey_ValueChanged" Minimum="{Binding ElementName=firstKey, Path=Value}" IsEnabled="{Binding ElementName=customRange, Path=IsChecked}" Width="70" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                 </DockPanel>
             </StackPanel>
         </Border>

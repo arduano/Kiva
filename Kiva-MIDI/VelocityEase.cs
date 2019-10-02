@@ -10,6 +10,7 @@ namespace Kiva_MIDI
     {
         public double Duration { get; set; } = 1;
         public double Slope { get; set; } = 2;
+        public double Supress { get; set; } = 1;
 
         public double Start { get; private set; }
         public double End { get; private set; }
@@ -52,7 +53,7 @@ namespace Kiva_MIDI
             }
             else
                 vel = getEaseVel(t) * (End - Start) + getInertiaVel(t);
-            vel /= Duration;
+            vel /= Duration * Supress;
             double pos = getEasePos(t) * (End - Start) + Start + getInertiaPos(t);
 
             Start = pos;
