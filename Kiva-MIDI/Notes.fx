@@ -7,8 +7,8 @@ float ScreenAspect;
 struct NOTE {
 	float start : START;
 	float end : END;
-	float4 colorl : COLORL;
-	float4 colorr : COLORR;
+    dword colorl : COLORL;
+    dword colorr : COLORR;
 };
 
 struct VS_IN
@@ -43,8 +43,11 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 	float borderLeft = NoteLeft + NoteBorder;
 	float borderRight = NoteRight - NoteBorder;
 
-	float4 cl = n.colorl;
-	float4 cr = n.colorr;
+    float4 colorlConv = float4((float)(n.colorl >> 24 & 0xff) / 255.0, (float)(n.colorl >> 16 & 0xff) / 255.0, (float)(n.colorl >> 8 & 0xff) / 255.0, (float)(n.colorl & 0xff) / 255.0);
+    float4 colorrConv = float4((float)(n.colorr >> 24 & 0xff) / 255.0, (float)(n.colorr >> 16 & 0xff) / 255.0, (float)(n.colorr >> 8 & 0xff) / 255.0, (float)(n.colorr & 0xff) / 255.0);
+
+	float4 cl = colorlConv;
+    float4 cr = colorrConv;
 	cl.xyz *= 0.3f;
 	cr.xyz *= 0.3f;
 	cl.xyz += 0.1f;
@@ -78,8 +81,8 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 
-	cl = n.colorl;
-	cr = n.colorr;
+	cl = colorlConv;
+	cr = colorrConv;
 	cl.xyz += 0.1f;
 	cr.xyz -= 0.3f;
 	cl.xyz = clamp(cl.xyz, 0, 1);

@@ -110,8 +110,8 @@ namespace Kiva_MIDI
             noteLayout = new InputLayout(device, ShaderSignature.GetInputSignature(notesShader.vertexShaderByteCode), new[] {
                 new InputElement("START",0,Format.R32_Float,0,0),
                 new InputElement("END",0,Format.R32_Float,4,0),
-                new InputElement("COLORL",0,Format.R32G32B32A32_Float,8,0),
-                new InputElement("COLORR",0,Format.R32G32B32A32_Float,24,0),
+                new InputElement("COLORL",0,Format.R32_UInt,8,0),
+                new InputElement("COLORR",0,Format.R32_UInt,12,0),
             });
 
             noteConstants = new NotesGlobalConstants()
@@ -385,7 +385,7 @@ namespace Kiva_MIDI
                 data.WriteRange(notes, count * sizeof(RenderNote));
                 context.UnmapSubresource(noteBuffer, 0);
                 context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
-                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 40, 0));
+                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 16, 0));
                 noteConstants.NoteLeft = left;
                 noteConstants.NoteRight = right;
                 SetNoteShaderConstants(context, noteConstants);
