@@ -257,6 +257,25 @@ namespace Kiva_MIDI
             {
                 keyEases[i] = new VelocityEase(0) { Duration = 0.05, Slope = 2, Supress = 3 };
             }
+
+            var renderTargetDesc = new RenderTargetBlendDescription();
+            renderTargetDesc.IsBlendEnabled = true;
+            renderTargetDesc.SourceBlend = BlendOption.SourceAlpha;
+            renderTargetDesc.DestinationBlend = BlendOption.InverseSourceAlpha;
+            renderTargetDesc.BlendOperation = BlendOperation.Add;
+            renderTargetDesc.SourceAlphaBlend = BlendOption.One;
+            renderTargetDesc.DestinationAlphaBlend = BlendOption.One;
+            renderTargetDesc.AlphaBlendOperation = BlendOperation.Add;
+            renderTargetDesc.RenderTargetWriteMask = ColorWriteMaskFlags.All;
+
+            BlendStateDescription desc = new BlendStateDescription();
+            desc.AlphaToCoverageEnable = false;
+            desc.IndependentBlendEnable = false;
+            desc.RenderTarget[0] = renderTargetDesc;
+
+            var blendStateEnabled = new BlendState(device, desc);
+
+            device.ImmediateContext.OutputMerger.SetBlendState(blendStateEnabled);
         }
 
         void SetNoteShaderConstants(DeviceContext context, NotesGlobalConstants constants)
@@ -333,7 +352,7 @@ namespace Kiva_MIDI
             noteConstants.NoteBorder = 0.0015f;
             SetNoteShaderConstants(context, noteConstants);
 
-            context.ClearRenderTargetView(target, new Color4(0, 0, 0, 0.6f));
+            context.ClearRenderTargetView(target, new Color4(0.4f, 0.4f, 0.4f, 1f));
 
             double ds = dynamicState.GetValue(0, 1);
 

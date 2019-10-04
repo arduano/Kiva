@@ -67,6 +67,7 @@
                 </Grid>
             </Border>
             <Grid Name="glContainer" MouseDown="GlContainer_MouseDown">
+                <!--<Grid Background="Green" Panel.ZIndex="-100"></Grid>-->
                 <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Hidden" Name="audioDesyncLabel" Panel.ZIndex="100">
                     <Grid.Background>
                         <SolidColorBrush Color="Black" Opacity=".5"/>

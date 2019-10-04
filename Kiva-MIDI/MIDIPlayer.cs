@@ -155,7 +155,7 @@ namespace Kiva_MIDI
             KDMAPI.InitializeKDMAPIStream();
             foreach (var e in eventFeed.GetConsumingEnumerable())
             {
-                KDMAPI.SendDirectData(e.data);
+                KDMAPI.SendDirectDataNoBuf(e.data);
             }
             KDMAPI.TerminateKDMAPIStream();
         }
