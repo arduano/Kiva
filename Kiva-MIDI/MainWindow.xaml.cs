@@ -22,6 +22,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.WPF;
 using Microsoft.Win32;
+using System.Collections.Concurrent;
 
 namespace Kiva_MIDI
 {
@@ -187,7 +188,7 @@ namespace Kiva_MIDI
             DependencyProperty.Register("ChromeVisibility", typeof(Visibility), typeof(MainWindow), new PropertyMetadata(Visibility.Visible));
 
         Scene scene;
-        KDMAPIPlayer player;
+        MIDIPlayer player;
 
         Settings settings = new Settings();
 
@@ -211,7 +212,7 @@ namespace Kiva_MIDI
             dx11img.MouseDown += (s, e) => Focus();
             scene.Time = Time;
 
-            player = new KDMAPIPlayer();
+            player = new MIDIPlayer();
             player.RunPlayer();
             player.Time = Time;
 
@@ -229,6 +230,10 @@ namespace Kiva_MIDI
             {
                 var renderText = "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" + 
                                  "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0");
+
+                if (player.BufferLen > 9000) audioDesyncLabel.Visibility = Visibility.Visible;
+                else audioDesyncLabel.Visibility = Visibility.Hidden;
+
                 renderInfo.Text = renderText;
                 //renderNcLabel.Content = 
                 timeSlider.Value = Time.GetTime();

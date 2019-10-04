@@ -162,7 +162,7 @@
     <Compile Include="DX.WPF\IDirect3D.cs" />
     <Compile Include="GeneralSettings.cs" />
     <Compile Include="KDMAPI.cs" />
-    <Compile Include="KDMAPIPlayer.cs" />
+    <Compile Include="MIDIPlayer.cs" />
     <Compile Include="LoadingMidiForm.xaml.cs">
       <DependentUpon>LoadingMidiForm.xaml</DependentUpon>
     </Compile>
@@ -297,7 +297,7 @@
     <Resource Include="Material.WPF\open.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="KeyboardSmall.fx" />
+    <EmbeddedResource Include="KeyboardSmall.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />

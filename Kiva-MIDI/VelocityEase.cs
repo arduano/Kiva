@@ -42,6 +42,14 @@ namespace Kiva_MIDI
             return pos;
         }
 
+        public double GetValue(double min, double max)
+        {
+            var val = GetValue();
+            if (val < min) val = min;
+            if (val > max) val = max;
+            return val;
+        }
+
         public void SetEnd(double e)
         {
             double t = (DateTime.Now - start).TotalSeconds / Duration;

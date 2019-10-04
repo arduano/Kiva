@@ -27,6 +27,16 @@ namespace Kiva_MIDI
             public float NoteRight;
             public float NoteBorder;
             public float ScreenAspect;
+            public float KeyboardHeight;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 16)]
+        struct KeyboardGlobalConstants
+        {
+            public float Height;
+            public float Left;
+            public float Right;
+            public float Aspect;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -40,24 +50,25 @@ namespace Kiva_MIDI
         [StructLayout(LayoutKind.Sequential)]
         struct RenderKey
         {
-            float left;
-            float right;
-            float distance;
-            public NoteCol color;
-            short meta;
+            public uint colorl;
+            public uint colorr;
+            public float left;
+            public float right;
+            public float distance;
+            public uint meta;
 
-            void MarkPressed(bool ispressed)
+            public void MarkPressed(bool ispressed)
             {
-                meta = (short)(meta & 0b10111111);
+                meta = (uint)(meta & 0b10111111);
                 if (ispressed)
-                    meta = (short)(meta | 0b01);
+                    meta = (uint)(meta | 0b01);
             }
 
-            void MarkBlack(bool black)
+            public void MarkBlack(bool black)
             {
-                meta = (short)(meta & 0b01111111);
+                meta = (uint)(meta & 0b01111111);
                 if (black)
-                    meta = (short)(meta | 0b1);
+                    meta = (uint)(meta | 0b1);
             }
         }
 
@@ -67,9 +78,14 @@ namespace Kiva_MIDI
         public long LastRenderedNoteCount { get; private set; } = 0;
 
         ShaderManager notesShader;
+        ShaderManager SmallWhiteKeyShader;
+        ShaderManager SmallBlackKeyShader;
+        ShaderManager BigWhiteKeyShader;
+        ShaderManager BigBlackKeyShader;
         InputLayout noteLayout;
         InputLayout keyLayout;
         Buffer globalNoteConstants;
+        Buffer keyBuffer;
 
         NotesGlobalConstants noteConstants;
 
@@ -81,6 +97,9 @@ namespace Kiva_MIDI
 
         bool[] blackKeys = new bool[257];
         int[] keynum = new int[257];
+
+        RenderKey[] renderKeys = new RenderKey[257];
+        VelocityEase[] keyEases = new VelocityEase[256];
 
         Settings settings;
 
@@ -107,11 +126,45 @@ namespace Kiva_MIDI
                 ShaderBytecode.Compile(noteShaderData, "GS_Note", "gs_4_0", ShaderFlags.None, EffectFlags.None)
             );
 
+            if (IO.File.Exists("KeyboardSmall.fx"))
+            {
+                noteShaderData = IO.File.ReadAllText("KeyboardSmall.fx");
+            }
+            else
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var names = assembly.GetManifestResourceNames();
+                using (var stream = assembly.GetManifestResourceStream("Kiva_MIDI.KeyboardSmall.fx"))
+                using (var reader = new IO.StreamReader(stream))
+                    noteShaderData = reader.ReadToEnd();
+            }
+            SmallWhiteKeyShader = new ShaderManager(
+                device,
+                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "GS_White", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            );
+            SmallBlackKeyShader = new ShaderManager(
+                device,
+                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "GS_Black", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            );
+
             noteLayout = new InputLayout(device, ShaderSignature.GetInputSignature(notesShader.vertexShaderByteCode), new[] {
                 new InputElement("START",0,Format.R32_Float,0,0),
                 new InputElement("END",0,Format.R32_Float,4,0),
                 new InputElement("COLORL",0,Format.R32_UInt,8,0),
                 new InputElement("COLORR",0,Format.R32_UInt,12,0),
+            });
+
+            keyLayout = new InputLayout(device, ShaderSignature.GetInputSignature(SmallWhiteKeyShader.vertexShaderByteCode), new[] {
+                new InputElement("COLORL",0,Format.R32_UInt,0,0),
+                new InputElement("COLORR",0,Format.R32_UInt,4,0),
+                new InputElement("LEFT",0,Format.R32_Float,8,0),
+                new InputElement("RIGHT",0,Format.R32_Float,12,0),
+                new InputElement("DISTANCE",0,Format.R32_Float,16,0),
+                new InputElement("META",0,Format.R32_UInt,20,0),
             });
 
             noteConstants = new NotesGlobalConstants()
@@ -132,12 +185,22 @@ namespace Kiva_MIDI
                 StructureByteStride = 0
             });
 
+            keyBuffer = new Buffer(device, new BufferDescription()
+            {
+                BindFlags = BindFlags.VertexBuffer,
+                CpuAccessFlags = CpuAccessFlags.Write,
+                OptionFlags = ResourceOptionFlags.None,
+                SizeInBytes = 24 * renderKeys.Length,
+                Usage = ResourceUsage.Dynamic,
+                StructureByteStride = 0
+            });
+
             globalNoteConstants = new Buffer(device, new BufferDescription()
             {
                 BindFlags = BindFlags.ConstantBuffer,
                 CpuAccessFlags = CpuAccessFlags.Write,
                 OptionFlags = ResourceOptionFlags.None,
-                SizeInBytes = 16,
+                SizeInBytes = 32,
                 Usage = ResourceUsage.Dynamic,
                 StructureByteStride = 0
             });
@@ -150,7 +213,6 @@ namespace Kiva_MIDI
                 if (blackKeys[i]) keynum[i] = b++;
                 else keynum[i] = w++;
             }
-
 
             int firstNote = 0;
             int lastNote = 256;
@@ -167,6 +229,7 @@ namespace Kiva_MIDI
                 {
                     x1array[i] = (float)(keynum[i] - knmfn) / (knmln - knmfn + 1);
                     wdtharray[i] = 1.0f / (knmln - knmfn + 1);
+                    renderKeys[i].MarkBlack(false);
                 }
                 else
                 {
@@ -184,7 +247,15 @@ namespace Kiva_MIDI
                     }
                     x1array[i] = (float)(keynum[_i] - knmfn) / (knmln - knmfn + 1) - offset;
                     wdtharray[i] = wdth;
+                    renderKeys[i].MarkBlack(true);
                 }
+                renderKeys[i].left = (float)x1array[i];
+                renderKeys[i].right = (float)(x1array[i] + wdtharray[i]);
+            }
+
+            for (int i = 0; i < keyEases.Length; i++)
+            {
+                keyEases[i] = new VelocityEase(0) { Duration = 0.05, Slope = 2, Supress = 3 };
             }
         }
 
@@ -198,8 +269,19 @@ namespace Kiva_MIDI
             context.GeometryShader.SetConstantBuffer(0, globalNoteConstants);
         }
 
+        void SetKeyboardShaderConstants(DeviceContext context, KeyboardGlobalConstants constants)
+        {
+            DataStream data;
+            context.MapSubresource(globalNoteConstants, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
+            data.Write(constants);
+            context.UnmapSubresource(globalNoteConstants, 0);
+            context.VertexShader.SetConstantBuffer(0, globalNoteConstants);
+            context.GeometryShader.SetConstantBuffer(0, globalNoteConstants);
+        }
+
         double[] x1array = new double[257];
         double[] wdtharray = new double[257];
+        bool[] pressedKeys = new bool[256];
 
         public void Render(Device device, RenderTargetView target, DrawEventArgs args)
         {
@@ -253,6 +335,23 @@ namespace Kiva_MIDI
 
             context.ClearRenderTargetView(target, new Color4(0, 0, 0, 0.6f));
 
+            double ds = dynamicState.GetValue(0, 1);
+
+            double fullLeft = x1array[firstNote];
+            double fullRight = x1array[lastNote - 1] + wdtharray[lastNote - 1];
+            if (settings.General.KeyRange == KeyRangeTypes.KeyDynamic)
+            {
+                double kleft = x1array[21];
+                double kright = x1array[108] + wdtharray[108];
+                fullLeft = fullLeft * (1 - ds) + kleft * ds;
+                fullRight = fullRight * (1 - ds) + kright * ds;
+            }
+            double fullWidth = fullRight - fullLeft;
+
+            float kbHeight = (float)(args.RenderSize.Width / args.RenderSize.Height / fullWidth);
+            if (settings.General.KeyboardStyle == KeyboardStyle.Small) kbHeight *= 0.017f;
+            noteConstants.KeyboardHeight = kbHeight;
+
             if (File != null)
             {
                 File.SetColorEvents(time);
@@ -266,21 +365,6 @@ namespace Kiva_MIDI
                 int firstRenderKey = 256;
                 int lastRenderKey = -1;
 
-                double ds = dynamicState.GetValue();
-                if (ds < 0) ds = 0;
-                if (ds > 1) ds = 1;
-
-                double fullLeft = x1array[firstNote];
-                double fullRight = x1array[lastNote - 1] + wdtharray[lastNote - 1];
-                if (settings.General.KeyRange == KeyRangeTypes.KeyDynamic)
-                {
-                    double kleft = x1array[21];
-                    double kright = x1array[108] + wdtharray[108];
-                    fullLeft = fullLeft * (1 - ds) + kleft * ds;
-                    fullRight = fullRight * (1 - ds) + kright * ds;
-                }
-                double fullWidth = fullRight - fullLeft;
-
                 for (int black = 0; black < 2; black++)
                 {
                     Parallel.For(firstNote, lastNote, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
@@ -289,6 +373,8 @@ namespace Kiva_MIDI
                         long _notesRendered = 0;
                         float left = (float)((x1array[k] - fullLeft) / fullWidth);
                         float right = (float)((x1array[k] + wdtharray[k] - fullLeft) / fullWidth);
+                        bool pressed = false;
+                        NoteCol col = new NoteCol();
                         unsafe
                         {
                             RenderNote* rn = stackalloc RenderNote[noteBufferLength];
@@ -321,6 +407,13 @@ namespace Kiva_MIDI
                             {
                                 var n = notes[noff++];
                                 if (n.end < time) continue;
+                                if (n.start < time)
+                                {
+                                    pressed = true;
+                                    NoteCol kcol = File.MidiNoteColors[n.colorPointer];
+                                    col.rgba = NoteCol.Blend(col.rgba, kcol.rgba);
+                                    col.rgba2 = NoteCol.Blend(col.rgba2, kcol.rgba2);
+                                }
                                 _notesRendered++;
                                 rn[nid++] = new RenderNote()
                                 {
@@ -335,6 +428,11 @@ namespace Kiva_MIDI
                                 }
                             }
                             FlushNoteBuffer(context, left, right, (IntPtr)rn, nid);
+                            renderKeys[k].colorl = col.rgba;
+                            renderKeys[k].colorr = col.rgba2;
+                            if (pressed && keyEases[k].End == 0) keyEases[k].SetEnd(1);
+                            else if (!pressed && keyEases[k].End == 1) keyEases[k].SetEnd(0);
+                            renderKeys[k].distance = (float)keyEases[k].GetValue(0, 1);
                             lock (addLock)
                             {
                                 notesRendered += _notesRendered;
@@ -347,7 +445,7 @@ namespace Kiva_MIDI
                         }
                     });
                 }
-                if (firstRenderKey < 21 || lastRenderKey > 109)
+                if (firstRenderKey <= 19 || lastRenderKey >= 110)
                 {
                     if (dynamicState88)
                     {
@@ -371,7 +469,26 @@ namespace Kiva_MIDI
             {
                 LastRenderedNoteCount = 0;
             }
-            //context.Flush();
+
+
+            SetKeyboardShaderConstants(context, new KeyboardGlobalConstants() {
+                Height = kbHeight,
+                Left = (float)fullLeft,
+                Right = (float)fullRight,
+                Aspect = noteConstants.ScreenAspect
+            });
+            DataStream data;
+            context.MapSubresource(keyBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
+            data.Position = 0;
+            data.WriteRange(renderKeys, 0, 257);
+            context.UnmapSubresource(keyBuffer, 0);
+            context.InputAssembler.InputLayout = keyLayout;
+            context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
+            context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(keyBuffer, 24, 0));
+            SmallWhiteKeyShader.SetShaders(context);
+            context.Draw(257, 0);
+            SmallBlackKeyShader.SetShaders(context);
+            context.Draw(257, 0);
         }
 
         unsafe void FlushNoteBuffer(DeviceContext context, float left, float right, IntPtr notes, int count)
@@ -406,8 +523,13 @@ namespace Kiva_MIDI
             Disposer.SafeDispose(ref noteLayout);
             Disposer.SafeDispose(ref keyLayout);
             Disposer.SafeDispose(ref notesShader);
+            Disposer.SafeDispose(ref SmallWhiteKeyShader);
+            Disposer.SafeDispose(ref SmallBlackKeyShader);
+            Disposer.SafeDispose(ref BigWhiteKeyShader);
+            Disposer.SafeDispose(ref BigBlackKeyShader);
             Disposer.SafeDispose(ref globalNoteConstants);
             Disposer.SafeDispose(ref noteBuffer);
+            Disposer.SafeDispose(ref keyBuffer);
         }
 
         bool isBlackNote(int n)

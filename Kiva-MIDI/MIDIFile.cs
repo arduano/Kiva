@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharpDX;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,8 +13,6 @@ namespace Kiva_MIDI
     [StructLayout(LayoutKind.Sequential)]
     public struct NoteCol
     {
-        //public float r, g, b, a;
-        //public float r2, g2, b2, a2;
         public uint rgba;
         public uint rgba2;
 
@@ -23,6 +22,22 @@ namespace Kiva_MIDI
                        (uint)((g << 16) & 0xff0000) |
                        (uint)((b << 8) & 0xff00) |
                        (uint)(a & 0xff);
+        }
+
+        public static uint Blend(uint from, uint with)
+        {
+            Vector4 fromv = new Vector4((float)(from >> 24 & 0xff) / 255.0f, (float)(from >> 16 & 0xff) / 255.0f, (float)(from >> 8 & 0xff) / 255.0f, (float)(from & 0xff) / 255.0f);
+            Vector4 withv = new Vector4((float)(with >> 24 & 0xff) / 255.0f, (float)(with >> 16 & 0xff) / 255.0f, (float)(with >> 8 & 0xff) / 255.0f, (float)(with & 0xff) / 255.0f);
+
+            float blend = withv.W;
+            float revBlend = (1 - withv.W) * fromv.W;
+
+            return Compress(
+                    (byte)((fromv.X * revBlend + withv.X * blend) * 255),
+                    (byte)((fromv.Y * revBlend + withv.Y * blend) * 255),
+                    (byte)((fromv.Z * revBlend + withv.Z * blend) * 255),
+                    (byte)((blend + revBlend) * 255)
+                );
         }
     }
 

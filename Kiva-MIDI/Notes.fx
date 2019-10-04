@@ -3,6 +3,7 @@ float NoteLeft;
 float NoteRight;
 float NoteBorder;
 float ScreenAspect;
+float KeyboardHeight;
 
 struct NOTE {
 	float start : START;
@@ -25,6 +26,8 @@ struct PS_IN
 
 NOTE VS_Note(NOTE input)
 {
+	input.start = input.start * (1 - KeyboardHeight) + KeyboardHeight;
+	input.end = input.end * (1 - KeyboardHeight) + KeyboardHeight;
 	return input;
 }
 

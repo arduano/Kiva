@@ -22,7 +22,7 @@ namespace Kiva_MIDI
                 this.a = a;
                 this.start = start;
                 this.skip = skip;
-                current = start;
+                current = start - skip;
             }
 
             public T Current => a[current];
