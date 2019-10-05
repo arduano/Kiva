@@ -107,7 +107,7 @@ namespace Kiva_MIDI
                     {
                         time = Time.GetTime();
                         KDMAPI.ResetKDMAPIStream();
-                        evid = GetEventPos(events, time) - 10;
+                        evid = GetEventPos(events, time);
                         if (evid < 0) evid = 0;
                         changed = false;
                     }

@@ -37,6 +37,14 @@ KEY VS(KEY input)
 	return input;
 }
 
+QUAD dim(QUAD q, float val){
+	q.c1.xyz += val;
+	q.c2.xyz += val;
+	q.c3.xyz += val;
+	q.c4.xyz += val;
+	return q;
+}
+
 void renderQuad(inout TriangleStream<PS_IN> OutputStream, QUAD quad) {
 	PS_IN v = (PS_IN)0;
 
@@ -69,7 +77,7 @@ void renderQuad(inout TriangleStream<PS_IN> OutputStream, QUAD quad) {
 	OutputStream.RestartStrip();
 }
 
-[maxvertexcount(6)]
+[maxvertexcount(6 * 5)]
 void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 {
 	KEY k = input[0];
@@ -81,6 +89,15 @@ void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	float left = (k.left - Left) / (Right - Left);
 	float right = (k.right - Left) / (Right - Left);
+	float top = Height + Height * 0.08 - dist;
+	float bottom = 0 - dist;
+
+	float bez = 0.07;
+
+	float ileft = left + bez * Height * Aspect;
+	float iright = right - bez * Height * Aspect;
+	float itop = top - bez * Height;
+	float ibottom = bottom + bez * Height;
 
 	float4 colorlConv = float4((float)(k.colorl >> 24 & 0xff) / 255.0, (float)(k.colorl >> 16 & 0xff) / 255.0, (float)(k.colorl >> 8 & 0xff) / 255.0, (float)(k.colorl & 0xff) / 255.0);
 	float4 colorrConv = float4((float)(k.colorr >> 24 & 0xff) / 255.0, (float)(k.colorr >> 16 & 0xff) / 255.0, (float)(k.colorr >> 8 & 0xff) / 255.0, (float)(k.colorr & 0xff) / 255.0);
@@ -89,23 +106,63 @@ void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	float4 coll = colorl;
 	float4 colr = colorr;
 
-	float top = Height + Height * 0.08;
-	float bottom = 0;
-
+	//Center
 	q.c1 = coll;
 	q.c2 = coll;
 	q.c3 = colr;
 	q.c4 = colr;
-	q.c1.xyz *= 0.8;
-	q.c4.xyz *= 0.8;
-	q.v1 = float2(left, top - dist);
-	q.v2 = float2(right, top - dist);
-	q.v3 = float2(right, bottom - dist);
-	q.v4 = float2(left, bottom - dist);
-	renderQuad(OutputStream, q);
+	q.v1 = float2(ileft, itop);
+	q.v2 = float2(iright, itop);
+	q.v3 = float2(iright, ibottom);
+	q.v4 = float2(ileft, ibottom);
+	renderQuad(OutputStream, dim(q, -0.1));
+
+	//Left
+	q.c1 = coll;
+	q.c2 = coll;
+	q.c3 = colr;
+	q.c4 = colr;
+	q.v1 = float2(left, top);
+	q.v2 = float2(ileft, itop);
+	q.v3 = float2(ileft, ibottom);
+	q.v4 = float2(left, bottom);
+	renderQuad(OutputStream, dim(q, -0.0));
+
+	//Top
+	q.c1 = coll;
+	q.c2 = coll;
+	q.c3 = coll;
+	q.c4 = coll;
+	q.v1 = float2(left, top);
+	q.v2 = float2(right, top);
+	q.v3 = float2(iright, itop);
+	q.v4 = float2(ileft, itop);
+	renderQuad(OutputStream, dim(q, -0.1));
+
+	//Right
+	q.c1 = coll;
+	q.c2 = colr;
+	q.c3 = colr;
+	q.c4 = coll;
+	q.v1 = float2(right, top);
+	q.v2 = float2(right, bottom);
+	q.v3 = float2(iright, ibottom);
+	q.v4 = float2(iright, itop);
+	renderQuad(OutputStream, dim(q, -0.3));
+
+	//Bottom
+	q.c1 = colr;
+	q.c2 = colr;
+	q.c3 = colr;
+	q.c4 = colr;
+	q.v1 = float2(ileft, ibottom);
+	q.v2 = float2(iright, ibottom);
+	q.v3 = float2(right, bottom);
+	q.v4 = float2(left, bottom);
+	renderQuad(OutputStream, dim(q, -0.3));
 }
 
-[maxvertexcount(18)]
+[maxvertexcount(6 * 9)]
 void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 {
 	KEY k = input[0];
@@ -113,10 +170,19 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	PS_IN v = (PS_IN)0;
 	QUAD q = (QUAD)0;
 
-	float dist = k.distance * Height * 0.08;
+	float dist = k.distance * Height * 0.05;
+
+	float bez = 0.05;
 
 	float left = (k.left - Left) / (Right - Left);
 	float right = (k.right - Left) / (Right - Left);
+	float top = Height + Height * 0.08 - dist + bez * Height;
+	float bottom = Height * 0.4 - dist + bez * Height;
+
+	float ileft = left + bez * Height * Aspect;
+	float iright = right - bez * Height * Aspect;
+	float itop = top - bez * Height;
+	float ibottom = bottom + bez * Height;
 
 	float4 colorlConv = float4((float)(k.colorl >> 24 & 0xff) / 255.0, (float)(k.colorl >> 16 & 0xff) / 255.0, (float)(k.colorl >> 8 & 0xff) / 255.0, (float)(k.colorl & 0xff) / 255.0);
 	float4 colorrConv = float4((float)(k.colorr >> 24 & 0xff) / 255.0, (float)(k.colorr >> 16 & 0xff) / 255.0, (float)(k.colorr >> 8 & 0xff) / 255.0, (float)(k.colorr & 0xff) / 255.0);
@@ -125,44 +191,104 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	float4 coll = colorl;
 	float4 colr = colorr;
 
-	float top = Height + Height * 0.08;
-	float bottom = Height * 0.5;
-
+	//Center
 	q.c1 = coll;
 	q.c2 = coll;
 	q.c3 = colr;
 	q.c4 = colr;
-	q.c1.xyz = 1 - (1 - q.c1.xyz) * 0.8;
-	q.c4.xyz = 1 - (1 - q.c4.xyz) * 0.8;
-	q.v1 = float2(left, top - dist);
-	q.v2 = float2(right, top - dist);
-	q.v3 = float2(right, bottom - dist);
-	q.v4 = float2(left, bottom - dist);
-	renderQuad(OutputStream, q);
+	q.v1 = float2(ileft, itop);
+	q.v2 = float2(iright, itop);
+	q.v3 = float2(iright, ibottom);
+	q.v4 = float2(ileft, ibottom);
+	renderQuad(OutputStream, dim(q, 0.1));
 
+	//Left
+	q.c1 = coll;
+	q.c2 = coll;
+	q.c3 = colr;
+	q.c4 = colr;
+	q.v1 = float2(left, itop);
+	q.v2 = float2(ileft, itop);
+	q.v3 = float2(ileft, ibottom);
+	q.v4 = float2(left, ibottom);
+	renderQuad(OutputStream, dim(q, 0.2));
+
+	//Top
 	q.c1 = coll;
 	q.c2 = coll;
 	q.c3 = coll;
 	q.c4 = coll;
-	q.c1.xyz = 1 - (1 - q.c1.xyz) * 0.8;
-	q.c4.xyz = 1 - (1 - q.c4.xyz) * 0.8;
-	q.c2.xyz = 1 - (1 - q.c2.xyz) * 0.8;
-	q.v1 = float2(left + 0.04 * Height * Aspect, top + 0.07 * Height - dist);
-	q.v2 = float2(right - 0.04 * Height * Aspect, top + 0.07 * Height - dist);
-	q.v3 = float2(right, top - dist);
-	q.v4 = float2(left, top - dist);
-	renderQuad(OutputStream, q);
+	q.v1 = float2(ileft, top);
+	q.v2 = float2(iright, top);
+	q.v3 = float2(iright, itop);
+	q.v4 = float2(ileft, itop);
+	renderQuad(OutputStream, dim(q, 0.2));
 
+	//Right
+	q.c1 = coll;
+	q.c2 = colr;
+	q.c3 = colr;
+	q.c4 = coll;
+	q.v1 = float2(right, itop);
+	q.v2 = float2(right, ibottom);
+	q.v3 = float2(iright, ibottom);
+	q.v4 = float2(iright, itop);
+	renderQuad(OutputStream, dim(q, 0.05));
+
+	//Bottom
 	q.c1 = colr;
 	q.c2 = colr;
 	q.c3 = colr;
 	q.c4 = colr;
-	q.c1.xyz = 1 - (1 - q.c1.xyz) * 0.8;
-	q.v1 = float2(left, bottom - dist);
-	q.v2 = float2(right, bottom - dist);
-	q.v3 = float2(right - 0.04 * Height * Aspect, bottom - 0.07 * Height - dist);
-	q.v4 = float2(left + 0.04 * Height * Aspect, bottom - 0.07 * Height - dist);
-	renderQuad(OutputStream, q);
+	q.v1 = float2(ileft, ibottom);
+	q.v2 = float2(iright, ibottom);
+	q.v3 = float2(iright, bottom);
+	q.v4 = float2(ileft, bottom);
+	renderQuad(OutputStream, dim(q, 0.05));
+
+	//Top Left
+	q.c1 = coll;
+	q.c2 = coll;
+	q.c3 = coll;
+	q.c4 = coll;
+	q.v1 = float2(ileft, itop);
+	q.v2 = float2(ileft, itop);
+	q.v3 = float2(left, itop);
+	q.v4 = float2(ileft, top);
+	renderQuad(OutputStream, dim(q, 0.3));
+
+	//Top Right
+	q.c1 = coll;
+	q.c2 = coll;
+	q.c3 = coll;
+	q.c4 = coll;
+	q.v1 = float2(iright, itop);
+	q.v2 = float2(iright, itop);
+	q.v3 = float2(iright, top);
+	q.v4 = float2(right, itop);
+	renderQuad(OutputStream, dim(q, 0.1));
+
+	//Bottom Left
+	q.c1 = colr;
+	q.c2 = colr;
+	q.c3 = colr;
+	q.c4 = colr;
+	q.v1 = float2(ileft, ibottom);
+	q.v2 = float2(ileft, ibottom);
+	q.v3 = float2(right, ibottom);
+	q.v4 = float2(iright, bottom);
+	renderQuad(OutputStream, dim(q, 0.0));
+
+	//Bottom Right
+	q.c1 = colr;
+	q.c2 = colr;
+	q.c3 = colr;
+	q.c4 = colr;
+	q.v1 = float2(ileft, ibottom);
+	q.v2 = float2(ileft, ibottom);
+	q.v3 = float2(ileft, bottom);
+	q.v4 = float2(left, ibottom);
+	renderQuad(OutputStream, dim(q, 0.1));
 }
 
 float4 PS(PS_IN input) : SV_Target
