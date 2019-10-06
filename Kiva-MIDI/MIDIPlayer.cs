@@ -97,17 +97,19 @@ namespace Kiva_MIDI
                     double time = Time.GetTime();
                     if (Time.Paused)
                     {
-                        evid = GetEventPos(events, time);
                         while (Time.Paused)
                         {
                             Thread.Sleep(50);
                         }
+                        evid = GetEventPos(events, time) - 10;
+                        if (evid < 0) evid = 0;
                     }
+                    while(evid == events.Length && !changed) { }
                     if (changed || lastTime > time)
                     {
                         time = Time.GetTime();
                         KDMAPI.ResetKDMAPIStream();
-                        evid = GetEventPos(events, time);
+                        evid = GetEventPos(events, time) - 10;
                         if (evid < 0) evid = 0;
                         changed = false;
                     }

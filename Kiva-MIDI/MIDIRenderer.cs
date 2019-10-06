@@ -97,6 +97,8 @@ namespace Kiva_MIDI
 
         bool[] blackKeys = new bool[257];
         int[] keynum = new int[257];
+        int[] blackKeysID;
+        int[] whiteKeysID;
 
         RenderKey[] renderKeys = new RenderKey[257];
         VelocityEase[] keyEases = new VelocityEase[256];
@@ -208,11 +210,26 @@ namespace Kiva_MIDI
             for (int i = 0; i < blackKeys.Length; i++) blackKeys[i] = isBlackNote(i);
             int b = 0;
             int w = 0;
+            List<int> black = new List<int>();
+            List<int> white = new List<int>();
             for (int i = 0; i < keynum.Length; i++)
             {
-                if (blackKeys[i]) keynum[i] = b++;
-                else keynum[i] = w++;
+                if (blackKeys[i])
+                {
+                    keynum[i] = b++;
+                    if (i < 256)
+                        black.Add(i);
+                }
+                else
+                {
+                    keynum[i] = w++;
+                    if (i < 256)
+                        white.Add(i);
+                }
             }
+
+            blackKeysID = black.ToArray();
+            whiteKeysID = white.ToArray();
 
             int firstNote = 0;
             int lastNote = 256;
@@ -384,11 +401,14 @@ namespace Kiva_MIDI
                 int firstRenderKey = 256;
                 int lastRenderKey = -1;
 
+                int[] ids;
+
                 for (int black = 0; black < 2; black++)
                 {
-                    Parallel.For(firstNote, lastNote, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
+                    if (black == 1) ids = blackKeysID;
+                    else ids = whiteKeysID;
+                    Parallel.ForEach(ids, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
                     {
-                        if ((blackKeys[k] && black == 0) || (!blackKeys[k] && black == 1)) return;
                         long _notesRendered = 0;
                         float left = (float)((x1array[k] - fullLeft) / fullWidth);
                         float right = (float)((x1array[k] + wdtharray[k] - fullLeft) / fullWidth);
@@ -400,6 +420,8 @@ namespace Kiva_MIDI
                             int nid = 0;
                             int noff = File.FirstRenderNote[k];
                             Note[] notes = File.Notes[k];
+                            if (notes.Length == 0) goto skipLoop;
+                            if (time > notes[notes.Length - 1].end) goto skipLoop;
                             if (lastTime > time)
                             {
                                 for (noff = 0; noff < notes.Length; noff++)
@@ -447,6 +469,7 @@ namespace Kiva_MIDI
                                 }
                             }
                             FlushNoteBuffer(context, left, right, (IntPtr)rn, nid);
+                            skipLoop:
                             renderKeys[k].colorl = col.rgba;
                             renderKeys[k].colorr = col.rgba2;
                             if (pressed && keyEases[k].End == 0) keyEases[k].SetEnd(1);
@@ -490,7 +513,8 @@ namespace Kiva_MIDI
             }
 
 
-            SetKeyboardShaderConstants(context, new KeyboardGlobalConstants() {
+            SetKeyboardShaderConstants(context, new KeyboardGlobalConstants()
+            {
                 Height = kbHeight,
                 Left = (float)fullLeft,
                 Right = (float)fullRight,
