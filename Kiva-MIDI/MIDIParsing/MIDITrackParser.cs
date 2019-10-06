@@ -467,7 +467,6 @@ namespace Kiva_MIDI
                                 Notes[note][currNoteIndexes[note]++] = new Note()
                                 {
                                     start = (float)trackSeconds,
-                                    skip = 1,
                                     colorPointer = track * 16 + channel
                                 };
                                 if (vel >= eventThresh)

@@ -108,21 +108,22 @@ namespace Kiva_MIDI
 
             //Set(ref depthStencil, DXUtils.CreateTexture2D(this.device, w, h, BindFlags.DepthStencil, Format.D24_UNorm_S8_UInt));
             //Set(ref depthStencilView, new DepthStencilView(this.device, depthStencil));
-
-            device.ImmediateContext.Rasterizer.SetViewports(new RawViewportF[] { new RawViewportF() {
-                X = 0,
-                Y = 0,
-                Width = w,
-                Height = h,
-                MinDepth = 0.0f,
-                MaxDepth = 1.0f
-            } });
             //device.ImmediateContext.OutputMerger.SetRenderTargets(depthStencilView, renderTargetView);
-            device.ImmediateContext.OutputMerger.SetRenderTargets(renderTargetView);
         }
 
         public override void BeginRender(DrawEventArgs args)
         {
+            device.ImmediateContext.Rasterizer.SetViewports(new RawViewportF[] { new RawViewportF() {
+                X = 0,
+                Y = 0,
+                Width = (int)args.RenderSize.Width,
+                Height = (int)args.RenderSize.Height,
+                MinDepth = 0.0f,
+                MaxDepth = 1.0f
+            } });
+
+            device.ImmediateContext.OutputMerger.SetRenderTargets(renderTargetView);
+
             device.GetOrThrow();
             //Device.ImmediateContext.ClearDepthStencilView(this.DepthStencilView, DepthStencilClearFlags.Depth, 1.0f, 0);
         }

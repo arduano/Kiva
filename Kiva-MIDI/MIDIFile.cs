@@ -159,7 +159,6 @@ namespace Kiva_MIDI
             ReadInt16();
             division = ReadInt16();
             if (format == 2) throw new Exception("Midi type 2 not supported");
-            if (division < 0) throw new Exception("Division < 0 not supported");
         }
 
         void ParseTrackChunk()

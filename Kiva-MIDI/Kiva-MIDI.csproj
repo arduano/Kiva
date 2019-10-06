@@ -149,7 +149,6 @@
     </Compile>
     <Compile Include="DX.WPF\D3D.cs" />
     <Compile Include="DX.WPF\D3D11.cs" />
-    <Compile Include="DX.WPF\D3D11Image.cs" />
     <Compile Include="DX.WPF\D3D9.cs" />
     <Compile Include="DX.WPF\DeviceUtil.cs" />
     <Compile Include="DisposeGroup.cs" />

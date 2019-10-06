@@ -3,102 +3,135 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Kiva_MIDI
 {
-	/// <summary>
-	/// A vanilla implementation of <see cref="IDirect3D"/> with some common wiring already done.
-	/// </summary>
-	public abstract partial class D3D : IDirect3D, IDisposable
-	{
-		public D3D()
-		{
-			OnInteractiveInit();
-		}
+    /// <summary>
+    /// A vanilla implementation of <see cref="IDirect3D"/> with some common wiring already done.
+    /// </summary>
+    public abstract partial class D3D : IDirect3D, IDisposable
+    {
+        class ArgPointer { public DrawEventArgs args = null; }
 
-		partial void OnInteractiveInit();
+        ArgPointer argsPointer = new ArgPointer();
 
-		~D3D() { Dispose(false); }
-		public void Dispose()
-		{
-			GC.SuppressFinalize(this);
-			Dispose(true);
-		}
+        Task renderThread = null;
 
-		protected virtual void Dispose(bool disposing) 
-		{
-		}
+        public D3D()
+        {
+            OnInteractiveInit();
+        }
 
-		/// <summary>
-		/// Size set with call to <see cref="Reset(DrawEventArgs)"/>
-		/// </summary>
-		public Vector2 RenderSize { get; protected set; }
+        partial void OnInteractiveInit();
 
-		public virtual void Reset(DrawEventArgs args)
-		{
-			int w = (int)Math.Ceiling(args.RenderSize.Width);
-			int h = (int)Math.Ceiling(args.RenderSize.Height);
-			if (w < 1 || h < 1)
-				return;
+        ~D3D() { Dispose(false); }
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Dispose(true);
+        }
 
-			RenderSize = new Vector2(w, h);
+        protected virtual void Dispose(bool disposing)
+        {
+        }
 
-			Reset(w, h);
-			if (Resetted != null)
-				Resetted(this, args);
+        /// <summary>
+        /// Size set with call to <see cref="Reset(DrawEventArgs)"/>
+        /// </summary>
+        public Vector2 RenderSize { get; protected set; }
 
-			Render(args);
+        public virtual void Reset(DrawEventArgs args)
+        {
+            lock (argsPointer)
+            {
+                int w = (int)Math.Ceiling(args.RenderSize.Width);
+                int h = (int)Math.Ceiling(args.RenderSize.Height);
+                if (w < 1 || h < 1)
+                    return;
 
-			if (args.Target != null)
-				SetBackBuffer(args.Target);
-		}
+                RenderSize = new Vector2(w, h);
 
-		public virtual void Reset(int w, int h)
-		{
-		}
+                Reset(w, h);
+                if (Resetted != null)
+                    Resetted(this, args);
 
-		public event EventHandler<DrawEventArgs> Resetted;
+                argsPointer.args = args;
+                Render(args);
 
-		/// <summary>
-		/// SharpDX 1.3 requires explicit dispose of all its ComObject.
-		/// This method makes it easy.
-		/// (Remark: I attempted to hack a correct Dispose implementation but it crashed the app on first GC!)
-		/// </summary>
-		public static void Set<T>(ref T field, T newValue)
-			where T : IDisposable
-		{
-			if (field != null)
-				field.Dispose();
-			field = newValue;
-		}
+                if (args.Target != null)
+                    SetBackBuffer(args.Target);
+            }
+        }
 
-		public abstract System.Windows.Media.Imaging.WriteableBitmap ToImage();
+        public virtual void Reset(int w, int h)
+        {
+        }
 
-		public abstract void SetBackBuffer(DXImageSource dximage);
+        public event EventHandler<DrawEventArgs> Resetted;
 
-		/// <summary>
-		/// Time in the last <see cref="DrawEventArgs"/> passed to <see cref="Render(DrawEventArgs)"/>
-		/// </summary>
-		public TimeSpan RenderTime { get; protected set; }
+        /// <summary>
+        /// SharpDX 1.3 requires explicit dispose of all its ComObject.
+        /// This method makes it easy.
+        /// (Remark: I attempted to hack a correct Dispose implementation but it crashed the app on first GC!)
+        /// </summary>
+        public static void Set<T>(ref T field, T newValue)
+            where T : IDisposable
+        {
+            if (field != null)
+                field.Dispose();
+            field = newValue;
+        }
 
-		public void Render(DrawEventArgs args)
-		{
-			RenderTime = args.TotalTime;
+        public abstract System.Windows.Media.Imaging.WriteableBitmap ToImage();
 
-            BeginRender(args);
-			RenderScene(args);
-			EndRender(args);
-            //SetBackBuffer(args.Target);
-		}
+        public abstract void SetBackBuffer(DXImageSource dximage);
 
-		public virtual void BeginRender(DrawEventArgs args) { }
-		public virtual void RenderScene(DrawEventArgs args)
-		{
-			if (Rendering != null)
-				Rendering(this, args);
-		}
-		public virtual void EndRender(DrawEventArgs args) { }
+        /// <summary>
+        /// Time in the last <see cref="DrawEventArgs"/> passed to <see cref="Render(DrawEventArgs)"/>
+        /// </summary>
+        public TimeSpan RenderTime { get; protected set; }
 
-		public event EventHandler<DrawEventArgs> Rendering;
-	}
+        public void Render(DrawEventArgs args)
+        {
+            RenderTime = args.TotalTime;
+
+            if (renderThread == null)
+            {
+                renderThread = StartRenderThread();
+            }
+            argsPointer.args = args;
+        }
+
+        Task StartRenderThread()
+        {
+            return
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    lock (argsPointer)
+                    {
+                        if (argsPointer.args == null) Thread.Sleep(100);
+                        else
+                        {
+                            BeginRender(argsPointer.args);
+                            RenderScene(argsPointer.args);
+                            EndRender(argsPointer.args);
+                        }
+                    }
+                }
+            });
+        }
+
+        public virtual void BeginRender(DrawEventArgs args) { }
+        public virtual void RenderScene(DrawEventArgs args)
+        {
+            Rendering?.Invoke(this, args);
+        }
+        public virtual void EndRender(DrawEventArgs args) { }
+
+        public event EventHandler<DrawEventArgs> Rendering;
+    }
 }
