@@ -176,7 +176,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	float left = (k.left - Left) / (Right - Left);
 	float right = (k.right - Left) / (Right - Left);
-	float top = Height + Height * 0.08 - dist + bez * Height;
+	float top = Height + Height * 0.08 - dist * 0 + bez * Height;
 	float bottom = Height * 0.4 - dist + bez * Height;
 
 	float ileft = left + bez * Height * Aspect;

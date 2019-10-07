@@ -125,7 +125,7 @@ namespace Kiva_MIDI
             byte eventThresh = settings.EventVelocityThreshold;
             byte noteThresh = settings.NoteVelocityThreshold;
             if (noteThresh > eventThresh) noteThresh = eventThresh;
-            //try
+            try
             {
                 while (true)
                 {
@@ -390,7 +390,7 @@ namespace Kiva_MIDI
                     }
                 }
             }
-            //catch { }
+            catch { }
             UnendedNotes = null;
             FirstKey = firstKey;
             LastKey = lastKey;
@@ -403,7 +403,7 @@ namespace Kiva_MIDI
             {
                 Notes[i] = new Note[noteCounts[i]];
             }
-            for(int i = 0; i < 16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 ColorEvents[i] = new ColorEvent[colorEventCounts[i]];
             }
@@ -420,7 +420,7 @@ namespace Kiva_MIDI
             {
                 UnendedNotes[i] = new FastList<UnendedNote>();
             }
-            //try
+            try
             {
                 while (true)
                 {
@@ -655,7 +655,8 @@ namespace Kiva_MIDI
                                                 }
                                                 else
                                                 {
-                                                    ColorEvents[channel][currColorEventIndx[channel]++] = new ColorEvent() {
+                                                    ColorEvents[channel][currColorEventIndx[channel]++] = new ColorEvent()
+                                                    {
                                                         time = trackSeconds,
                                                         color = col
                                                     };
@@ -757,7 +758,7 @@ namespace Kiva_MIDI
                     }
                 }
             }
-            //catch { }
+            catch { }
             for (int note = 0; note < 256; note++)
                 for (int channel = 0; channel < 16; channel++)
                 {
@@ -780,6 +781,248 @@ namespace Kiva_MIDI
             UnendedNotes = null;
             Notes = null;
             currNoteIndexes = null;
+        }
+
+        public static long GetCorruptChunkLength(BufferByteReader reader)
+        {
+            uint ReadVariableLenP1()
+            {
+                uint val = 0;
+                byte c;
+                for (int i = 0; i < 4; i++)
+                {
+                    c = reader.Read();
+                    if (c > 0x7F)
+                    {
+                        val = ((val << 7) | (byte)(c & 0x7F));
+                    }
+                    else
+                    {
+                        val = val << 7 | c;
+                        break;
+                    }
+                }
+                return val;
+            }
+
+            bool CheckIfEnd()
+            {
+                bool matches = true;
+                byte[] chars = new byte[4];
+                int i = 0;
+                foreach (var c in "MTrk")
+                {
+                    var b = reader.Read();
+                    chars[i++] = b;
+                    if (b != c) matches = false;
+                }
+                foreach (var c in chars) reader.PushToQueue(c);
+                return matches;
+            }
+
+            byte prevCommand = 0;
+            while (true)
+            {
+                if (reader.Location == reader.Length) return reader.Location;
+                var endCheck = reader.Read();
+                reader.Pushback = endCheck;
+                if (endCheck == 'M')
+                {
+                    if (CheckIfEnd())
+                    {
+                        return reader.Location - 4;
+                    }
+                }
+                uint delta = ReadVariableLenP1();
+                byte command = reader.Read();
+                if (command < 0x80)
+                {
+                    reader.Pushback = command;
+                    command = prevCommand;
+                }
+                prevCommand = command;
+                byte comm = (byte)(command & 0b11110000);
+                if (comm == 0b10010000)
+                {
+                    reader.Skip(2);
+                    continue;
+                }
+                else if (comm == 0b10000000)
+                {
+                    reader.Skip(2);
+                    continue;
+                }
+                else if (comm == 0b10100000)
+                {
+                    byte channel = (byte)(command & 0b00001111);
+                    byte note = reader.Read();
+                    byte vel = reader.Read();
+                }
+                else if (comm == 0b10110000)
+                {
+                    byte channel = (byte)(command & 0b00001111);
+                    byte controller = reader.Read();
+                    byte value = reader.Read();
+                }
+                else if (comm == 0b11000000)
+                {
+                    byte program = reader.Read();
+                }
+                else if (comm == 0b11010000)
+                {
+                    byte pressure = reader.Read();
+                }
+                else if (comm == 0b11100000)
+                {
+                    byte var1 = reader.Read();
+                    byte var2 = reader.Read();
+                }
+                else if (comm == 0b10110000)
+                {
+                    byte cc = reader.Read();
+                    byte vv = reader.Read();
+                }
+                else if (command == 0b11110000)
+                {
+                    List<byte> data = new List<byte>() { command };
+                    byte b = 0;
+                    while (b != 0b11110111)
+                    {
+                        b = reader.Read();
+                        data.Add(b);
+                    }
+                }
+                else if (command == 0b11110100 || command == 0b11110001 || command == 0b11110101 || command == 0b11111001 || command == 0b11111101)
+                {
+                }
+                else if (command == 0b11110010)
+                {
+                    byte var1 = reader.Read();
+                    byte var2 = reader.Read();
+                }
+                else if (command == 0b11110011)
+                {
+                    byte pos = reader.Read();
+                }
+                else if (command == 0b11110110)
+                {
+                }
+                else if (command == 0b11110111)
+                {
+                }
+                else if (command == 0b11111000)
+                {
+                }
+                else if (command == 0b11111010)
+                {
+                }
+                else if (command == 0b11111100)
+                {
+                }
+                else if (command == 0b11111110)
+                {
+                }
+                else if (command == 0xFF)
+                {
+                    command = reader.Read();
+                    if (command == 0x00)
+                    {
+                        if (reader.Read() != 2)
+                        {
+                            throw new Exception("Corrupt Track");
+                        }
+                    }
+                    else if ((command >= 0x01 && command <= 0x0A) || command == 0x7F)
+                    {
+                        int size = (int)ReadVariableLenP1();
+                        reader.Skip(size);
+                    }
+                    else if (command == 0x20)
+                    {
+                        command = reader.Read();
+                        if (command != 1)
+                        {
+                            throw new Exception("Corrupt Track");
+                        }
+                        reader.Read();
+                    }
+                    else if (command == 0x21)
+                    {
+                        command = reader.Read();
+                        if (command != 1)
+                        {
+                            throw new Exception("Corrupt Track");
+                        }
+                        reader.Read();
+                    }
+                    else if (command == 0x2F)
+                    {
+                        command = reader.Read();
+                        if (command != 0)
+                        {
+                            throw new Exception("Corrupt Track");
+                        }
+                        if (reader.Location == reader.Length) return reader.Location;
+                        if (CheckIfEnd())
+                        {
+                            return reader.Location - 4;
+                        }
+                    }
+                    else if (command == 0x51)
+                    {
+                        command = reader.Read();
+                        if (command != 3)
+                        {
+                            throw new Exception("Corrupt Track");
+                        }
+                        reader.Skip(3);
+                    }
+                    else if (command == 0x54)
+                    {
+                        command = reader.Read();
+                        if (command != 5)
+                        {
+                            throw new Exception("Corrupt Track");
+                        }
+                        byte hr = reader.Read();
+                        byte mn = reader.Read();
+                        byte se = reader.Read();
+                        byte fr = reader.Read();
+                        byte ff = reader.Read();
+                    }
+                    else if (command == 0x58)
+                    {
+                        command = reader.Read();
+                        if (command != 4)
+                        {
+                            throw new Exception("Corrupt Track");
+                        }
+                        byte nn = reader.Read();
+                        byte dd = reader.Read();
+                        byte cc = reader.Read();
+                        byte bb = reader.Read();
+                    }
+                    else if (command == 0x59)
+                    {
+                        command = reader.Read();
+                        if (command != 2)
+                        {
+                            throw new Exception("Corrupt Track");
+                        }
+                        byte sf = reader.Read();
+                        byte mi = reader.Read();
+                    }
+                    else
+                    {
+                        throw new Exception("Corrupt Track");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Corrupt Track");
+                }
+            }
+            return reader.Location;
         }
     }
 }

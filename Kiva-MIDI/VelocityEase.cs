@@ -30,7 +30,7 @@ namespace Kiva_MIDI
 
         public double GetValue()
         {
-            double t = (DateTime.Now - start).TotalSeconds / Duration;
+            double t = (DateTime.UtcNow - start).TotalSeconds / Duration;
             if (t > 1)
             {
                 v = 0;
@@ -52,7 +52,7 @@ namespace Kiva_MIDI
 
         public void SetEnd(double e)
         {
-            double t = (DateTime.Now - start).TotalSeconds / Duration;
+            double t = (DateTime.UtcNow - start).TotalSeconds / Duration;
             double vel;
             if (t > 1)
             {
@@ -67,14 +67,14 @@ namespace Kiva_MIDI
             Start = pos;
             End = e;
             v = vel;
-            start = DateTime.Now;
+            start = DateTime.UtcNow;
         }
 
         public VelocityEase(double initial)
         {
             Start = initial;
             End = initial;
-            start = DateTime.Now;
+            start = DateTime.UtcNow;
         }
     }
 }

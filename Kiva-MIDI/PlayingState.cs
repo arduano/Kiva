@@ -8,7 +8,7 @@ namespace Kiva_MIDI
 {
     public class PlayingState
     {
-        public DateTime Time { get; private set; } = DateTime.Now;
+        public DateTime Time { get; private set; } = DateTime.UtcNow;
         public double MIDITime { get; private set; } = 0;
         public bool Paused { get; private set; } = true;
         public double Speed { get; private set; } = 1;
@@ -19,7 +19,7 @@ namespace Kiva_MIDI
         public void Pause()
         {
             if (Paused) return;
-            MIDITime += (DateTime.Now - Time).TotalSeconds * Speed;
+            MIDITime += (DateTime.UtcNow - Time).TotalSeconds * Speed;
             var pause = Paused;
             Paused = true;
             TimeChanged?.Invoke();
@@ -28,7 +28,7 @@ namespace Kiva_MIDI
 
         public void Play()
         {
-            Time = DateTime.Now;
+            Time = DateTime.UtcNow;
             var pause = Paused;
             Paused = false;
             if (pause) PauseChanged?.Invoke();
@@ -46,12 +46,12 @@ namespace Kiva_MIDI
         public double GetTime()
         {
             if (Paused) return MIDITime;
-            return MIDITime + (DateTime.Now - Time).TotalSeconds * Speed;
+            return MIDITime + (DateTime.UtcNow - Time).TotalSeconds * Speed;
         }
 
         public void Navigate(double time)
         {
-            Time = DateTime.Now;
+            Time = DateTime.UtcNow;
             MIDITime = time;
             TimeChanged?.Invoke();
         }
@@ -59,7 +59,7 @@ namespace Kiva_MIDI
         public void ChangeSpeed(double speed)
         {
             MIDITime = GetTime();
-            Time = DateTime.Now;
+            Time = DateTime.UtcNow;
             Speed = speed;
         }
     }

@@ -167,7 +167,10 @@ namespace Kiva_MIDI
             uint length = ReadInt32();
             trackBeginnings.Add(MidiFileReader.Position);
             trackLengths.Add(length);
-            MidiFileReader.Position += length;
+            if (MidiFileReader.Position + length > MidiFileReader.Length)
+                MidiFileReader.Position = MidiFileReader.Length;
+            else
+                MidiFileReader.Position += length;
             trackcount++;
             ParseStatusText = "Checking MIDI\nFound " + trackcount + " tracks";
             Console.WriteLine("Track " + trackcount + ", Size " + length);
@@ -212,7 +215,27 @@ namespace Kiva_MIDI
             ParseHeaderChunk();
             while (MidiFileReader.Position < MidiFileReader.Length)
             {
-                ParseTrackChunk();
+                try
+                {
+                    ParseTrackChunk();
+                }
+                catch
+                {
+                    if (trackBeginnings.Count == 0) throw new Exception("Corrupt first track chunk header");
+                    else
+                    {
+                        ParseStatusText = "Chunk " + (trackcount - 1) + " has corrupt length\nCalculating length...";
+                        var pos = trackBeginnings.Last();
+                        var reader = new BufferByteReader(MidiFileReader, 10000, pos, MidiFileReader.Length - pos);
+                        try
+                        {
+                            var len = MIDITrackParser.GetCorruptChunkLength(reader);
+                            trackLengths[trackLengths.Count - 1] = (uint)len;
+                            MidiFileReader.Position = pos + len;
+                        }
+                        catch { throw new Exception("Could not determine length of corrupt chunk"); }
+                    }
+                }
                 ParseNumber += 2;
                 cancel.ThrowIfCancellationRequested();
             }

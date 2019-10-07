@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace Kiva_MIDI
         byte[] buffer;
         byte[] bufferNext;
         Task nextReader = null;
+
+        Queue<byte> pushpush = new Queue<byte>();
 
         public BufferByteReader(Stream stream, int buffersize, long streamstart, long streamlen)
         {
@@ -64,7 +67,7 @@ namespace Kiva_MIDI
             maxbufferpos = (int)Math.Min(streamlen - pos + 1, buffersize);
         }
 
-        public long Location => pos;
+        public long Location => pos + bufferpos;
 
         public int Pushback = -1;
 
@@ -73,7 +76,8 @@ namespace Kiva_MIDI
             if (Pushback != -1)
             {
                 byte _b = (byte)Pushback;
-                Pushback = -1;
+                if (pushpush.Count > 1) Pushback = pushpush.Dequeue();
+                else Pushback = -1;
                 return _b;
             }
             byte b = buffer[bufferpos++];
@@ -115,7 +119,8 @@ namespace Kiva_MIDI
             {
                 if (Pushback != -1)
                 {
-                    Pushback = -1;
+                    if (pushpush.Count > 1) Pushback = pushpush.Dequeue();
+                    else Pushback = -1;
                     continue;
                 }
                 bufferpos++;
@@ -128,6 +133,12 @@ namespace Kiva_MIDI
                 }
                 else throw new IndexOutOfRangeException();
             }
+        }
+
+        public void PushToQueue(byte b)
+        {
+            if (Pushback == -1) Pushback = b;
+            else pushpush.Enqueue(b);
         }
 
         public void Dispose()
