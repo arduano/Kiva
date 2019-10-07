@@ -46,6 +46,13 @@ namespace Kiva_MIDI
             if (range == KeyRangeTypes.KeyDynamic) dynamicRange.IsChecked = true;
             if (range == KeyRangeTypes.Custom) customRange.IsChecked = true;
 
+            var style = settings.General.KeyboardStyle;
+            if (style == KeyboardStyle.Big) bigKeyboard.IsChecked = true;
+            if (style == KeyboardStyle.Small) smallKeyboard.IsChecked = true;
+            if (style == KeyboardStyle.None) noKeyboard.IsChecked = true;
+
+            fpsLock.Value = settings.General.FPSLock;
+
             firstKey.Value = settings.General.CustomFirstKey;
             lastKey.Value = settings.General.CustomLastKey;
         }
@@ -60,6 +67,14 @@ namespace Kiva_MIDI
             if (sender == dynamicRange) settings.General.KeyRange = KeyRangeTypes.KeyDynamic;
             if (sender == customRange) settings.General.KeyRange = KeyRangeTypes.Custom;
         }
+        
+        private void KBStyleChanged(object sender, RoutedEventArgs e)
+        {
+            if (!IsInitialized) return;
+            if (sender == noKeyboard) settings.General.KeyboardStyle = KeyboardStyle.None;
+            if (sender == smallKeyboard) settings.General.KeyboardStyle = KeyboardStyle.Small;
+            if (sender == bigKeyboard) settings.General.KeyboardStyle = KeyboardStyle.Big;
+        }
 
         private void FirstKey_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
         {
@@ -71,6 +86,11 @@ namespace Kiva_MIDI
         {
             if (!IsInitialized) return;
             settings.General.CustomLastKey = (int)lastKey.Value;
+        }
+
+        private void FpsLock_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+        {
+            settings.General.FPSLock = (int)fpsLock.Value;
         }
     }
 }

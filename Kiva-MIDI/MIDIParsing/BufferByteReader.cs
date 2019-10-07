@@ -68,6 +68,7 @@ namespace Kiva_MIDI
         }
 
         public long Location => pos + bufferpos;
+        public long Length => streamlen;
 
         public int Pushback = -1;
 

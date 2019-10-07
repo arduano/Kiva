@@ -90,7 +90,8 @@ namespace Kiva_MIDI
         public event Action ParseCancelled;
 
         //Persistent values
-        public MIDIEvent[][] MIDIEvents { get; private set; } = null;
+        public MIDIEvent[][] MIDINoteEvents { get; private set; } = null;
+        public MIDIEvent[] MIDIControlEvents { get; private set; } = null;
         public Note[][] Notes { get; private set; } = new Note[256][];
         public int[] FirstRenderNote { get; private set; } = new int[256];
         public double lastRenderTime { get; set; } = 0;
@@ -289,20 +290,25 @@ namespace Kiva_MIDI
             var eventMerger = Task.Run(() =>
             {
                 int count = loaderSettings.EventPlayerThreads;
-                MIDIEvents = new MIDIEvent[count][];
+                MIDINoteEvents = new MIDIEvent[count][];
                 Parallel.For(0, count, new ParallelOptions() { CancellationToken = cancel }, i =>
                 {
                     try
                     {
-                        MIDIEvents[i] = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => new SkipIterator<MIDIEvent>(p.Events, i, count)).ToArray(), e =>
-                    {
-                        return e.time;
-                    }).ToArray();
+                        MIDINoteEvents[i] = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => new SkipIterator<MIDIEvent>(p.NoteEvents, i, count)).ToArray(), e =>
+                        {
+                            return e.time;
+                        }).ToArray();
                     }
                     catch (OperationCanceledException)
                     {
                     }
                 });
+            });
+            var controlEventMerger = Task.Run(() =>
+            {
+                int count = loaderSettings.EventPlayerThreads;
+                MIDIControlEvents = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => p.ControlEvents).ToArray(), e => e.time).ToArray();
             });
             cancel.ThrowIfCancellationRequested();
             ParseStage = ParsingStage.MergingKeys;
@@ -325,6 +331,7 @@ namespace Kiva_MIDI
             ParseStatusText = "Merging Events...";
             ParseStage = ParsingStage.MergingEvents;
             Console.WriteLine("Merging events...");
+            controlEventMerger.GetAwaiter().GetResult();
             eventMerger.GetAwaiter().GetResult();
             ParseStatusText = "Done!";
         }

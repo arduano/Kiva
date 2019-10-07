@@ -13,7 +13,7 @@ namespace Kiva_MIDI
     class MIDIPlayer : IDisposable
     {
         [DllImport("ntdll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int NtDelayExecution([MarshalAs(UnmanagedType.I1)] bool alertable, Int64 DelayInterval);
+        public static extern int NtDelayExecution([MarshalAs(UnmanagedType.I1)] bool alertable, ref Int64 DelayInterval);
 
         public int BufferLen => eventFeed == null ? 0 : eventFeed.Count;
 
@@ -68,7 +68,8 @@ namespace Kiva_MIDI
                     SpinWait.SpinUntil(() => file != null || disposed);
                     try
                     {
-                        for (int i = 0; i < file.MIDIEvents.Length; i++)
+                        tasks.Add(RunPlayerThread(-1));
+                        for (int i = 0; i < file.MIDINoteEvents.Length; i++)
                         {
                             tasks.Add(RunPlayerThread(i));
                         }
@@ -90,11 +91,18 @@ namespace Kiva_MIDI
             return Task.Factory.StartNew(() =>
             {
                 MIDIEvent[] events;
-                try
-                {
-                    events = file.MIDIEvents[i];
-                }
-                catch { return; }
+                if (i == -1)
+                    try
+                    {
+                        events = file.MIDIControlEvents;
+                    }
+                    catch { return; }
+                else
+                    try
+                    {
+                        events = file.MIDINoteEvents[i];
+                    }
+                    catch { return; }
                 int evid = 0;
                 double lastTime = 0;
                 bool changed = true;
@@ -111,15 +119,15 @@ namespace Kiva_MIDI
                             Thread.Sleep(50);
                         }
                         evid = GetEventPos(events, time) - 10;
-                        if (evid < 0) evid = 0;
+                        if (evid < 0 || i == -1) evid = 0;
                     }
-                    while (evid == events.Length && !changed) { }
+                    while (evid == events.Length && !changed) { Thread.Sleep(50); }
                     if (changed || lastTime > time)
                     {
                         time = Time.GetTime();
                         KDMAPI.ResetKDMAPIStream();
                         evid = GetEventPos(events, time) - 10;
-                        if (evid < 0) evid = 0;
+                        if (evid < 0 || i == -1) evid = 0;
                         changed = false;
                     }
                     lastTime = time;
@@ -127,23 +135,24 @@ namespace Kiva_MIDI
                     {
                         var ev = events[evid];
                         var delay = (ev.time - time) / Time.Speed;
-                        while (delay > 0.2)
+                        while (delay > 0.2 && file != null)
                         {
                             Thread.Sleep(20);
                             delay = (ev.time - Time.GetTime()) / Time.Speed;
                             if (changed) break;
+                            if (file == null) goto dispose;
                         }
                         if (changed) goto reset;
                         if (delay > 0)
-                            //NtDelayExecution(false, (long)(delay * 1000000000));
-                            Thread.Sleep(new TimeSpan((long)(delay * 10000000)));
-                        if (eventFeed.Count > 10000 || delay < -1)
+                        {
+                            Int64 s = (long)(delay * -10000000);
+                            NtDelayExecution(false, ref s);
+                            //Thread.Sleep(new TimeSpan((long)(delay * 10000000)));
+                        }
+                        if ((eventFeed.Count > 10000 || delay < -1) && i != -1)
                             while ((evid < events.Length && events[evid].time < Time.GetTime() && (eventFeed.Count > 10000 || delay < -1)))
                             {
-                                var d = events[evid++];
-                                var de = d.data & 0xF0;
-                                if (!(de == 0x90 || de == 0x80))
-                                    eventFeed.Add(d);
+                                evid++;
                             }
                         else
                             eventFeed.Add(ev);
@@ -158,6 +167,7 @@ namespace Kiva_MIDI
                     }
                     evid++;
                 }
+                dispose:
                 Time.TimeChanged -= onChanged;
             }, TaskCreationOptions.LongRunning);
         }

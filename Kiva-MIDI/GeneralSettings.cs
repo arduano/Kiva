@@ -32,6 +32,8 @@ namespace Kiva_MIDI
 
         public KeyboardStyle KeyboardStyle { get; set; } = KeyboardStyle.Small;
 
+        public int FPSLock = 0;
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

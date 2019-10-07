@@ -19,7 +19,8 @@ namespace Kiva_MIDI
         public TempoEvent[] globaTempos;
 
         public long noteCount;
-        int midiEventCount = 0;
+        int midiNoteEventCount = 0;
+        int midiControlEventCount = 0;
         public int[] noteCounts = new int[256];
         public int[] colorEventCounts = new int[16];
         public int[] currColorEventIndx = new int[16];
@@ -30,8 +31,10 @@ namespace Kiva_MIDI
         FastList<UnendedNote>[] UnendedNotes = null;
         public Note[][] Notes = new Note[256][];
         public ColorEvent[][] ColorEvents = new ColorEvent[16][];
-        public MIDIEvent[] Events = null;
-        int currEventIndex = 0;
+        public MIDIEvent[] NoteEvents = null;
+        public MIDIEvent[] ControlEvents = null;
+        int currNoteEventIndex = 0;
+        int currControlEventIndex = 0;
         int[] currNoteIndexes = new int[256];
 
         public int FirstKey;
@@ -154,7 +157,7 @@ namespace Kiva_MIDI
                                 if (lastKey < note) lastKey = note;
                             }
                             if (vel >= eventThresh)
-                                midiEventCount++;
+                                midiNoteEventCount++;
                             UnendedNotes[note * 16 + channel].Add(new UnendedNote() { vel = vel });
                         }
                         else
@@ -163,7 +166,7 @@ namespace Kiva_MIDI
                             if (!un.ZeroLen)
                             {
                                 if (un.Pop().vel >= eventThresh)
-                                    midiEventCount++;
+                                    midiNoteEventCount++;
                             }
                         }
                         continue;
@@ -177,7 +180,7 @@ namespace Kiva_MIDI
                         if (!un.ZeroLen)
                         {
                             if (un.Pop().vel >= eventThresh)
-                                midiEventCount++;
+                                midiNoteEventCount++;
                         }
                         continue;
                     }
@@ -186,36 +189,36 @@ namespace Kiva_MIDI
                         byte channel = (byte)(command & 0b00001111);
                         byte note = reader.Read();
                         byte vel = reader.Read();
-                        midiEventCount++;
+                        midiNoteEventCount++;
                     }
                     else if (comm == 0b10110000)
                     {
                         byte channel = (byte)(command & 0b00001111);
                         byte controller = reader.Read();
                         byte value = reader.Read();
-                        midiEventCount++;
+                        midiControlEventCount++;
                     }
                     else if (comm == 0b11000000)
                     {
                         byte program = reader.Read();
-                        midiEventCount++;
+                        midiControlEventCount++;
                     }
                     else if (comm == 0b11010000)
                     {
                         byte pressure = reader.Read();
-                        midiEventCount++;
+                        midiControlEventCount++;
                     }
                     else if (comm == 0b11100000)
                     {
                         byte var1 = reader.Read();
                         byte var2 = reader.Read();
-                        midiEventCount++;
+                        midiControlEventCount++;
                     }
                     else if (comm == 0b10110000)
                     {
                         byte cc = reader.Read();
                         byte vv = reader.Read();
-                        midiEventCount++;
+                        midiControlEventCount++;
                     }
                     else if (command == 0b11110000)
                     {
@@ -407,7 +410,8 @@ namespace Kiva_MIDI
             {
                 ColorEvents[i] = new ColorEvent[colorEventCounts[i]];
             }
-            Events = new MIDIEvent[midiEventCount];
+            NoteEvents = new MIDIEvent[midiNoteEventCount];
+            ControlEvents = new MIDIEvent[midiControlEventCount];
         }
 
         public void SecondPassParse()
@@ -450,7 +454,7 @@ namespace Kiva_MIDI
                                     Notes[note][n.id].end = trackSeconds;
                                     if (n.vel >= eventThresh)
                                     {
-                                        Events[currEventIndex++] = new MIDIEvent()
+                                        NoteEvents[currNoteEventIndex++] = new MIDIEvent()
                                         {
                                             time = (float)trackSeconds,
                                             data = (uint)(command | (note << 8) | (vel << 16))
@@ -471,7 +475,7 @@ namespace Kiva_MIDI
                                 };
                                 if (vel >= eventThresh)
                                 {
-                                    Events[currEventIndex++] = new MIDIEvent()
+                                    NoteEvents[currNoteEventIndex++] = new MIDIEvent()
                                     {
                                         time = (float)trackSeconds,
                                         data = (uint)(command | (note << 8) | (vel << 16))
@@ -499,7 +503,7 @@ namespace Kiva_MIDI
                                 Notes[note][n.id].end = trackSeconds;
                                 if (n.vel >= eventThresh)
                                 {
-                                    Events[currEventIndex++] = new MIDIEvent()
+                                    NoteEvents[currNoteEventIndex++] = new MIDIEvent()
                                     {
                                         time = (float)trackSeconds,
                                         data = (uint)(command | (note << 8) | (vel << 16))
@@ -515,7 +519,7 @@ namespace Kiva_MIDI
                         byte channel = (byte)(command & 0b00001111);
                         byte note = reader.Read();
                         byte vel = reader.Read();
-                        Events[currEventIndex++] = new MIDIEvent()
+                        ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
                             data = (uint)(command | (note << 8) | (vel << 16))
@@ -526,7 +530,7 @@ namespace Kiva_MIDI
                         byte channel = (byte)(command & 0b00001111);
                         byte controller = reader.Read();
                         byte value = reader.Read();
-                        Events[currEventIndex++] = new MIDIEvent()
+                        ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
                             data = (uint)(command | (controller << 8) | (value << 16))
@@ -535,7 +539,7 @@ namespace Kiva_MIDI
                     else if (comm == 0b11000000)
                     {
                         byte program = reader.Read();
-                        Events[currEventIndex++] = new MIDIEvent()
+                        ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
                             data = (uint)(command | (program << 8))
@@ -544,7 +548,7 @@ namespace Kiva_MIDI
                     else if (comm == 0b11010000)
                     {
                         byte pressure = reader.Read();
-                        Events[currEventIndex++] = new MIDIEvent()
+                        ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
                             data = (uint)(command | (pressure << 8))
@@ -554,7 +558,7 @@ namespace Kiva_MIDI
                     {
                         byte var1 = reader.Read();
                         byte var2 = reader.Read();
-                        Events[currEventIndex++] = new MIDIEvent()
+                        ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
                             data = (uint)(command | (var1 << 8) | (var2 << 16))
@@ -564,7 +568,7 @@ namespace Kiva_MIDI
                     {
                         byte cc = reader.Read();
                         byte vv = reader.Read();
-                        Events[currEventIndex++] = new MIDIEvent()
+                        ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
                             data = (uint)(command | (cc << 8) | (vv << 16))
