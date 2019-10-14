@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,11 +14,23 @@ namespace Kiva_MIDI
     /// </summary>
     public abstract partial class D3D : IDirect3D, IDisposable
     {
+        [DllImport("ntdll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int NtDelayExecution([MarshalAs(UnmanagedType.I1)] bool alertable, ref Int64 DelayInterval);
+
         class ArgPointer { public DrawEventArgs args = null; }
 
         ArgPointer argsPointer = new ArgPointer();
 
         Task renderThread = null;
+
+        List<DateTime> frameTimes = new List<DateTime>();
+
+        public int FPSLock { get; set; } = 60;
+        public bool SingleThreadedRender { get; set; } = false;
+        Stopwatch frameTimer = new Stopwatch();
+        double delayExtraDelay = 0;
+
+        Stopwatch renderTimer = new Stopwatch();
 
         public D3D()
         {
@@ -101,6 +114,13 @@ namespace Kiva_MIDI
             {
                 renderThread = StartRenderThread();
             }
+            if (SingleThreadedRender)
+            {
+                lock (argsPointer)
+                {
+                    TrueRender();
+                }
+            }
             argsPointer.args = args;
         }
 
@@ -109,20 +129,48 @@ namespace Kiva_MIDI
             return
             Task.Run(() =>
             {
+                renderTimer.Start();
+                TimeSpan last = renderTimer.Elapsed;
+                frameTimes.Add(DateTime.UtcNow);
                 while (true)
                 {
+                    frameTimer.Start();
+                    while (SingleThreadedRender) Thread.Sleep(100);
                     lock (argsPointer)
                     {
-                        if (argsPointer.args == null) Thread.Sleep(100);
+                        if (argsPointer.args == null || SingleThreadedRender) Thread.Sleep(100);
                         else
                         {
-                            BeginRender(argsPointer.args);
-                            RenderScene(argsPointer.args);
-                            EndRender(argsPointer.args);
+                            argsPointer.args.TotalTime = renderTimer.Elapsed;
+                            argsPointer.args.DeltaTime = renderTimer.Elapsed - last;
+                            last = renderTimer.Elapsed;
+                            TrueRender();
                         }
                     }
+                    if (FPSLock != 0)
+                    {
+                        var desired = 10000000 / FPSLock;
+                        var elapsed = frameTimer.ElapsedTicks;
+                        long remaining = -(desired - elapsed) + (long)delayExtraDelay;
+                        Stopwatch s = new Stopwatch();
+                        s.Start();
+                        if (remaining < 0)
+                        {
+                            NtDelayExecution(false, ref remaining);
+                        }
+                        var excess = remaining + s.ElapsedTicks;
+                        delayExtraDelay = (delayExtraDelay * 60 + excess) / 61;
+                    }
+                    frameTimer.Reset();
                 }
             });
+        }
+
+        void TrueRender()
+        {
+            BeginRender(argsPointer.args);
+            RenderScene(argsPointer.args);
+            EndRender(argsPointer.args);
         }
 
         public virtual void BeginRender(DrawEventArgs args) { }

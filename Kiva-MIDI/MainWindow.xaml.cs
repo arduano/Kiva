@@ -188,11 +188,13 @@ namespace Kiva_MIDI
             DependencyProperty.Register("ChromeVisibility", typeof(Visibility), typeof(MainWindow), new PropertyMetadata(Visibility.Visible));
 
         Scene scene;
+        D3D11 d3d;
         MIDIPlayer player;
 
         Settings settings = new Settings();
 
         SettingsWindow settingsWindow = null;
+        LoadingMidiForm loadingForm = null;
 
         public MainWindow()
         {
@@ -207,7 +209,8 @@ namespace Kiva_MIDI
             Time = new PlayingState();
             Time.PauseChanged += PauseChanged;
             PauseChanged();
-            scene = new Scene(settings) { Renderer = new D3D11(), FPS = FPS };
+            d3d = new D3D11();
+            scene = new Scene(settings) { Renderer = d3d, FPS = FPS };
             dx11img.Renderer = scene;
             dx11img.MouseDown += (s, e) => Focus();
             scene.Time = Time;
@@ -226,9 +229,25 @@ namespace Kiva_MIDI
 
             versionLabel.Content = Settings.VersionName;
 
+            d3d.FPSLock = settings.General.FPSLock;
+
+            settings.General.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "FPSLock")
+                    d3d.FPSLock = settings.General.FPSLock;
+                if (e.PropertyName == "SelectedMIDIDevice")
+                    player.DeviceID = settings.General.SelectedMIDIDevice;
+                if (e.PropertyName == "CompatibilityFPS")
+                    d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
+            };
+
+            d3d.FPSLock = settings.General.FPSLock;
+            player.DeviceID = settings.General.SelectedMIDIDevice;
+            d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
+
             CompositionTarget.Rendering += (s, e) =>
             {
-                var renderText = "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" + 
+                var renderText = "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
                                  "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0");
 
                 if (player.BufferLen > 9000) audioDesyncLabel.Visibility = Visibility.Visible;
@@ -251,31 +270,33 @@ namespace Kiva_MIDI
             GC.Collect(2, GCCollectionMode.Forced);
 
 
-            var form = new LoadingMidiForm(filename, settings);
-            form.ParseFinished += () =>
+            loadingForm = new LoadingMidiForm(filename, settings);
+            loadingForm.ParseFinished += () =>
             {
-                var file = form.LoadedFile;
+                var file = loadingForm.LoadedFile;
                 Dispatcher.Invoke(() =>
                 {
                     player.File = file;
                     scene.File = file;
                     timeSlider.Maximum = file.MidiLength;
-                    form.Close();
-                    form.Dispose();
+                    loadingForm.Close();
+                    loadingForm.Dispose();
+                    loadingForm = null;
                     GC.Collect(2, GCCollectionMode.Forced);
                     Time.Play();
                 });
             };
-            form.ParseCancelled += () =>
+            loadingForm.ParseCancelled += () =>
             {
                 Dispatcher.Invoke(() =>
                 {
-                    form.Close();
-                    form.Dispose();
+                    loadingForm.Close();
+                    loadingForm.Dispose();
                     GC.Collect(2, GCCollectionMode.Forced);
+                    loadingForm = null;
                 });
             };
-            form.ShowDialog();
+            loadingForm.ShowDialog();
             //var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
             //var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
             //var file = new MIDIFile("E:\\Midi\\[Black MIDI]scarlet_zone-& The Young Descendant of Tepes V.2.mid");
@@ -356,6 +377,7 @@ namespace Kiva_MIDI
 
         private void MainWindow_PreviewDrop(object sender, DragEventArgs e)
         {
+            if (!IsInitialized || loadingForm != null) return;
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -376,11 +398,13 @@ namespace Kiva_MIDI
 
         private void MainWindow_PreviewDragEnter(object sender, DragEventArgs e)
         {
+            if (!IsInitialized || loadingForm != null) return;
             dropHighlight.Visibility = Visibility.Visible;
         }
 
         private void MainWindow_PreviewDragLeave(object sender, DragEventArgs e)
         {
+            if (!IsInitialized || loadingForm != null) return;
             dropHighlight.Visibility = Visibility.Hidden;
         }
 
@@ -420,7 +444,8 @@ namespace Kiva_MIDI
 
         private void SpeedSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (IsInitialized) { 
+            if (IsInitialized)
+            {
                 settings.Volatile.Speed = speedSlider.Value;
                 Time.ChangeSpeed(settings.Volatile.Speed);
             }

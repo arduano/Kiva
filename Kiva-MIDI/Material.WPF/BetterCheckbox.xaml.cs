@@ -30,7 +30,7 @@ namespace Kiva_MIDI
         }
 
         public static readonly DependencyProperty IsCheckedProperty =
-            DependencyProperty.Register("IsChecked", typeof(bool), typeof(BetterCheckbox), new PropertyMetadata(false));
+            DependencyProperty.Register("IsChecked", typeof(bool), typeof(BetterCheckbox), new PropertyMetadata(false, (s, e) => ((BetterCheckbox)s).OnCheckChanged()));
 
 
         public string Text
@@ -43,6 +43,21 @@ namespace Kiva_MIDI
             DependencyProperty.Register("Text", typeof(string), typeof(BetterCheckbox), new PropertyMetadata(""));
 
 
+        public static readonly RoutedEvent CheckToggledEvent = EventManager.RegisterRoutedEvent(
+            "RadioChecked", RoutingStrategy.Bubble,
+            typeof(RoutedPropertyChangedEventHandler<bool>), typeof(BetterCheckbox));
+
+        public event RoutedPropertyChangedEventHandler<bool> CheckToggled
+        {
+            add { AddHandler(CheckToggledEvent, value); }
+            remove { RemoveHandler(CheckToggledEvent, value); }
+        }
+
+
+        void OnCheckChanged()
+        {
+            RaiseEvent(new RoutedPropertyChangedEventArgs<bool>(!IsChecked, IsChecked, CheckToggledEvent));
+        }
 
 
         public BetterCheckbox()

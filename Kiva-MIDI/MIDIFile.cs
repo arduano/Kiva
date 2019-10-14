@@ -267,7 +267,7 @@ namespace Kiva_MIDI
             cancel.ThrowIfCancellationRequested();
             var temposMerge = TimedMerger<TempoEvent>.MergeMany(parsers.Select(p => p.Tempos).ToArray(), t => t.time);
             globalTempos = temposMerge.Cast<TempoEvent>().ToArray();
-        }
+         }
 
         void SecondPassParse()
         {

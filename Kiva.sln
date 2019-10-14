@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kiva-MIDI", "Kiva-MIDI\Kiva-MIDI.csproj", "{47B2D2B8-530D-484C-955C-DBA0472AE45B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterWPF", "BetterWPF\BetterWPF.csproj", "{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,18 +27,6 @@ Global
 		{47B2D2B8-530D-484C-955C-DBA0472AE45B}.Release|x64.Build.0 = Release|x64
 		{47B2D2B8-530D-484C-955C-DBA0472AE45B}.Release|x86.ActiveCfg = Release|x86
 		{47B2D2B8-530D-484C-955C-DBA0472AE45B}.Release|x86.Build.0 = Release|x86
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Debug|x64.Build.0 = Debug|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Debug|x86.Build.0 = Debug|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Release|x64.ActiveCfg = Release|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Release|x64.Build.0 = Release|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Release|x86.ActiveCfg = Release|Any CPU
-		{FDFEDB9D-FB0A-4903-A5F9-AFAE133F48EB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

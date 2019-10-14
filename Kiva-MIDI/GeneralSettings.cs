@@ -32,7 +32,11 @@ namespace Kiva_MIDI
 
         public KeyboardStyle KeyboardStyle { get; set; } = KeyboardStyle.Small;
 
-        public int FPSLock = 0;
+        public int FPSLock { get; set; } = 0;
+        public bool CompatibilityFPS { get; set; } = false;
+
+        public int SelectedMIDIDevice { get; set; } = -1;
+        public string SelectedMIDIDeviceName { get; set; } = "KDMAPI";
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

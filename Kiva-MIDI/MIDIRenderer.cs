@@ -382,7 +382,8 @@ namespace Kiva_MIDI
             noteConstants.NoteBorder = 0.0015f;
             SetNoteShaderConstants(context, noteConstants);
 
-            context.ClearRenderTargetView(target, new Color4(0.4f, 0.4f, 0.4f, 1f));
+            //context.ClearRenderTargetView(target, new Color4(0.4f, 0.4f, 0.4f, 1f));
+            context.ClearRenderTargetView(target, new Color4(0.0f, 0.0f, 0.0f, 0f));
 
             double ds = dynamicState.GetValue(0, 1);
 
@@ -399,11 +400,12 @@ namespace Kiva_MIDI
 
             float kbHeight = (float)(args.RenderSize.Width / args.RenderSize.Height / fullWidth);
             if (settings.General.KeyboardStyle == KeyboardStyle.Small) kbHeight *= 0.017f;
+            if (settings.General.KeyboardStyle == KeyboardStyle.None) kbHeight = 0;
             noteConstants.KeyboardHeight = kbHeight;
 
-            if (File != null)
+            lock (fileLock)
             {
-                lock (fileLock)
+                if (File != null)
                 {
                     File.SetColorEvents(time);
 
@@ -436,17 +438,16 @@ namespace Kiva_MIDI
                                 int noff = File.FirstRenderNote[k];
                                 Note[] notes = File.Notes[k];
                                 if (notes.Length == 0) goto skipLoop;
-                                if (time > notes[notes.Length - 1].end) goto skipLoop;
                                 if (lastTime > time)
                                 {
                                     for (noff = 0; noff < notes.Length; noff++)
                                     {
                                         if (notes[noff].end > time)
                                         {
-                                            File.FirstRenderNote[k] = noff;
                                             break;
                                         }
                                     }
+                                    File.FirstRenderNote[k] = noff;
                                 }
                                 else if (lastTime < time)
                                 {
@@ -454,10 +455,10 @@ namespace Kiva_MIDI
                                     {
                                         if (notes[noff].end > time)
                                         {
-                                            File.FirstRenderNote[k] = noff;
                                             break;
                                         }
                                     }
+                                    File.FirstRenderNote[k] = noff;
                                 }
                                 while (noff != notes.Length && notes[noff].start < renderCutoff)
                                 {
@@ -522,38 +523,40 @@ namespace Kiva_MIDI
                     LastRenderedNoteCount = notesRendered;
                     File.lastRenderTime = time;
                 }
-            }
-            else
-            {
-                LastRenderedNoteCount = 0;
-                for(int i = 0; i < renderKeys.Length; i++)
+                else
                 {
-                    renderKeys[i].colorl = 0;
-                    renderKeys[i].colorr = 0;
-                    renderKeys[i].distance = 0;
+                    LastRenderedNoteCount = 0;
+                    for (int i = 0; i < renderKeys.Length; i++)
+                    {
+                        renderKeys[i].colorl = 0;
+                        renderKeys[i].colorr = 0;
+                        renderKeys[i].distance = 0;
+                    }
                 }
             }
 
-
-            SetKeyboardShaderConstants(context, new KeyboardGlobalConstants()
+            if (settings.General.KeyboardStyle != KeyboardStyle.None)
             {
-                Height = kbHeight,
-                Left = (float)fullLeft,
-                Right = (float)fullRight,
-                Aspect = noteConstants.ScreenAspect
-            });
-            DataStream data;
-            context.MapSubresource(keyBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
-            data.Position = 0;
-            data.WriteRange(renderKeys, 0, 257);
-            context.UnmapSubresource(keyBuffer, 0);
-            context.InputAssembler.InputLayout = keyLayout;
-            context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
-            context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(keyBuffer, 24, 0));
-            SmallWhiteKeyShader.SetShaders(context);
-            context.Draw(257, 0);
-            SmallBlackKeyShader.SetShaders(context);
-            context.Draw(257, 0);
+                SetKeyboardShaderConstants(context, new KeyboardGlobalConstants()
+                {
+                    Height = kbHeight,
+                    Left = (float)fullLeft,
+                    Right = (float)fullRight,
+                    Aspect = noteConstants.ScreenAspect
+                });
+                DataStream data;
+                context.MapSubresource(keyBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
+                data.Position = 0;
+                data.WriteRange(renderKeys, 0, 257);
+                context.UnmapSubresource(keyBuffer, 0);
+                context.InputAssembler.InputLayout = keyLayout;
+                context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
+                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(keyBuffer, 24, 0));
+                SmallWhiteKeyShader.SetShaders(context);
+                context.Draw(257, 0);
+                SmallBlackKeyShader.SetShaders(context);
+                context.Draw(257, 0);
+            }
         }
 
         unsafe void FlushNoteBuffer(DeviceContext context, float left, float right, IntPtr notes, int count)

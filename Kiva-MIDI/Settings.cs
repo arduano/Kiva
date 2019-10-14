@@ -81,6 +81,13 @@ namespace Kiva_MIDI
             }
 
             loaderSettings = (MIDILoaderSettings)loading.midi;
+
+            General = loading.general;
+
+            General.PropertyChanged += (s, e) =>
+            {
+                SaveSetings(General, generalPath);
+            };
         }
 
         dynamic UpdateSettings(dynamic settings)

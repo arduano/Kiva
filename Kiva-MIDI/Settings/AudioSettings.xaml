@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Kiva_MIDI.AudioSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Kiva_MIDI"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Padding="10">
+            <DockPanel LastChildFill="True">
+                <Label DockPanel.Dock="Top">MIDI Output Device</Label>
+                <ListBox Name="devicesList" BorderBrush="Black" Background="Transparent" HorizontalContentAlignment="Stretch" Padding="0">
+                    
+                </ListBox>
+            </DockPanel>
+        </Border>
+        <Border Grid.Column="1" Padding="10">
+            <StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

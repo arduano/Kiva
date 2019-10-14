@@ -41,8 +41,9 @@
                     <Label FontSize="14" HorizontalAlignment="Left">
                         Lock FPS (0 = unlocked):
                     </Label>
-                    <local:NumberSelect x:Name="fpsLock" ValueChanged="FpsLock_ValueChanged" Minimum="0" Maximum="1000" HorizontalAlignment="Left" Width="80" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
+                    <local:NumberSelect x:Name="fpsLock" ValueChanged="FpsLock_ValueChanged" Minimum="0" Maximum="10000" HorizontalAlignment="Left" Width="80" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
                 </DockPanel>
+                <local:BetterCheckbox CheckToggled="CompatibilityFps_CheckToggled" x:Name="compatibilityFps" Text="Compatibility FPS"/>
             </StackPanel>
         </Border>
     </Grid>

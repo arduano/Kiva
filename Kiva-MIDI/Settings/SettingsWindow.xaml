@@ -46,7 +46,7 @@
             </Border>
             <Grid Name="content" Background="#0179db">
                 <local:VisualSettings x:Name="visualSettings"/>
-                <Grid/>
+                <local:AudioSettings x:Name="audioSettings"/>
                 <Grid/>
             </Grid>
         </DockPanel>

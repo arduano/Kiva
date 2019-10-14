@@ -151,11 +151,13 @@ namespace Kiva_MIDI
             };
 
             visualSettings.Settings = settings;
+            audioSettings.Settings = settings;
 
             var selectBrush = new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
 
             ClearSelection();
             ((Button)tabPanel.Children[0]).Background = selectBrush;
+            content.Children[0].Visibility = Visibility.Visible;
 
             foreach (var _t in tabPanel.Children)
             {
@@ -164,6 +166,7 @@ namespace Kiva_MIDI
                     var idx = tabPanel.Children.IndexOf((Button)s);
                     ClearSelection();
                     t.Background = selectBrush;
+                    content.Children[idx].Visibility = Visibility.Visible;
                 };
             }
         }
@@ -171,6 +174,7 @@ namespace Kiva_MIDI
         void ClearSelection()
         {
             foreach (var b in tabPanel.Children.Cast<Button>()) b.Background = Brushes.Transparent;
+            foreach (var b in content.Children.Cast<UIElement>()) b.Visibility = Visibility.Collapsed;
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)

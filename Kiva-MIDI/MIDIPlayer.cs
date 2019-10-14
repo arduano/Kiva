@@ -17,6 +17,26 @@ namespace Kiva_MIDI
 
         public int BufferLen => eventFeed == null ? 0 : eventFeed.Count;
 
+        public int DeviceID
+        {
+            get => deviceID;
+            set
+            {
+                if (deviceID != value)
+                {
+                    deviceID = value;
+                    cancelConsumer.Cancel();
+                    if (deviceThread != null)
+                        deviceThread.GetAwaiter().GetResult();
+                    cancelConsumer = new CancellationTokenSource();
+                    if (deviceID < 0)
+                        deviceThread = Task.Factory.StartNew(() => RunEventConsumerKDMAPI(cancelConsumer.Token), TaskCreationOptions.LongRunning);
+                    else
+                        deviceThread = Task.Factory.StartNew(() => RunEventConsumerWINMM(cancelConsumer.Token), TaskCreationOptions.LongRunning);
+                }
+            }
+        }
+
         public MIDIFile File
         {
             get => file;
@@ -49,6 +69,12 @@ namespace Kiva_MIDI
         Task playerThread = null;
 
         List<Task> tasks = new List<Task>();
+        private int deviceID = -1;
+
+        OutputDevice device = null;
+        Task deviceThread = null;
+
+        CancellationTokenSource cancelConsumer;
 
         public void Dispose()
         {
@@ -62,7 +88,11 @@ namespace Kiva_MIDI
             playerThread = Task.Run(() =>
             {
                 eventFeed = new BlockingCollection<MIDIEvent>();
-                Task.Factory.StartNew(RunEventConsumerKDMAPI, TaskCreationOptions.LongRunning);
+                cancelConsumer = new CancellationTokenSource();
+                if (deviceID < 0)
+                    deviceThread = Task.Factory.StartNew(() => RunEventConsumerKDMAPI(cancelConsumer.Token), TaskCreationOptions.LongRunning);
+                else
+                    deviceThread = Task.Factory.StartNew(() => RunEventConsumerWINMM(cancelConsumer.Token), TaskCreationOptions.LongRunning);
                 while (!disposed)
                 {
                     SpinWait.SpinUntil(() => file != null || disposed);
@@ -103,6 +133,7 @@ namespace Kiva_MIDI
                         events = file.MIDINoteEvents[i];
                     }
                     catch { return; }
+                if (events.Length == 0) return;
                 int evid = 0;
                 double lastTime = 0;
                 bool changed = true;
@@ -125,7 +156,15 @@ namespace Kiva_MIDI
                     if (changed || lastTime > time)
                     {
                         time = Time.GetTime();
-                        KDMAPI.ResetKDMAPIStream();
+                        if (deviceID == 01)
+                            KDMAPI.ResetKDMAPIStream();
+                        else if (device != null)
+                            try
+                            {
+                                device.Reset();
+                            }
+                            catch { }
+
                         evid = GetEventPos(events, time) - 10;
                         if (evid < 0 || i == -1) evid = 0;
                         changed = false;
@@ -172,14 +211,38 @@ namespace Kiva_MIDI
             }, TaskCreationOptions.LongRunning);
         }
 
-        void RunEventConsumerKDMAPI()
+        void RunEventConsumerKDMAPI(CancellationToken cancel)
         {
             KDMAPI.InitializeKDMAPIStream();
-            foreach (var e in eventFeed.GetConsumingEnumerable())
+            try
             {
-                KDMAPI.SendDirectDataNoBuf(e.data);
+                foreach (var e in eventFeed.GetConsumingEnumerable(cancel))
+                {
+                    KDMAPI.SendDirectDataNoBuf(e.data);
+                    if (deviceID != -1) break;
+                }
             }
+            catch (OperationCanceledException) { }
             KDMAPI.TerminateKDMAPIStream();
+        }
+
+        void RunEventConsumerWINMM(CancellationToken cancel)
+        {
+            var id = deviceID;
+            var device = new OutputDevice(id);
+            this.device = device;
+            try
+            {
+                foreach (var e in eventFeed.GetConsumingEnumerable(cancel))
+                {
+                    device.SendShort((int)e.data);
+                    if (deviceID != id) break;
+                }
+            }
+            catch (OperationCanceledException) { }
+            device.Close();
+            device.Dispose();
+            this.device = null;
         }
 
         int GetEventPos(MIDIEvent[] events, double time)
