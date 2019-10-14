@@ -38,13 +38,5 @@ namespace BetterWPF
             foreach (var _b in bindings) b.Bindings.Add(_b);
             o.SetBinding(p, b);
         }
-
-        public void Set<T>(TempValueProperty<T> o)
-        {
-            var b = new MultiBinding();
-            b.Converter = this;
-            foreach (var _b in bindings) b.Bindings.Add(_b);
-            o.SetBinding(TempValueProperty<object>.ValProperty, b);
-        }
     }
 }
