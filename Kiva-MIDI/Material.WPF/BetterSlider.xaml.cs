@@ -83,8 +83,6 @@ namespace Kiva_MIDI
         {
             InitializeComponent();
 
-            var scaledWidth = new TempValueProperty<double>();
-
             new InplaceConverter(new[]
             {
                 new BBinding(ValueProperty, this),
