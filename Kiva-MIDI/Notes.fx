@@ -31,6 +31,13 @@ NOTE VS_Note(NOTE input)
 	return input;
 }
 
+float2 polarise(float2 vert) {
+	return float2(
+		cos(vert.x * 3.141592 * 2) * (vert.y + 0.1),
+		sin(vert.x * 3.141592 * 2) * (vert.y + 0.1),
+		);
+}
+
 [maxvertexcount(12)]
 void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 {
@@ -55,27 +62,27 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	v.col = cl;
 	v.pos = float4(NoteLeft, n.start, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	v.pos = float4(NoteLeft, n.end, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	v.col = cr;
 	v.pos = float4(NoteRight, n.end, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 
 	v.col = cr;
 	v.pos = float4(NoteRight, n.end, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	v.pos = float4(NoteRight, n.start, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	v.col = cl;
 	v.pos = float4(NoteLeft, n.start, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 
@@ -97,27 +104,27 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	v.col = cl;
 	v.pos = float4(borderLeft, borderBottom, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	v.pos = float4(borderLeft, borderTop, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	v.col = cr;
 	v.pos = float4(borderRight, borderTop, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 
 	v.col = cr;
 	v.pos = float4(borderRight, borderTop, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	v.pos = float4(borderRight, borderBottom, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	v.col = cl;
 	v.pos = float4(borderLeft, borderBottom, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 }
