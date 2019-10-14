@@ -17,7 +17,7 @@ struct VS_IN
 	float4 pos : POSITION;
 	float4 col : COLOR;
 };
-
+ 
 struct PS_IN
 {
 	float4 pos : SV_POSITION;
@@ -28,13 +28,15 @@ NOTE VS_Note(NOTE input)
 {
 	input.start = input.start * (1 - KeyboardHeight) + KeyboardHeight;
 	input.end = input.end * (1 - KeyboardHeight) + KeyboardHeight;
+	input.start = max(input.start, 0);
+	input.end = max(input.end, 0);
 	return input;
 }
 
 float2 polarise(float2 vert) {
 	return float2(
-		cos(vert.x * 3.141592 * 2) * (vert.y + 0.1),
-		sin(vert.x * 3.141592 * 2) * (vert.y + 0.1),
+		cos(-vert.x * 3.141592 * 2) * (vert.y + 0.1),
+		sin(-vert.x * 3.141592 * 2) * (vert.y + 0.1) / ScreenAspect
 		);
 }
 
