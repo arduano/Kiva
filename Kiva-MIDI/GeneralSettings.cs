@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Kiva_MIDI
 {
@@ -37,6 +38,10 @@ namespace Kiva_MIDI
 
         public int SelectedMIDIDevice { get; set; } = -1;
         public string SelectedMIDIDeviceName { get; set; } = "KDMAPI";
+
+        public Color BackgroundColor { get; set; } = Color.FromArgb(255, 142, 142, 142);
+        public Color ForegroundColor { get; set; } = Color.FromArgb(255, 142, 142, 142);
+        public Color BarColor { get; set; } = Color.FromArgb(255, 255, 0, 0);
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

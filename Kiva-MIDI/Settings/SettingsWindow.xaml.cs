@@ -152,6 +152,7 @@ namespace Kiva_MIDI
 
             visualSettings.Settings = settings;
             audioSettings.Settings = settings;
+            miscSettings.Settings = settings;
 
             var selectBrush = new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
 

@@ -457,6 +457,7 @@ namespace Kiva_MIDI
                                         NoteEvents[currNoteEventIndex++] = new MIDIEvent()
                                         {
                                             time = (float)trackSeconds,
+                                            vel = n.vel,
                                             data = (uint)(command | (note << 8) | (vel << 16))
                                         };
                                     }
@@ -478,6 +479,7 @@ namespace Kiva_MIDI
                                     NoteEvents[currNoteEventIndex++] = new MIDIEvent()
                                     {
                                         time = (float)trackSeconds,
+                                        vel = vel,
                                         data = (uint)(command | (note << 8) | (vel << 16))
                                     };
                                 }
@@ -506,6 +508,7 @@ namespace Kiva_MIDI
                                     NoteEvents[currNoteEventIndex++] = new MIDIEvent()
                                     {
                                         time = (float)trackSeconds,
+                                        vel = n.vel,
                                         data = (uint)(command | (note << 8) | (vel << 16))
                                     };
                                 }
@@ -522,6 +525,7 @@ namespace Kiva_MIDI
                         ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
+                            vel = 255,
                             data = (uint)(command | (note << 8) | (vel << 16))
                         };
                     }
@@ -533,6 +537,7 @@ namespace Kiva_MIDI
                         ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
+                            vel = 255,
                             data = (uint)(command | (controller << 8) | (value << 16))
                         };
                     }
@@ -542,6 +547,7 @@ namespace Kiva_MIDI
                         ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
+                            vel = 255,
                             data = (uint)(command | (program << 8))
                         };
                     }
@@ -551,6 +557,7 @@ namespace Kiva_MIDI
                         ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
+                            vel = 255,
                             data = (uint)(command | (pressure << 8))
                         };
                     }
@@ -561,6 +568,7 @@ namespace Kiva_MIDI
                         ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
+                            vel = 255,
                             data = (uint)(command | (var1 << 8) | (var2 << 16))
                         };
                     }
@@ -571,6 +579,7 @@ namespace Kiva_MIDI
                         ControlEvents[currControlEventIndex++] = new MIDIEvent()
                         {
                             time = (float)trackSeconds,
+                            vel = 255,
                             data = (uint)(command | (cc << 8) | (vv << 16))
                         };
                     }

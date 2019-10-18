@@ -188,8 +188,8 @@ namespace Kiva_MIDI
                             NtDelayExecution(false, ref s);
                             //Thread.Sleep(new TimeSpan((long)(delay * 10000000)));
                         }
-                        if ((eventFeed.Count > 10000 || delay < -1) && i != -1)
-                            while ((evid < events.Length && events[evid].time < Time.GetTime() && (eventFeed.Count > 10000 || delay < -1)))
+                        if ((eventFeed.Count > events[evid].vel * 100 || delay < -1) && i != -1)
+                            while ((evid < events.Length && events[evid].time < Time.GetTime() && (eventFeed.Count > events[evid].vel * 100 || delay < -1)))
                             {
                                 evid++;
                             }

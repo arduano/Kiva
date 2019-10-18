@@ -37,6 +37,7 @@ namespace Kiva_MIDI
             public float Left;
             public float Right;
             public float Aspect;
+            public uint BarColor;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -95,6 +96,7 @@ namespace Kiva_MIDI
         ShaderManager SmallBlackKeyShader;
         ShaderManager BigWhiteKeyShader;
         ShaderManager BigBlackKeyShader;
+        ShaderManager BigBarShader;
         InputLayout noteLayout;
         InputLayout keyLayout;
         Buffer globalNoteConstants;
@@ -164,6 +166,37 @@ namespace Kiva_MIDI
                 ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
                 ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
                 ShaderBytecode.Compile(noteShaderData, "GS_Black", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            );
+
+            if (IO.File.Exists("KeyboardBig.fx"))
+            {
+                noteShaderData = IO.File.ReadAllText("KeyboardBig.fx");
+            }
+            else
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var names = assembly.GetManifestResourceNames();
+                using (var stream = assembly.GetManifestResourceStream("Kiva_MIDI.KeyboardBig.fx"))
+                using (var reader = new IO.StreamReader(stream))
+                    noteShaderData = reader.ReadToEnd();
+            }
+            BigWhiteKeyShader = new ShaderManager(
+                device,
+                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "GS_White", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            );
+            BigBlackKeyShader = new ShaderManager(
+                device,
+                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "GS_Black", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            );
+            BigBarShader = new ShaderManager(
+                device,
+                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(noteShaderData, "GS_Bar", "gs_4_0", ShaderFlags.None, EffectFlags.None)
             );
 
             noteLayout = new InputLayout(device, ShaderSignature.GetInputSignature(notesShader.vertexShaderByteCode), new[] {
@@ -249,6 +282,10 @@ namespace Kiva_MIDI
 
             double wdth;
 
+            double blackKeyScale = 0.65;
+            double offset2set = 0.3;
+            double offset3set = 0.5;
+
             double knmfn = keynum[firstNote];
             double knmln = keynum[lastNote - 1];
             if (blackKeys[firstNote]) knmfn = keynum[firstNote - 1] + 0.5;
@@ -259,22 +296,18 @@ namespace Kiva_MIDI
                 {
                     x1array[i] = (float)(keynum[i] - knmfn) / (knmln - knmfn + 1);
                     wdtharray[i] = 1.0f / (knmln - knmfn + 1);
-                    renderKeys[i].MarkBlack(false);
                 }
                 else
                 {
                     int _i = i + 1;
-                    wdth = 0.6f / (knmln - knmfn + 1);
+                    wdth = blackKeyScale / (knmln - knmfn + 1);
                     int bknum = keynum[i] % 5;
                     double offset = wdth / 2;
-                    if (bknum == 0 || bknum == 2)
-                    {
-                        offset *= 1.3;
-                    }
-                    else if (bknum == 1 || bknum == 4)
-                    {
-                        offset *= 0.7;
-                    }
+                    if (bknum == 0) offset += offset * offset2set;
+                    if (bknum == 2) offset += offset * offset3set;
+                    if (bknum == 1) offset -= offset * offset2set;
+                    if (bknum == 4) offset -= offset * offset3set;
+
                     x1array[i] = (float)(keynum[_i] - knmfn) / (knmln - knmfn + 1) - offset;
                     wdtharray[i] = wdth;
                     renderKeys[i].MarkBlack(true);
@@ -306,6 +339,22 @@ namespace Kiva_MIDI
             var blendStateEnabled = new BlendState(device, desc);
 
             device.ImmediateContext.OutputMerger.SetBlendState(blendStateEnabled);
+
+            RasterizerStateDescription renderStateDesc = new RasterizerStateDescription
+            {
+                CullMode = CullMode.None,
+                DepthBias = 0,
+                DepthBiasClamp = 0,
+                FillMode = FillMode.Solid,
+                IsAntialiasedLineEnabled = false,
+                IsDepthClipEnabled = false,
+                IsFrontCounterClockwise = false,
+                IsMultisampleEnabled = true,
+                IsScissorEnabled = false,
+                SlopeScaledDepthBias = 0
+            };
+            var rasterStateSolid = new RasterizerState(device, renderStateDesc);
+            device.ImmediateContext.Rasterizer.State = rasterStateSolid;
         }
 
         void SetNoteShaderConstants(DeviceContext context, NotesGlobalConstants constants)
@@ -400,6 +449,7 @@ namespace Kiva_MIDI
 
             float kbHeight = (float)(args.RenderSize.Width / args.RenderSize.Height / fullWidth);
             if (settings.General.KeyboardStyle == KeyboardStyle.Small) kbHeight *= 0.017f;
+            if (settings.General.KeyboardStyle == KeyboardStyle.Big) kbHeight *= 0.04f;
             if (settings.General.KeyboardStyle == KeyboardStyle.None) kbHeight = 0;
             noteConstants.KeyboardHeight = kbHeight;
 
@@ -537,25 +587,40 @@ namespace Kiva_MIDI
 
             if (settings.General.KeyboardStyle != KeyboardStyle.None)
             {
+                DataStream data;
+                var col = settings.General.BarColor;
                 SetKeyboardShaderConstants(context, new KeyboardGlobalConstants()
                 {
                     Height = kbHeight,
                     Left = (float)fullLeft,
                     Right = (float)fullRight,
-                    Aspect = noteConstants.ScreenAspect
+                    Aspect = noteConstants.ScreenAspect,
+                    BarColor = NoteCol.Compress(col.R, col.G, col.B, col.A)
                 });
-                DataStream data;
+                context.InputAssembler.InputLayout = keyLayout;
+                context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
+                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(keyBuffer, 24, 0));
                 context.MapSubresource(keyBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
                 data.Position = 0;
                 data.WriteRange(renderKeys, 0, 257);
                 context.UnmapSubresource(keyBuffer, 0);
-                context.InputAssembler.InputLayout = keyLayout;
-                context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
-                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(keyBuffer, 24, 0));
-                SmallWhiteKeyShader.SetShaders(context);
-                context.Draw(257, 0);
-                SmallBlackKeyShader.SetShaders(context);
-                context.Draw(257, 0);
+                data.Close();
+                if (settings.General.KeyboardStyle == KeyboardStyle.Big)
+                {
+                    BigWhiteKeyShader.SetShaders(context);
+                    context.Draw(257, 0);
+                    BigBarShader.SetShaders(context);
+                    context.Draw(1, 0);
+                    BigBlackKeyShader.SetShaders(context);
+                    context.Draw(257, 0);
+                }
+                else
+                {
+                    SmallWhiteKeyShader.SetShaders(context);
+                    context.Draw(257, 0);
+                    SmallBlackKeyShader.SetShaders(context);
+                    context.Draw(257, 0);
+                }
             }
         }
 
@@ -594,6 +659,7 @@ namespace Kiva_MIDI
             Disposer.SafeDispose(ref SmallWhiteKeyShader);
             Disposer.SafeDispose(ref SmallBlackKeyShader);
             Disposer.SafeDispose(ref BigWhiteKeyShader);
+            Disposer.SafeDispose(ref BigBarShader);
             Disposer.SafeDispose(ref BigBlackKeyShader);
             Disposer.SafeDispose(ref globalNoteConstants);
             Disposer.SafeDispose(ref noteBuffer);

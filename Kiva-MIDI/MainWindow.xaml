@@ -60,10 +60,12 @@
                             <Label FontSize="16" VerticalAlignment="Center" Padding="5,0,5,3" Margin="0,0,5,0">Speed:</Label>
                             <local:ValueSlider ValueChanged="SpeedSlider_ValueChanged" x:Name="speedSlider" Width="220" Minimum="-3" Maximum="3" TrueMin="0.01" TrueMax="100" DecimalPoints="2" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
                         </DockPanel>
+                        <local:InfoIcon Title="Speed" Text="The relative time scale. Higher values mean faster playback."/>
                         <DockPanel Margin="5,0" WindowChrome.IsHitTestVisibleInChrome="True">
                             <Label FontSize="16" VerticalAlignment="Center" Padding="5,0,5,3" Margin="0,0,5,0">Size:</Label>
                             <local:ValueSlider ValueChanged="SizeSlider_ValueChanged" x:Name="sizeSlider" Width="220" Minimum="-4" Maximum="3" TrueMin="0.01" TrueMax="1000" DecimalPoints="2" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
                         </DockPanel>
+                        <local:InfoIcon Title="Height Scale" Text="The 'Size' of the notes. The smaller the size, the faster they fall."/>
                     </DockPanel>
                     <!--<Slider Name="timeSlider" Margin="10,8,10,7" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged" VerticalAlignment="Center"/>-->
                     <local:BetterSlider x:Name="timeSlider" UserValueChanged="TimeSlider_UserValueChanged" Margin="10,0,10,0" Minimum="0" Maximum="3" Value="1" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True"/>
@@ -75,7 +77,7 @@
                     <Grid.Background>
                         <SolidColorBrush Color="Black" Opacity=".5"/>
                     </Grid.Background>
-                    <Label Foreground="Red" >Skipping Audio Events</Label>
+                    <Label Name="skipEventsCount" Foreground="Red" >Skipping Audio Events</Label>
                 </Grid>
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="100">
                     <Grid.Background>

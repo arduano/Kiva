@@ -14,12 +14,21 @@
         <Border Padding="10">
             <StackPanel>
                 <StackPanel>
-                    <Label FontSize="14">Keyboard Key Range</Label>
+                    <DockPanel HorizontalAlignment="Left">
+                        <Label FontSize="14">Keyboard Key Range</Label>
+                        <local:InfoIcon Title="Key Range" Text="The visible key range. The keyboard maintains its aspect ratio when changing size."/>
+                    </DockPanel>
                     <local:BetterRadio RadioChecked="RangeChanged" x:Name="key88Range" Height="26" Text="88 Keys"/>
                     <local:BetterRadio RadioChecked="RangeChanged" x:Name="key128Range" Height="26" Text="128 Keys"/>
                     <local:BetterRadio RadioChecked="RangeChanged" x:Name="key256Range" Height="26" Text="256 Keys"/>
-                    <local:BetterRadio RadioChecked="RangeChanged" x:Name="midiRange" Height="26" Text="MIDI's Key Range"/>
-                    <local:BetterRadio RadioChecked="RangeChanged" x:Name="dynamicRange" Height="26" Text="Dynamic 88-128 Range"/>
+                    <DockPanel HorizontalAlignment="Left">
+                        <local:BetterRadio RadioChecked="RangeChanged" ParentDepth="2" x:Name="midiRange" Height="26" Text="MIDI's Key Range"/>
+                        <local:InfoIcon Title="MIDI Key Range" Text="From the leftmost to the rightmost note in the midi file" Margin="5,0,0,4" VerticalAlignment="Bottom"/>
+                    </DockPanel>
+                    <DockPanel HorizontalAlignment="Left">
+                        <local:BetterRadio RadioChecked="RangeChanged" ParentDepth="2" x:Name="dynamicRange" Height="26" Text="Dynamic 88-128 Range"/>
+                        <local:InfoIcon Title="Dynamic Key Range" Text="The keyboard will animate between 128 and 88 keys, depending on what notes are on screen" Margin="5,0,0,4" VerticalAlignment="Bottom"/>
+                    </DockPanel>
                     <DockPanel Margin="0">
                         <local:BetterRadio RadioChecked="RangeChanged" x:Name="customRange" ParentDepth="2" Height="26" Text="Custom" Margin="0,0,10,0"/>
                         <local:NumberSelect x:Name="firstKey" Minimum="0" ValueChanged="FirstKey_ValueChanged" Maximum="{Binding ElementName=lastKey, Path=Value}" IsEnabled="{Binding ElementName=customRange, Path=IsChecked}" Width="70" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
@@ -43,7 +52,7 @@
                     </Label>
                     <local:NumberSelect x:Name="fpsLock" ValueChanged="FpsLock_ValueChanged" Minimum="0" Maximum="10000" HorizontalAlignment="Left" Width="80" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
                 </DockPanel>
-                <local:BetterCheckbox CheckToggled="CompatibilityFps_CheckToggled" x:Name="compatibilityFps" Text="Compatibility FPS"/>
+                <!--<local:BetterCheckbox CheckToggled="CompatibilityFps_CheckToggled" x:Name="compatibilityFps" Text="Compatibility FPS"/>-->
             </StackPanel>
         </Border>
     </Grid>

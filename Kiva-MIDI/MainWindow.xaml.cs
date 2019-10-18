@@ -239,18 +239,26 @@ namespace Kiva_MIDI
                     player.DeviceID = settings.General.SelectedMIDIDevice;
                 if (e.PropertyName == "CompatibilityFPS")
                     d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
+                if (e.PropertyName == "BackgroundColor")
+                    glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
             };
 
             d3d.FPSLock = settings.General.FPSLock;
             player.DeviceID = settings.General.SelectedMIDIDevice;
             d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
+            glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
 
             CompositionTarget.Rendering += (s, e) =>
             {
                 var renderText = "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
                                  "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0");
 
-                if (player.BufferLen > 9000) audioDesyncLabel.Visibility = Visibility.Visible;
+                double eventSkip = Math.Floor(player.BufferLen / 100.0);
+                if (eventSkip > 0)
+                {
+                    audioDesyncLabel.Visibility = Visibility.Visible;
+                    skipEventsCount.Content = "Skipping velocity: " + eventSkip;
+                }
                 else audioDesyncLabel.Visibility = Visibility.Hidden;
 
                 renderInfo.Text = renderText;

@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="Kiva_MIDI.MiscSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Kiva_MIDI"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Padding="10">
+            <StackPanel>
+                <DockPanel>
+                    <Label FontSize="14" HorizontalAlignment="Left">
+                        Background Color
+                    </Label>
+                    <local:HexColorPicker ValueChanged="BackgroundColor_ValueChanged" UseAlpha="True" x:Name="backgroundColor" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                </DockPanel>
+                <DockPanel>
+                    <Label FontSize="14" HorizontalAlignment="Left">
+                        Bar Color
+                    </Label>
+                    <local:HexColorPicker ValueChanged="BarColor_ValueChanged" x:Name="barColor" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                </DockPanel>
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Padding="10">
+            <StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
