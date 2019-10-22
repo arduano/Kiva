@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kiva_MIDI
 {
-    class MIDITrackParser : IDisposable
+    public class MIDITrackParser : IDisposable
     {
         struct UnendedNote
         {

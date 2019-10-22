@@ -176,6 +176,8 @@
     <Compile Include="MessageBox.xaml.cs">
       <DependentUpon>MessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MIDIMemoryFile.cs" />
+    <Compile Include="MIDIParseFile.cs" />
     <Compile Include="MIDIPlayer.cs" />
     <Compile Include="LoadingMidiForm.xaml.cs">
       <DependentUpon>LoadingMidiForm.xaml</DependentUpon>
@@ -195,6 +197,7 @@
     <Compile Include="Material.WPF\NumberSelect.xaml.cs">
       <DependentUpon>NumberSelect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PaletteSettings.cs" />
     <Compile Include="Settings\MiscSettings.xaml.cs">
       <DependentUpon>MiscSettings.xaml</DependentUpon>
     </Compile>

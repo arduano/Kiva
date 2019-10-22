@@ -70,7 +70,7 @@ namespace Kiva_MIDI
             s += Hexify(Color.R);
             s += Hexify(Color.G);
             s += Hexify(Color.B);
-            if (UseAlpha && hexText.Text.Length != 6)
+            if (UseAlpha && (hexText.Text.Length != 6 || Color.A != 255))
                 s += Hexify(Color.A);
             if (hexText.Text != s)
                 hexText.Text = s;

@@ -52,7 +52,7 @@ namespace Kiva_MIDI
             if (style == KeyboardStyle.None) noKeyboard.IsChecked = true;
 
             fpsLock.Value = settings.General.FPSLock;
-            compatibilityFps.IsChecked = settings.General.CompatibilityFPS;
+            //compatibilityFps.IsChecked = settings.General.CompatibilityFPS;
 
             firstKey.Value = settings.General.CustomFirstKey;
             lastKey.Value = settings.General.CustomLastKey;
@@ -98,7 +98,7 @@ namespace Kiva_MIDI
         private void CompatibilityFps_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             if (!IsInitialized) return;
-            settings.General.CompatibilityFPS = compatibilityFps.IsChecked;
+            //settings.General.CompatibilityFPS = compatibilityFps.IsChecked;
         }
     }
 }

@@ -104,7 +104,7 @@ namespace Kiva_MIDI
 
         NotesGlobalConstants noteConstants;
 
-        int noteBufferLength = 1 << 10;
+        int noteBufferLength = 1 << 12;
         Buffer noteBuffer;
 
         VelocityEase dynamicState = new VelocityEase(0) { Duration = 0.7, Slope = 3, Supress = 2 };
@@ -457,121 +457,125 @@ namespace Kiva_MIDI
             {
                 if (File != null)
                 {
-                    File.SetColorEvents(time);
-
-                    var colors = File.MidiNoteColors;
-                    var lastTime = File.lastRenderTime;
-
-                    long notesRendered = 0;
-                    object addLock = new object();
-
-                    int firstRenderKey = 256;
-                    int lastRenderKey = -1;
-
-                    int[] ids;
-
-                    for (int black = 0; black < 2; black++)
+                    if (File is MIDIMemoryFile)
                     {
-                        if (black == 1) ids = blackKeysID;
-                        else ids = whiteKeysID;
-                        Parallel.ForEach(ids, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
+                        var file = File as MIDIMemoryFile;
+                        file.SetColorEvents(time);
+
+                        var colors = file.MidiNoteColors;
+                        var lastTime = file.lastRenderTime;
+
+                        long notesRendered = 0;
+                        object addLock = new object();
+
+                        int firstRenderKey = 256;
+                        int lastRenderKey = -1;
+
+                        int[] ids;
+
+                        for (int black = 0; black < 2; black++)
                         {
-                            long _notesRendered = 0;
-                            float left = (float)((x1array[k] - fullLeft) / fullWidth);
-                            float right = (float)((x1array[k] + wdtharray[k] - fullLeft) / fullWidth);
-                            bool pressed = false;
-                            NoteCol col = new NoteCol();
-                            unsafe
+                            if (black == 1) ids = blackKeysID;
+                            else ids = whiteKeysID;
+                            Parallel.ForEach(ids, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
                             {
-                                RenderNote* rn = stackalloc RenderNote[noteBufferLength];
-                                int nid = 0;
-                                int noff = File.FirstRenderNote[k];
-                                Note[] notes = File.Notes[k];
-                                if (notes.Length == 0) goto skipLoop;
-                                if (lastTime > time)
+                                long _notesRendered = 0;
+                                float left = (float)((x1array[k] - fullLeft) / fullWidth);
+                                float right = (float)((x1array[k] + wdtharray[k] - fullLeft) / fullWidth);
+                                bool pressed = false;
+                                NoteCol col = new NoteCol();
+                                unsafe
                                 {
-                                    for (noff = 0; noff < notes.Length; noff++)
+                                    RenderNote* rn = stackalloc RenderNote[noteBufferLength];
+                                    int nid = 0;
+                                    int noff = file.FirstRenderNote[k];
+                                    Note[] notes = file.Notes[k];
+                                    if (notes.Length == 0) goto skipLoop;
+                                    if (lastTime > time)
                                     {
-                                        if (notes[noff].end > time)
+                                        for (noff = 0; noff < notes.Length; noff++)
                                         {
-                                            break;
+                                            if (notes[noff].end > time)
+                                            {
+                                                break;
+                                            }
+                                        }
+                                        file.FirstRenderNote[k] = noff;
+                                    }
+                                    else if (lastTime < time)
+                                    {
+                                        for (; noff < notes.Length; noff++)
+                                        {
+                                            if (notes[noff].end > time)
+                                            {
+                                                break;
+                                            }
+                                        }
+                                        file.FirstRenderNote[k] = noff;
+                                    }
+                                    while (noff != notes.Length && notes[noff].start < renderCutoff)
+                                    {
+                                        var n = notes[noff++];
+                                        if (n.end < time) continue;
+                                        if (n.start < time)
+                                        {
+                                            pressed = true;
+                                            NoteCol kcol = file.MidiNoteColors[n.colorPointer];
+                                            col.rgba = NoteCol.Blend(col.rgba, kcol.rgba);
+                                            col.rgba2 = NoteCol.Blend(col.rgba2, kcol.rgba2);
+                                        }
+                                        _notesRendered++;
+                                        rn[nid++] = new RenderNote()
+                                        {
+                                            start = (float)((n.start - time) / timeScale),
+                                            end = (float)((n.end - time) / timeScale),
+                                            color = colors[n.colorPointer]
+                                        };
+                                        if (nid == noteBufferLength)
+                                        {
+                                            FlushNoteBuffer(context, left, right, (IntPtr)rn, nid);
+                                            nid = 0;
                                         }
                                     }
-                                    File.FirstRenderNote[k] = noff;
-                                }
-                                else if (lastTime < time)
-                                {
-                                    for (; noff < notes.Length; noff++)
+                                    FlushNoteBuffer(context, left, right, (IntPtr)rn, nid);
+                                    skipLoop:
+                                    renderKeys[k].colorl = col.rgba;
+                                    renderKeys[k].colorr = col.rgba2;
+                                    if (pressed && keyEases[k].End == 0) keyEases[k].SetEnd(1);
+                                    else if (!pressed && keyEases[k].End == 1) keyEases[k].SetEnd(0);
+                                    renderKeys[k].distance = (float)keyEases[k].GetValue(0, 1);
+                                    lock (addLock)
                                     {
-                                        if (notes[noff].end > time)
+                                        notesRendered += _notesRendered;
+                                        if (_notesRendered > 0)
                                         {
-                                            break;
+                                            if (firstRenderKey > k) firstRenderKey = k;
+                                            if (lastRenderKey < k) lastRenderKey = k;
                                         }
                                     }
-                                    File.FirstRenderNote[k] = noff;
                                 }
-                                while (noff != notes.Length && notes[noff].start < renderCutoff)
-                                {
-                                    var n = notes[noff++];
-                                    if (n.end < time) continue;
-                                    if (n.start < time)
-                                    {
-                                        pressed = true;
-                                        NoteCol kcol = File.MidiNoteColors[n.colorPointer];
-                                        col.rgba = NoteCol.Blend(col.rgba, kcol.rgba);
-                                        col.rgba2 = NoteCol.Blend(col.rgba2, kcol.rgba2);
-                                    }
-                                    _notesRendered++;
-                                    rn[nid++] = new RenderNote()
-                                    {
-                                        start = (float)((n.start - time) / timeScale),
-                                        end = (float)((n.end - time) / timeScale),
-                                        color = colors[n.colorPointer]
-                                    };
-                                    if (nid == noteBufferLength)
-                                    {
-                                        FlushNoteBuffer(context, left, right, (IntPtr)rn, nid);
-                                        nid = 0;
-                                    }
-                                }
-                                FlushNoteBuffer(context, left, right, (IntPtr)rn, nid);
-                                skipLoop:
-                                renderKeys[k].colorl = col.rgba;
-                                renderKeys[k].colorr = col.rgba2;
-                                if (pressed && keyEases[k].End == 0) keyEases[k].SetEnd(1);
-                                else if (!pressed && keyEases[k].End == 1) keyEases[k].SetEnd(0);
-                                renderKeys[k].distance = (float)keyEases[k].GetValue(0, 1);
-                                lock (addLock)
-                                {
-                                    notesRendered += _notesRendered;
-                                    if (_notesRendered > 0)
-                                    {
-                                        if (firstRenderKey > k) firstRenderKey = k;
-                                        if (lastRenderKey < k) lastRenderKey = k;
-                                    }
-                                }
+                            });
+                        }
+                        if (firstRenderKey <= 19 || lastRenderKey >= 110)
+                        {
+                            if (dynamicState88)
+                            {
+                                dynamicState.SetEnd(0);
+                                dynamicState88 = false;
                             }
-                        });
-                    }
-                    if (firstRenderKey <= 19 || lastRenderKey >= 110)
-                    {
-                        if (dynamicState88)
-                        {
-                            dynamicState.SetEnd(0);
-                            dynamicState88 = false;
                         }
-                    }
-                    else
-                    {
-                        if (!dynamicState88)
+                        else
                         {
-                            dynamicState.SetEnd(1);
-                            dynamicState88 = true;
+                            if (!dynamicState88)
+                            {
+                                dynamicState.SetEnd(1);
+                                dynamicState88 = true;
+                            }
                         }
-                    }
 
-                    LastRenderedNoteCount = notesRendered;
-                    File.lastRenderTime = time;
+                        LastRenderedNoteCount = notesRendered;
+                        file.lastRenderTime = time;
+                    }
                 }
                 else
                 {

@@ -99,7 +99,7 @@ namespace Kiva_MIDI
             Keyboard.ClearFocus();
             loadSettingsScreen.Visibility = Visibility.Collapsed;
             loadProgessScreen.Visibility = Visibility.Visible;
-            LoadedFile = new MIDIFile(filepath, loaderSettings, cancel.Token);
+            LoadedFile = new MIDIMemoryFile(filepath, loaderSettings, cancel.Token);
             LoadedFile.ParseFinished += () =>
             {
                 ParseFinished?.Invoke();

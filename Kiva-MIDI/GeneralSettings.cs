@@ -43,6 +43,10 @@ namespace Kiva_MIDI
         public Color ForegroundColor { get; set; } = Color.FromArgb(255, 142, 142, 142);
         public Color BarColor { get; set; } = Color.FromArgb(255, 255, 0, 0);
 
+        public string PaletteName { get; set; } = "Random.png";
+        public bool PaletteRandomized { get; set; } = true;
+
         public event PropertyChangedEventHandler PropertyChanged;
+
     }
 }

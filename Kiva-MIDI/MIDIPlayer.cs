@@ -98,10 +98,10 @@ namespace Kiva_MIDI
                     SpinWait.SpinUntil(() => file != null || disposed);
                     try
                     {
-                        tasks.Add(RunPlayerThread(-1));
-                        for (int i = 0; i < file.MIDINoteEvents.Length; i++)
+                        tasks.Add(RunMemoryPlayerThread(-1));
+                        for (int i = 0; i < (file as MIDIMemoryFile).MIDINoteEvents.Length; i++)
                         {
-                            tasks.Add(RunPlayerThread(i));
+                            tasks.Add(RunMemoryPlayerThread(i));
                         }
                         lock (tasks)
                         {
@@ -116,7 +116,7 @@ namespace Kiva_MIDI
             });
         }
 
-        Task RunPlayerThread(int i)
+        Task RunMemoryPlayerThread(int i)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -124,13 +124,13 @@ namespace Kiva_MIDI
                 if (i == -1)
                     try
                     {
-                        events = file.MIDIControlEvents;
+                        events = (file as MIDIMemoryFile).MIDIControlEvents;
                     }
                     catch { return; }
                 else
                     try
                     {
-                        events = file.MIDINoteEvents[i];
+                        events = (file as MIDIMemoryFile).MIDINoteEvents[i];
                     }
                     catch { return; }
                 if (events.Length == 0) return;

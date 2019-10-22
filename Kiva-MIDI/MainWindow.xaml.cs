@@ -323,7 +323,11 @@ namespace Kiva_MIDI
 
         private void MinimiseButton_Click(object sender, RoutedEventArgs e)
         {
-            WindowStyle = WindowStyle.SingleBorderWindow;
+            try
+            {
+                WindowStyle = WindowStyle.SingleBorderWindow;
+            }
+            catch { }
             WindowState = WindowState.Minimized;
         }
 
@@ -342,7 +346,10 @@ namespace Kiva_MIDI
             base.OnPropertyChanged(e);
             if (e.Property == WindowStateProperty)
             {
-                if (WindowState != WindowState.Minimized) WindowStyle = WindowStyle.None;
+                if (WindowState != WindowState.Minimized)
+                {
+                    WindowStyle = WindowStyle.None;
+                }
             }
         }
 
