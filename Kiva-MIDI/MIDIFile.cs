@@ -1,6 +1,7 @@
 ﻿using SharpDX;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -245,6 +246,46 @@ namespace Kiva_MIDI
                     rgba = NoteCol.Compress((byte)r, (byte)g, (byte)b, 255),
                     rgba2 = NoteCol.Compress((byte)r, (byte)g, (byte)b, 255),
                 };
+            }
+        }
+
+        public void SetColors(Bitmap img, bool randomise)
+        {
+            Random r = new Random();
+            double[] order = new double[trackcount * 16];
+            int[] coords = new int[trackcount * 16];
+            for (int i = 0; i < order.Length; i++)
+            {
+                order[i] = r.NextDouble();
+                coords[i] = i;
+            }
+            if (randomise)
+            {
+                Array.Sort(order, coords);
+            }
+            for (int i = 0; i < trackcount; i++)
+            {
+                for (int j = 0; j < 16; j++)
+                {
+                    int y = coords[i * 16 + j];
+                    int x = y % 16;
+                    y = y - x;
+                    y /= 16;
+                    System.Drawing.Color col;
+                    if (img.Width == 16)
+                    {
+                        col = img.GetPixel(x, y % img.Height);
+                        OriginalMidiNoteColors[i * 16 + j].rgba = NoteCol.Compress(col.R, col.G, col.B, col.A);
+                        OriginalMidiNoteColors[i * 16 + j].rgba2 = NoteCol.Compress(col.R, col.G, col.B, col.A);
+                    }
+                    else
+                    {
+                        col = img.GetPixel(x * 2, y % img.Height);
+                        OriginalMidiNoteColors[i * 16 + j].rgba = NoteCol.Compress(col.R, col.G, col.B, col.A);
+                        col = img.GetPixel(x * 2 + 1, y % img.Height);
+                        OriginalMidiNoteColors[i * 16 + j].rgba2 = NoteCol.Compress(col.R, col.G, col.B, col.A);
+                    }
+                }
             }
         }
 

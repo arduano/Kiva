@@ -85,10 +85,10 @@ namespace Kiva_MIDI
 
         public void RunPlayer()
         {
+            cancelConsumer = new CancellationTokenSource();
             playerThread = Task.Run(() =>
             {
                 eventFeed = new BlockingCollection<MIDIEvent>();
-                cancelConsumer = new CancellationTokenSource();
                 if (deviceID < 0)
                     deviceThread = Task.Factory.StartNew(() => RunEventConsumerKDMAPI(cancelConsumer.Token), TaskCreationOptions.LongRunning);
                 else
@@ -229,19 +229,24 @@ namespace Kiva_MIDI
         void RunEventConsumerWINMM(CancellationToken cancel)
         {
             var id = deviceID;
-            var device = new OutputDevice(id);
-            this.device = device;
             try
             {
+                var device = new OutputDevice(id);
+                this.device = device;
                 foreach (var e in eventFeed.GetConsumingEnumerable(cancel))
                 {
                     device.SendShort((int)e.data);
                     if (deviceID != id) break;
                 }
             }
-            catch (OperationCanceledException) { }
-            device.Close();
-            device.Dispose();
+            catch { }
+            try
+            {
+                device.Close();
+                device.Dispose();
+            }
+            catch { }
+
             this.device = null;
         }
 

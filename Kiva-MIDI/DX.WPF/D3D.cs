@@ -151,14 +151,14 @@ namespace Kiva_MIDI
                     {
                         var desired = 10000000 / FPSLock;
                         var elapsed = frameTimer.ElapsedTicks;
-                        long remaining = -(desired - elapsed) + (long)delayExtraDelay;
+                        long remaining = -(desired + (long)delayExtraDelay - elapsed);
                         Stopwatch s = new Stopwatch();
                         s.Start();
                         if (remaining < 0)
                         {
                             NtDelayExecution(false, ref remaining);
                         }
-                        var excess = remaining + s.ElapsedTicks;
+                        var excess = desired - frameTimer.ElapsedTicks;
                         delayExtraDelay = (delayExtraDelay * 60 + excess) / 61;
                     }
                     frameTimer.Reset();

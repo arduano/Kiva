@@ -6,6 +6,13 @@
              xmlns:local="clr-namespace:Kiva_MIDI"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="600">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../ButtonTemplates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -42,18 +49,36 @@
                     <local:BetterRadio RadioChecked="KBStyleChanged" x:Name="smallKeyboard" Height="26" Text="Small Keyboard"/>
                     <local:BetterRadio RadioChecked="KBStyleChanged" x:Name="noKeyboard" Height="26" Text="No Keyboard"/>
                 </StackPanel>
-            </StackPanel>
-        </Border>
-        <Border Grid.Column="1" Padding="10">
-            <StackPanel>
                 <DockPanel>
                     <Label FontSize="14" HorizontalAlignment="Left">
                         Lock FPS (0 = unlocked):
                     </Label>
                     <local:NumberSelect x:Name="fpsLock" ValueChanged="FpsLock_ValueChanged" Minimum="0" Maximum="10000" HorizontalAlignment="Left" Width="80" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
                 </DockPanel>
-                <!--<local:BetterCheckbox CheckToggled="CompatibilityFps_CheckToggled" x:Name="compatibilityFps" Text="Compatibility FPS"/>-->
             </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Padding="10">
+            <DockPanel>
+                <Grid DockPanel.Dock="Top">
+                    <Label FontSize="14" HorizontalAlignment="Left">
+                        Note Color Palette
+                    </Label>
+                    <Button Name="reloadPalettes" PreviewMouseDown="ReloadPalettes_PreviewMouseDown" Style="{DynamicResource TransparentButtonStyle}" HorizontalAlignment="Right" Width="80" FontSize="14" Margin="0,3">
+                        Reload
+                    </Button>
+                </Grid>
+                <Button Name="openPaletteFolder" PreviewMouseDown="OpenPaletteFolder_PreviewMouseDown" DockPanel.Dock="Bottom" Style="{DynamicResource TransparentButtonStyle}" HorizontalAlignment="Center" Width="140" Height="25" FontSize="14" Margin="0,3,0,0">
+                    Open Palette Folder
+                </Button>
+                <local:BetterCheckbox x:Name="randomisePaletteOrder" CheckToggled="RandomisePaletteOrder_CheckToggled" DockPanel.Dock="Bottom" Text="Randomise Color Order" Margin="0,5,0,0"/>
+                <Border BorderThickness="1" BorderBrush="Black">
+                    <ScrollViewer Name="paletteList" Height="299">
+                        <StackPanel Name="palettesPanel">
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+                <!--<local:BetterCheckbox CheckToggled="CompatibilityFps_CheckToggled" x:Name="compatibilityFps" Text="Compatibility FPS"/>-->
+            </DockPanel>
         </Border>
     </Grid>
 </UserControl>

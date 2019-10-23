@@ -27,6 +27,8 @@ namespace Kiva_MIDI
         public GeneralSettings General { get; set; } = new GeneralSettings();
         MIDILoaderSettings loaderSettings;
 
+        public PaletteSettings PaletteSettings { get; } = new PaletteSettings();
+
         public MIDILoaderSettings GetMIDILoaderSettings()
         {
             return loaderSettings.Clone();
@@ -84,10 +86,16 @@ namespace Kiva_MIDI
 
             General = loading.general;
 
-            General.PropertyChanged += (s, e) =>
+            PaletteSettings.Reload();
+            if (!PaletteSettings.Palettes.ContainsKey(General.PaletteName))
             {
-                SaveSetings(General, generalPath);
-            };
+                General.PaletteName = PaletteSettings.Palettes.Keys.First();
+            }
+
+            General.PropertyChanged += (s, e) =>
+        {
+            SaveSetings(General, generalPath);
+        };
         }
 
         dynamic UpdateSettings(dynamic settings)

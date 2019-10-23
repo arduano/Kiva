@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,8 @@ namespace Kiva_MIDI
             }
         }
 
+        SolidColorBrush selectBrush = new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
+
         public VisualSettings()
         {
             InitializeComponent();
@@ -56,6 +59,41 @@ namespace Kiva_MIDI
 
             firstKey.Value = settings.General.CustomFirstKey;
             lastKey.Value = settings.General.CustomLastKey;
+
+            randomisePaletteOrder.IsChecked = settings.General.PaletteRandomized;
+
+            SetPalettes();
+        }
+
+        void SetPalettes()
+        {
+            foreach (var p in settings.PaletteSettings.Palettes.Keys)
+            {
+                var item = new Grid()
+                {
+                    Tag = p,
+                    Background = Brushes.Transparent
+                };
+                item.Children.Add(
+                    new RippleEffectDecorator()
+                    {
+                        Content = new Label
+                        {
+                            Content = p
+                        }
+                    }
+                );
+                item.PreviewMouseDown += (s, e) =>
+                {
+                    if (settings.General.PaletteName == p) return;
+                    foreach (var i in palettesPanel.Children.Cast<Grid>()) i.Background = Brushes.Transparent;
+                    settings.General.PaletteName = p;
+                    item.Background = selectBrush;
+                };
+                if (p == settings.General.PaletteName)
+                    item.Background = selectBrush;
+                palettesPanel.Children.Add(item);
+            }
         }
 
         private void RangeChanged(object sender, RoutedEventArgs e)
@@ -68,7 +106,7 @@ namespace Kiva_MIDI
             if (sender == dynamicRange) settings.General.KeyRange = KeyRangeTypes.KeyDynamic;
             if (sender == customRange) settings.General.KeyRange = KeyRangeTypes.Custom;
         }
-        
+
         private void KBStyleChanged(object sender, RoutedEventArgs e)
         {
             if (!IsInitialized) return;
@@ -99,6 +137,27 @@ namespace Kiva_MIDI
         {
             if (!IsInitialized) return;
             //settings.General.CompatibilityFPS = compatibilityFps.IsChecked;
+        }
+
+        private void OpenPaletteFolder_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("explorer.exe", System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva\\Palettes\\"));
+        }
+
+        private void ReloadPalettes_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            palettesPanel.Children.Clear();
+            settings.PaletteSettings.Reload();
+            if (!settings.PaletteSettings.Palettes.Keys.Contains(settings.General.PaletteName))
+                settings.General.PaletteName = settings.PaletteSettings.Palettes.Keys.First();
+
+            SetPalettes();
+        }
+
+        private void RandomisePaletteOrder_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            if (!IsInitialized) return;
+            settings.General.PaletteRandomized = randomisePaletteOrder.IsChecked;
         }
     }
 }

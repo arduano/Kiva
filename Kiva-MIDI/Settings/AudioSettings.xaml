@@ -14,9 +14,11 @@
         <Border Padding="10">
             <DockPanel LastChildFill="True">
                 <Label DockPanel.Dock="Top">MIDI Output Device</Label>
-                <ListBox Name="devicesList" BorderBrush="Black" Background="Transparent" HorizontalContentAlignment="Stretch" Padding="0">
-                    
-                </ListBox>
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel Name="devicesList" Background="Transparent">
+
+                    </StackPanel>
+                </Border>
             </DockPanel>
         </Border>
         <Border Grid.Column="1" Padding="10">

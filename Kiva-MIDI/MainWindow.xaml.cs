@@ -191,6 +191,8 @@ namespace Kiva_MIDI
         D3D11 d3d;
         MIDIPlayer player;
 
+        MIDIFile loadedFle;
+
         Settings settings = new Settings();
 
         SettingsWindow settingsWindow = null;
@@ -241,6 +243,11 @@ namespace Kiva_MIDI
                     d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
                 if (e.PropertyName == "BackgroundColor")
                     glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
+                if(loadedFle != null)
+                {
+                    if (e.PropertyName == "PaletteName" || e.PropertyName == "PaletteRandomized")
+                        loadedFle.SetColors(settings.PaletteSettings.Palettes[settings.General.PaletteName], settings.General.PaletteRandomized);
+                }
             };
 
             d3d.FPSLock = settings.General.FPSLock;
@@ -275,6 +282,7 @@ namespace Kiva_MIDI
             Time.Reset();
             player.File = null;
             scene.File = null;
+            loadedFle = null;
             GC.Collect(2, GCCollectionMode.Forced);
 
 
@@ -282,10 +290,12 @@ namespace Kiva_MIDI
             loadingForm.ParseFinished += () =>
             {
                 var file = loadingForm.LoadedFile;
+                file.SetColors(settings.PaletteSettings.Palettes[settings.General.PaletteName], settings.General.PaletteRandomized);
                 Dispatcher.Invoke(() =>
                 {
                     player.File = file;
                     scene.File = file;
+                    loadedFle = file;
                     timeSlider.Maximum = file.MidiLength;
                     loadingForm.Close();
                     loadingForm.Dispose();

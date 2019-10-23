@@ -63,24 +63,25 @@ namespace Kiva_MIDI
                     var device = OutputDevice.GetDeviceCapabilities(i);
                     name = device.name;
                 }
-                var item = new ListBoxItem()
+                var item = new Grid()
                 {
                     Tag = new DeviceData() { id = i, name = name },
-                    Padding = new Thickness(0),
-                    Content = new RippleEffectDecorator()
+                };
+                item.Children.Add(
+                    new RippleEffectDecorator()
                     {
                         Content = new Label
                         {
                             Content = name
                         }
                     }
-                };
+                );
                 item.PreviewMouseDown += (s, e) =>
                 {
                     ClearSelectedDevice();
-                    SelectDevice(devicesList.Items.IndexOf(item));
+                    SelectDevice(devicesList.Children.IndexOf(item));
                 };
-                devicesList.Items.Add(item);
+                devicesList.Children.Add(item);
             }
 
             ClearSelectedDevice();
@@ -89,9 +90,8 @@ namespace Kiva_MIDI
         public void SelectDevice(int index)
         {
             ClearSelectedDevice();
-            ((ContentControl)devicesList.Items[index]).Background = selectBrush;
-            var tag = (DeviceData)((ContentControl)devicesList.Items[index]).Tag;
-            devicesList.SelectedItem = index;
+            ((Grid)devicesList.Children[index]).Background = selectBrush;
+            var tag = (DeviceData)((Grid)devicesList.Children[index]).Tag;
             settings.General.SelectedMIDIDevice = tag.id;
             settings.General.SelectedMIDIDeviceName = tag.name;
         }
@@ -101,7 +101,7 @@ namespace Kiva_MIDI
             ClearSelectedDevice();
             int i = 0;
             bool selected = false;
-            foreach (var b in devicesList.Items.Cast<ContentControl>())
+            foreach (var b in devicesList.Children.Cast<Grid>())
             {
                 var tag = (DeviceData)b.Tag;
                 if (tag.name == settings.General.SelectedMIDIDeviceName)
@@ -123,7 +123,7 @@ namespace Kiva_MIDI
 
         public void ClearSelectedDevice()
         {
-            foreach (var b in devicesList.Items.Cast<ContentControl>()) b.Background = Brushes.Transparent;
+            foreach (var b in devicesList.Children.Cast<Grid>()) b.Background = Brushes.Transparent;
         }
     }
 }
