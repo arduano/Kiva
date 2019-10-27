@@ -53,8 +53,14 @@ namespace Kiva_MIDI
         {
             Window_SourceInitialized(this, null);
             Width = ActualWidth;
-            Height = ActualHeight;
+            //Height = ActualHeight;
             SizeToContent = SizeToContent.Manual;
+            if (Width > 400) Width = 400;
+            if(Height > 200)
+            {
+                double area = Width * Height;
+                Width = Math.Sqrt(area) * 2.5;
+            }
         }
 
         public static void Show(string title, string message)
@@ -65,6 +71,14 @@ namespace Kiva_MIDI
         public static void Show(string message)
         {
             Show("", message);
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(content.ActualHeight < bodyText.ActualHeight + 20)
+            {
+                Height = ActualHeight + (bodyText.ActualHeight + 20 - content.ActualHeight);
+            }
         }
     }
 }

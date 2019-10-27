@@ -46,8 +46,12 @@ namespace Kiva_MIDI
             Dispose(true);
         }
 
+        bool disposed = false;
+
         protected virtual void Dispose(bool disposing)
         {
+            disposed = true;
+            renderThread.GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -132,7 +136,7 @@ namespace Kiva_MIDI
                 renderTimer.Start();
                 TimeSpan last = renderTimer.Elapsed;
                 frameTimes.Add(DateTime.UtcNow);
-                while (true)
+                while (!disposed)
                 {
                     frameTimer.Start();
                     while (SingleThreadedRender) Thread.Sleep(100);

@@ -81,21 +81,25 @@ namespace Kiva_MIDI
             File = null;
             disposed = true;
             playerThread.GetAwaiter().GetResult();
+            deviceThread.GetAwaiter().GetResult();
         }
 
         public void RunPlayer()
         {
             cancelConsumer = new CancellationTokenSource();
+            eventFeed = new BlockingCollection<MIDIEvent>();
+            if (deviceThread != null)
+                deviceThread.GetAwaiter().GetResult();
+            if (deviceID < 0)
+                deviceThread = Task.Factory.StartNew(() => RunEventConsumerKDMAPI(cancelConsumer.Token), TaskCreationOptions.LongRunning);
+            else
+                deviceThread = Task.Factory.StartNew(() => RunEventConsumerWINMM(cancelConsumer.Token), TaskCreationOptions.LongRunning);
             playerThread = Task.Run(() =>
             {
-                eventFeed = new BlockingCollection<MIDIEvent>();
-                if (deviceID < 0)
-                    deviceThread = Task.Factory.StartNew(() => RunEventConsumerKDMAPI(cancelConsumer.Token), TaskCreationOptions.LongRunning);
-                else
-                    deviceThread = Task.Factory.StartNew(() => RunEventConsumerWINMM(cancelConsumer.Token), TaskCreationOptions.LongRunning);
                 while (!disposed)
                 {
                     SpinWait.SpinUntil(() => file != null || disposed);
+                    if (disposed) break;
                     try
                     {
                         tasks.Add(RunMemoryPlayerThread(-1));
@@ -148,11 +152,16 @@ namespace Kiva_MIDI
                         while (Time.Paused)
                         {
                             Thread.Sleep(50);
+                            if (file == null) goto dispose;
                         }
                         evid = GetEventPos(events, time) - 10;
                         if (evid < 0 || i == -1) evid = 0;
                     }
-                    while (evid == events.Length && !changed) { Thread.Sleep(50); }
+                    while (evid == events.Length && !changed)
+                    {
+                        Thread.Sleep(50);
+                        if (file == null) goto dispose;
+                    }
                     if (changed || lastTime > time)
                     {
                         time = Time.GetTime();
@@ -201,6 +210,7 @@ namespace Kiva_MIDI
                         while (Time.GetTime() > events[events.Length - 1].time)
                         {
                             Thread.Sleep(50);
+                            if (file == null) goto dispose;
                         }
                         evid = GetEventPos(events, time);
                     }
@@ -219,7 +229,7 @@ namespace Kiva_MIDI
                 foreach (var e in eventFeed.GetConsumingEnumerable(cancel))
                 {
                     KDMAPI.SendDirectDataNoBuf(e.data);
-                    if (deviceID != -1) break;
+                    if (deviceID != -1 || disposed) break;
                 }
             }
             catch (OperationCanceledException) { }
@@ -236,14 +246,18 @@ namespace Kiva_MIDI
                 foreach (var e in eventFeed.GetConsumingEnumerable(cancel))
                 {
                     device.SendShort((int)e.data);
-                    if (deviceID != id) break;
+                    if (deviceID != id || disposed) break;
                 }
             }
             catch { }
             try
             {
-                device.Close();
                 device.Dispose();
+            }
+            catch { }
+            try
+            {
+                device.Close();
             }
             catch { }
 

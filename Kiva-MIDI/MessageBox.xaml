@@ -9,7 +9,7 @@
         TextElement.FontSize="16"
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"        
-        Title="SettingsWindow" Loaded="Window_Loaded" MinHeight="100" MinWidth="200" WindowStyle="None" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SizeToContent="WidthAndHeight">
+        Title="SettingsWindow" Loaded="Window_Loaded" MinHeight="100" MinWidth="200" WindowStyle="None" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SizeToContent="WidthAndHeight" SizeChanged="Window_SizeChanged">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -37,7 +37,7 @@
                 </DockPanel>
             </Border>
             <Grid Name="content" Background="#0179db">
-                <TextBlock Name="bodyText" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" MaxWidth="400" TextWrapping="Wrap">
+                <TextBlock Name="bodyText" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" TextWrapping="Wrap">
                 </TextBlock>
             </Grid>
         </DockPanel>

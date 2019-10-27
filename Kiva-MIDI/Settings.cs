@@ -17,7 +17,8 @@ namespace Kiva_MIDI
         public static readonly string VersionName = "Beta";
         public static readonly string SettingsVersion = "1";
         public string InstallPath;
-        static readonly string SettingsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva/Settings");
+        //static readonly string SettingsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva/Settings");
+        static readonly string SettingsFolderPath = Path.Combine("Settings");
 
         string versionPath;
         string midiPath;

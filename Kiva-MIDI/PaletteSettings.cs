@@ -18,7 +18,8 @@ namespace Kiva_MIDI
         public void Reload()
         {
             float mult = 0.12345f;
-            string searchPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva/Palettes");
+            //string searchPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva/Palettes");
+            string searchPath = Path.Combine("Palettes");
             if (!Directory.Exists(searchPath)) Directory.CreateDirectory(searchPath);
             using (Bitmap palette = new Bitmap(16, 8))
             {

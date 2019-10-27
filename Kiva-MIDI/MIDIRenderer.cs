@@ -90,6 +90,8 @@ namespace Kiva_MIDI
         public PlayingState Time { get; set; } = new PlayingState();
 
         public long LastRenderedNoteCount { get; private set; } = 0;
+        public long LastNPS { get; private set; } = 0;
+        public long LastPolyphony { get; private set; } = 0;
 
         ShaderManager notesShader;
         ShaderManager SmallWhiteKeyShader;
@@ -477,6 +479,7 @@ namespace Kiva_MIDI
                         {
                             if (black == 1) ids = blackKeysID;
                             else ids = whiteKeysID;
+                                int polyphonySum = 0;
                             Parallel.ForEach(ids, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
                             {
                                 long _notesRendered = 0;
@@ -489,6 +492,7 @@ namespace Kiva_MIDI
                                     RenderNote* rn = stackalloc RenderNote[noteBufferLength];
                                     int nid = 0;
                                     int noff = file.FirstRenderNote[k];
+                                    int polyphony = 0;
                                     Note[] notes = file.Notes[k];
                                     if (notes.Length == 0) goto skipLoop;
                                     if (lastTime > time)
@@ -519,6 +523,7 @@ namespace Kiva_MIDI
                                         if (n.end < time) continue;
                                         if (n.start < time)
                                         {
+                                            polyphony++;
                                             pressed = true;
                                             NoteCol kcol = file.MidiNoteColors[n.colorPointer];
                                             col.rgba = NoteCol.Blend(col.rgba, kcol.rgba);
@@ -546,6 +551,7 @@ namespace Kiva_MIDI
                                     renderKeys[k].distance = (float)keyEases[k].GetValue(0, 1);
                                     lock (addLock)
                                     {
+                                        polyphonySum += polyphony;
                                         notesRendered += _notesRendered;
                                         if (_notesRendered > 0)
                                         {
@@ -580,6 +586,8 @@ namespace Kiva_MIDI
                 else
                 {
                     LastRenderedNoteCount = 0;
+                    LastNPS = 0;
+                    LastPolyphony = 0;
                     for (int i = 0; i < renderKeys.Length; i++)
                     {
                         renderKeys[i].colorl = 0;

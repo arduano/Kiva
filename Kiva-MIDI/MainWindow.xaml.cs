@@ -255,10 +255,20 @@ namespace Kiva_MIDI
             d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
             glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
 
+            Func<TimeSpan, string> timeSpanString = (s) => 
+            s.Minutes + ":" + 
+            (s.Seconds > 9 ? s.Seconds.ToString() : "0" + s.Seconds) + "." + 
+            (s.Milliseconds - (s.Milliseconds % 100)) / 100;
+
             CompositionTarget.Rendering += (s, e) =>
             {
-                var renderText = "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
+                var midiLen = loadedFle == null ? 0 : loadedFle.MidiLength;
+                var midiTime = Time.GetTime();
+                var renderText = timeSpanString(TimeSpan.FromSeconds(Time.GetTime())) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen)) + "\n" +
+                                 "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
                                  "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0");
+
+                if (midiTime > midiLen + 1) Time.Pause();
 
                 double eventSkip = Math.Floor(player.BufferLen / 100.0);
                 if (eventSkip > 0)
@@ -277,7 +287,7 @@ namespace Kiva_MIDI
         public FPS FPS { get; set; }
         public PlayingState Time { get; set; }
 
-        void LoadMidi(string filename)
+        public void LoadMidi(string filename)
         {
             Time.Reset();
             player.File = null;
@@ -315,10 +325,6 @@ namespace Kiva_MIDI
                 });
             };
             loadingForm.ShowDialog();
-            //var file = new MIDIFile("E:\\Midi\\tau2.5.9.mid");
-            //var file = new MIDIFile("E:\\Midi\\9KX2 18 Million Notes.mid");
-            //var file = new MIDIFile("E:\\Midi\\[Black MIDI]scarlet_zone-& The Young Descendant of Tepes V.2.mid");
-            //var file = new MIDIFile("E:\\Midi\\Septette For The Dead Princess 442 MILLION.mid");
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -505,7 +511,9 @@ namespace Kiva_MIDI
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             player.File = null;
+            player.Dispose();
             scene.File = null;
+            d3d.Dispose();
         }
 
         private void GlContainer_MouseDown(object sender, MouseButtonEventArgs e)

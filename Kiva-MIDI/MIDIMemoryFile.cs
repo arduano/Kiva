@@ -13,6 +13,7 @@ namespace Kiva_MIDI
         public MIDIEvent[] MIDIControlEvents { get; private set; } = null;
         public Note[][] Notes { get; private set; } = new Note[256][];
         public int[] FirstRenderNote { get; private set; } = new int[256];
+        public int[] FirstUnhitNote { get; private set; } = new int[256];
         public double lastRenderTime { get; set; } = 0;
         public int[] LastColorEvent;
         public ColorEvent[][] ColorEvents;

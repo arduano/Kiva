@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -141,7 +142,7 @@ namespace Kiva_MIDI
 
         private void OpenPaletteFolder_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("explorer.exe", System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva\\Palettes\\"));
+            Process.Start("explorer.exe", System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Palettes\\"));
         }
 
         private void ReloadPalettes_PreviewMouseDown(object sender, MouseButtonEventArgs e)
