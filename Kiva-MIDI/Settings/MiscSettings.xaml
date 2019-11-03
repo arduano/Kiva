@@ -25,6 +25,7 @@
                     </Label>
                     <local:HexColorPicker ValueChanged="BarColor_ValueChanged" x:Name="barColor" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
                 </DockPanel>
+                <local:BetterCheckbox x:Name="hideInfoCard" Text="Hide Info Card" Margin="0,5,0,0" CheckToggled="hideInfoCard_CheckToggled"/>
             </StackPanel>
         </Border>
         <Border Grid.Column="1" Padding="10">

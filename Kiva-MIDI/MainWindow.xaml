@@ -12,7 +12,7 @@
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"        
         Name="mainWindow"
-        Title="MainWindow" WindowStyle="None" Height="700" Width="1200" 
+        Title="Kiva" WindowStyle="None" Height="700" Width="1200" 
         Loaded="Window_Loaded" SnapsToDevicePixels="True" PreviewKeyDown="MainWindow_PreviewKeyDown"  KeyDown="MainWindow_KeyDown"
         AllowDrop="True" PreviewDrop="MainWindow_PreviewDrop" PreviewDragEnter="MainWindow_PreviewDragEnter" 
         PreviewDragLeave="MainWindow_PreviewDragLeave" WindowStartupLocation="CenterScreen"
@@ -79,7 +79,7 @@
                     </Grid.Background>
                     <Label Name="skipEventsCount" Foreground="Red" >Skipping Audio Events</Label>
                 </Grid>
-                <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="100">
+                <Grid Name="infoCard" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="100">
                     <Grid.Background>
                         <SolidColorBrush Color="Black" Opacity=".5"/>
                     </Grid.Background>
@@ -97,7 +97,6 @@
                         </DockPanel>
                         <StackPanel Name="infoPanel">
                             <TextBlock Foreground="White" Name="renderInfo" Padding="5"></TextBlock>
-                            <TextBlock Foreground="White" Name="midiInfo"></TextBlock>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

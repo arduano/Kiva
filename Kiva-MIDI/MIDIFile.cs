@@ -214,7 +214,7 @@ namespace Kiva_MIDI
             ParseStage = ParsingStage.FirstPass;
             Parallel.For(0, parsers.Length, new ParallelOptions() { CancellationToken = cancel }, (i) =>
             {
-                var reader = new BufferByteReader(MidiFileReader, 10000, trackBeginnings[i], trackLengths[i]);
+                var reader = new BufferByteReader(MidiFileReader, 100000, trackBeginnings[i], trackLengths[i]);
                 parsers[i] = new MIDITrackParser(reader, division, i, loaderSettings);
                 parsers[i].FirstPassParse();
                 lock (l)

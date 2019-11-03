@@ -243,7 +243,9 @@ namespace Kiva_MIDI
                     d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
                 if (e.PropertyName == "BackgroundColor")
                     glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
-                if(loadedFle != null)
+                if (e.PropertyName == "HideInfoCard")
+                    infoCard.Visibility = settings.General.HideInfoCard ? Visibility.Hidden : Visibility.Visible;
+                if (loadedFle != null)
                 {
                     if (e.PropertyName == "PaletteName" || e.PropertyName == "PaletteRandomized")
                         loadedFle.SetColors(settings.PaletteSettings.Palettes[settings.General.PaletteName], settings.General.PaletteRandomized);
@@ -254,10 +256,11 @@ namespace Kiva_MIDI
             player.DeviceID = settings.General.SelectedMIDIDevice;
             d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
             glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
+            infoCard.Visibility = settings.General.HideInfoCard ? Visibility.Hidden : Visibility.Visible;
 
-            Func<TimeSpan, string> timeSpanString = (s) => 
-            s.Minutes + ":" + 
-            (s.Seconds > 9 ? s.Seconds.ToString() : "0" + s.Seconds) + "." + 
+            Func<TimeSpan, string> timeSpanString = (s) =>
+            s.Minutes + ":" +
+            (s.Seconds > 9 ? s.Seconds.ToString() : "0" + s.Seconds) + "." +
             (s.Milliseconds - (s.Milliseconds % 100)) / 100;
 
             CompositionTarget.Rendering += (s, e) =>
@@ -266,7 +269,9 @@ namespace Kiva_MIDI
                 var midiTime = Time.GetTime();
                 var renderText = timeSpanString(TimeSpan.FromSeconds(Time.GetTime())) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen)) + "\n" +
                                  "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
-                                 "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0");
+                                 "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0") + "\n" +
+                                 "NPS: " + scene.LastNPS.ToString("#,##0") + "\n" +
+                                 "Polyphony: " + scene.LastPolyphony.ToString("#,##0");
 
                 if (midiTime > midiLen + 1) Time.Pause();
 

@@ -41,6 +41,16 @@ namespace Kiva_MIDI
             get => render.LastRenderedNoteCount;
         }
 
+        public long LastPolyphony
+        {
+            get => render.LastPolyphony;
+        }
+
+        public long LastNPS
+        {
+            get => render.LastNPS;
+        }
+
         public virtual D3D11 Renderer
         {
             get { return context; }

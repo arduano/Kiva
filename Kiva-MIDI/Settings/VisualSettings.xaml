@@ -60,9 +60,15 @@
         <Border Grid.Column="1" Padding="10">
             <DockPanel>
                 <Grid DockPanel.Dock="Top">
-                    <Label FontSize="14" HorizontalAlignment="Left">
-                        Note Color Palette
-                    </Label>
+                    <DockPanel HorizontalAlignment="Left">
+                        <Label FontSize="14" HorizontalAlignment="Left">
+                            Note Color Palette
+                        </Label>
+                        <local:InfoIcon
+                            Title="Palettes"
+                            Text="Work the same way as Zenith palettes. Image must be a png, either 16 or 32 pixels wide. Every column represents a midi channel, every row represents a track. If the image is 32 pixels wide, then every two rows represent a channel making the notes have gradients."
+                            />
+                    </DockPanel>
                     <Button Name="reloadPalettes" PreviewMouseDown="ReloadPalettes_PreviewMouseDown" Style="{DynamicResource TransparentButtonStyle}" HorizontalAlignment="Right" Width="80" FontSize="14" Margin="0,3">
                         Reload
                     </Button>
@@ -70,7 +76,13 @@
                 <Button Name="openPaletteFolder" PreviewMouseDown="OpenPaletteFolder_PreviewMouseDown" DockPanel.Dock="Bottom" Style="{DynamicResource TransparentButtonStyle}" HorizontalAlignment="Center" Width="140" Height="25" FontSize="14" Margin="0,3,0,0">
                     Open Palette Folder
                 </Button>
-                <local:BetterCheckbox x:Name="randomisePaletteOrder" CheckToggled="RandomisePaletteOrder_CheckToggled" DockPanel.Dock="Bottom" Text="Randomise Color Order" Margin="0,5,0,0"/>
+                <DockPanel DockPanel.Dock="Bottom" Margin="0,5,0,0">
+                    <local:BetterCheckbox x:Name="randomisePaletteOrder" CheckToggled="RandomisePaletteOrder_CheckToggled" Text="Randomise Color Order" HorizontalAlignment="Left"/>
+                    <local:InfoIcon HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,2"
+                                    Text="Shuffle the palette colors"
+                                    Title="Randomise color order"
+                                    />
+                </DockPanel>
                 <Border BorderThickness="1" BorderBrush="Black">
                     <ScrollViewer Name="paletteList" Height="299">
                         <StackPanel Name="palettesPanel">

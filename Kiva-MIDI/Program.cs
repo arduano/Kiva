@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kiva_MIDI
@@ -11,15 +12,14 @@ namespace Kiva_MIDI
         [STAThread]
         static void Main(string[] args)
         {
-            //var window = new MainWindow();
+            var window = new MainWindow();
             try
             {
-                //if (args.Length != 0)
-                //{
-                //    window.LoadMidi(args[0]);
-                //}
-                //window.ShowDialog();
-                new MainWindow().ShowDialog();
+                if (args.Length != 0)
+                {
+                    window.LoadMidi(args[0]);
+                }
+                window.ShowDialog();
             }
             catch (Exception e)
             {

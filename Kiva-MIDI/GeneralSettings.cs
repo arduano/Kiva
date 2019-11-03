@@ -31,9 +31,9 @@ namespace Kiva_MIDI
         public int CustomFirstKey { get; set; } = 0;
         public int CustomLastKey { get; set; } = 127;
 
-        public KeyboardStyle KeyboardStyle { get; set; } = KeyboardStyle.Small;
+        public KeyboardStyle KeyboardStyle { get; set; } = KeyboardStyle.Big;
 
-        public int FPSLock { get; set; } = 0;
+        public int FPSLock { get; set; } = 60;
         public bool CompatibilityFPS { get; set; } = false;
 
         public int SelectedMIDIDevice { get; set; } = -1;
@@ -45,6 +45,8 @@ namespace Kiva_MIDI
 
         public string PaletteName { get; set; } = "Random.png";
         public bool PaletteRandomized { get; set; } = true;
+
+        public bool HideInfoCard { get; set; } = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

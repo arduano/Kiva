@@ -40,6 +40,7 @@ namespace Kiva_MIDI
         {
             backgroundColor.Color = settings.General.BackgroundColor;
             barColor.Color = settings.General.BarColor;
+            hideInfoCard.IsChecked = settings.General.HideInfoCard;
         }
 
         private void BackgroundColor_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
@@ -52,6 +53,11 @@ namespace Kiva_MIDI
         {
             if (IsInitialized)
                 settings.General.BarColor = barColor.Color;
+        }
+
+        private void hideInfoCard_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            settings.General.HideInfoCard = hideInfoCard.IsChecked;
         }
     }
 }
