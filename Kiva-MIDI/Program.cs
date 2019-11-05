@@ -35,11 +35,11 @@ namespace Kiva_MIDI
                             UpdateReady = true;
                             if (!KivaUpdates.IsAnotherKivaRunning())
                             {
-                                if(args.Length == 0)Process.Start(KivaUpdates.InstallerPath, "update -Reopen");
+                                if(args.Length == 0) Process.Start(KivaUpdates.InstallerPath, "update -Reopen");
                                 else Process.Start(KivaUpdates.InstallerPath, "update -Reopen -ReopenArg \"" + args[0] + "\"");
                             }
                         }
-                        catch { TryDownloadUpdatePackage(s.VersionName); }
+                        catch (Exception e) { TryDownloadUpdatePackage(s.VersionName); }
                     }
                     else
                     {
@@ -64,7 +64,6 @@ namespace Kiva_MIDI
 
         static void TryDownloadUpdatePackage(string currVersion)
         {
-            UpdateDownloading = true;
             Task.Run(() =>
             {
                 bool updateAvailable = false;
@@ -75,6 +74,7 @@ namespace Kiva_MIDI
                 catch { }
                 if (updateAvailable)
                 {
+                    UpdateDownloading = true;
                     try
                     {
                         var data = KivaUpdates.DownloadAssetData(KivaUpdates.DataAssetName);
@@ -82,14 +82,16 @@ namespace Kiva_MIDI
                         data.CopyTo(dest);
                         data.Close();
                         dest.Close();
+                        UpdateReady = true;
+                        UpdateDownloading = false;
                     }
                     catch (Exception e)
                     {
                         MessageBox.Show("Couldn't download and save update package", "Update failed");
+                        UpdateDownloading = false;
                     }
                 }
             });
-            UpdateReady = true;
         }
     }
 }

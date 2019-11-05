@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KivaShared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,29 @@ namespace KivaInstaller
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public Exception exception = null;
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    var data = KivaUpdates.DownloadAssetData(KivaUpdates.DataAssetName);
+                    Dispatcher.Invoke(() => progressText.Content = "Installing...");
+                    KivaUpdates.InstallFromStream(data);
+                    data.Close();
+                    Program.FinalizeInstall();
+                    Dispatcher.Invoke(() => Close());
+                }
+                catch (Exception ex)
+                {
+                    exception = ex;
+                    Dispatcher.Invoke(() => Close());
+                }
+            });
         }
     }
 }

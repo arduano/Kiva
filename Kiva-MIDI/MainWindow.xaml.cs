@@ -25,6 +25,7 @@ using Microsoft.Win32;
 using System.Collections.Concurrent;
 using System.IO;
 using MessageBox = KivaShared.MessageBox;
+using KivaShared;
 
 namespace Kiva_MIDI
 {
@@ -287,9 +288,13 @@ namespace Kiva_MIDI
                 else audioDesyncLabel.Visibility = Visibility.Hidden;
 
                 renderInfo.Text = renderText;
-                //renderNcLabel.Content = 
                 timeSlider.Value = Time.GetTime();
                 rotateLogo.Angle = timeSlider.Value * 4;
+
+                if (Program.UpdateDownloading) downloadingUpdateLabel.Visibility = Visibility.Visible;
+                else downloadingUpdateLabel.Visibility = Visibility.Collapsed;
+                if (Program.UpdateReady) updateInstalledButton.Visibility = Visibility.Visible;
+                else updateInstalledButton.Visibility = Visibility.Collapsed;
             };
         }
         public FPS FPS { get; set; }
@@ -529,6 +534,12 @@ namespace Kiva_MIDI
             this.Focus();
             DependencyObject scope = FocusManager.GetFocusScope(this);
             FocusManager.SetFocusedElement(scope, this as IInputElement);
+        }
+
+        private void updateInstalledButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            KivaUpdates.KillAllKivas();
+            Process.Start(KivaUpdates.InstallerPath, "update -Reopen");
         }
     }
 }

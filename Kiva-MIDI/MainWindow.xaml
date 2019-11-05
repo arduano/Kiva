@@ -39,7 +39,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <!--<Image HorizontalAlignment="Center" Width="40" Height="Auto" Margin="5" Source="i2m.png"/>-->
-                    <DockPanel HorizontalAlignment="Right" Margin="0,0,10,23" Grid.RowSpan="2" Width="52">
+                    <DockPanel HorizontalAlignment="Right" Margin="0,0,10,23" Grid.RowSpan="2" Width="52" Panel.ZIndex="100">
                         <Button Style="{StaticResource WindowButton}" Focusable="False" Name="ExitButton" Background="Red" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="ExitButton_Click"></Button>
                         <Button Style="{StaticResource WindowButton}" Focusable="False" Name="MinimiseButton" Background="Orange" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinimiseButton_Click"></Button>
                     </DockPanel>
@@ -66,6 +66,10 @@
                             <local:ValueSlider ValueChanged="SizeSlider_ValueChanged" x:Name="sizeSlider" Width="220" Minimum="-4" Maximum="3" TrueMin="0.01" TrueMax="1000" DecimalPoints="2" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
                         </DockPanel>
                         <local:InfoIcon Title="Height Scale" Text="The 'Size' of the notes. The smaller the size, the faster they fall."/>
+                        <Grid>
+                            <Label Name="downloadingUpdateLabel" FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0">Downloading update...</Label>
+                            <Button Name="updateInstalledButton" PreviewMouseDown="updateInstalledButton_PreviewMouseDown" FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TransparentButtonStyle}" Height="25">Update installed! Click here to restart Kiva</Button>
+                        </Grid>
                     </DockPanel>
                     <!--<Slider Name="timeSlider" Margin="10,8,10,7" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged" VerticalAlignment="Center"/>-->
                     <local:BetterSlider x:Name="timeSlider" UserValueChanged="TimeSlider_UserValueChanged" Margin="10,0,10,0" Minimum="0" Maximum="3" Value="1" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True"/>

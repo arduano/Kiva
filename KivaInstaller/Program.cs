@@ -18,6 +18,8 @@ namespace KivaInstaller
         {
             try
             {
+                KivaUpdates.KillAllKivas();
+
                 bool reopen = false;
                 string reopenArg = "";
 
@@ -86,21 +88,33 @@ namespace KivaInstaller
                     {
                         if (Silent) SilentInstall();
                         else NormalInstall();
-                        KivaUpdates.WriteVersionSettings(KivaUpdates.GetLatestVersion(), true, true);
-                        KivaUpdates.CopySelfInside(KivaUpdates.InstallerPath);
                     }
                     if (command == "update")
                     {
                         UpdateFromPackage(packagePath);
                         KivaUpdates.WriteVersionSettings(KivaUpdates.GetLatestVersion(), true, true);
                     }
+                    if(command == "uninstall")
+                    {
+                        KivaUpdates.DeleteStartShortcut();
+                        KivaUpdates.DeleteKivaFolder();
+                        if (!Silent) MessageBox.Show("Successfully uninstalled Kiva!");
+                    }
                 }
 
                 if (reopen)
                 {
                     string kivaPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva/Kiva.exe");
-                    if (reopenArg == "") Process.Start(kivaPath);
-                    else Process.Start(kivaPath, "\"" + reopenArg + "\"");
+                    if (reopenArg == "") Process.Start(new ProcessStartInfo() { 
+                        FileName = kivaPath,
+                        WorkingDirectory = Path.GetDirectoryName(kivaPath)
+                    });
+                    else Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = kivaPath,
+                        WorkingDirectory = Path.GetDirectoryName(kivaPath),
+                        Arguments = "\"" + reopenArg + "\""
+                    });
                 }
             }
             catch (Exception e)
@@ -118,6 +132,7 @@ namespace KivaInstaller
         {
             var window = new MainWindow();
             window.ShowDialog();
+            if (window.exception != null) throw window.exception;
         }
 
         static void SilentInstall()
@@ -125,6 +140,7 @@ namespace KivaInstaller
             var data = KivaUpdates.DownloadAssetData(KivaUpdates.DataAssetName);
             KivaUpdates.InstallFromStream(data);
             data.Close();
+            FinalizeInstall();
         }
 
         static void UpdateFromPackage(string path)
@@ -138,6 +154,15 @@ namespace KivaInstaller
             KivaUpdates.KillAllKivas();
             KivaUpdates.InstallFromStream(f);
             f.Close();
+            File.Delete(path);
+        }
+
+        public static void FinalizeInstall()
+        {
+            KivaUpdates.WriteVersionSettings(KivaUpdates.GetLatestVersion(), true, true);
+            KivaUpdates.CopySelfInside(KivaUpdates.InstallerPath);
+            KivaUpdates.CreateStartShortcut();
+            KivaUpdates.CreateUninstallScript();
         }
     }
 }

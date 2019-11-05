@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KivaInstaller"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="LoadingMidiForm" WindowStyle="None" Height="72.729" Width="266.373" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="{Binding ActualHeight,ElementName=content}"/>
+    </WindowChrome.WindowChrome>
+    <Grid Name="content" Background="#0D47A1">
+        <Label Name="progressText" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">Downloading Kiva...</Label>
     </Grid>
 </Window>

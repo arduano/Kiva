@@ -70,7 +70,7 @@ namespace KivaShared
 
         public static void Show(string message)
         {
-            Show("", message);
+            Show(message, "");
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
