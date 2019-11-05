@@ -50,5 +50,13 @@ namespace Kiva_MIDI
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public GeneralSettings()
+        {
+            try
+            {
+                SelectedMIDIDevice = KDMAPI.IsKDMAPIAvailable() ? -1 : 0;
+            }
+            catch { SelectedMIDIDevice = 0; }
+        }
     }
 }
