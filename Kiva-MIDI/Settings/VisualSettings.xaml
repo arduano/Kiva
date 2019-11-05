@@ -10,6 +10,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../ButtonTemplates.xaml"/>
+                <ResourceDictionary Source="../Scrollbar.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -84,8 +85,8 @@
                                     />
                 </DockPanel>
                 <Border BorderThickness="1" BorderBrush="Black">
-                    <ScrollViewer Name="paletteList" Height="299">
-                        <StackPanel Name="palettesPanel">
+                    <ScrollViewer Name="paletteList" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Name="palettesPanel" VerticalAlignment="Top">
                         </StackPanel>
                     </ScrollViewer>
                 </Border>

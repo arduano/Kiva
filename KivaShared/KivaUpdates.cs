@@ -155,6 +155,25 @@ namespace KivaShared
             if (File.Exists(shortcutLocation)) File.Delete(shortcutLocation);
         }
 
+        public static void CreateDesktopShortcut()
+        {
+            string shortcutLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Kiva.lnk");
+            if (File.Exists(shortcutLocation)) File.Delete(shortcutLocation);
+            WshShell shell = new WshShell();
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
+
+            shortcut.Description = "Kiva";
+            shortcut.TargetPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva\\Kiva.exe");
+            shortcut.WorkingDirectory = Path.GetDirectoryName(shortcut.TargetPath);
+            shortcut.Save();
+        }
+
+        public static void DeleteDesktopShortcut()
+        {
+            string shortcutLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Kiva.lnk");
+            if (File.Exists(shortcutLocation)) File.Delete(shortcutLocation);
+        }
+
         public static void DeleteKivaFolder()
         {
             Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva"), true);
