@@ -23,6 +23,8 @@ using SharpDX.DXGI;
 using SharpDX.WPF;
 using Microsoft.Win32;
 using System.Collections.Concurrent;
+using System.IO;
+using MessageBox = KivaShared.MessageBox;
 
 namespace Kiva_MIDI
 {
@@ -193,13 +195,14 @@ namespace Kiva_MIDI
 
         MIDIFile loadedFle;
 
-        Settings settings = new Settings();
+        Settings settings;
 
         SettingsWindow settingsWindow = null;
         LoadingMidiForm loadingForm = null;
 
-        public MainWindow()
+        public MainWindow(Settings settings)
         {
+            this.settings = settings;
             InitializeComponent();
             SourceInitialized += (s, e) =>
             {
@@ -294,6 +297,11 @@ namespace Kiva_MIDI
 
         public void LoadMidi(string filename)
         {
+            if (!File.Exists(filename))
+            {
+                MessageBox.Show("File " + filename + "not found", "Couldn't open midi file");
+                return;
+            }
             Time.Reset();
             player.File = null;
             scene.File = null;
@@ -306,28 +314,22 @@ namespace Kiva_MIDI
             {
                 var file = loadingForm.LoadedFile;
                 file.SetColors(settings.PaletteSettings.Palettes[settings.General.PaletteName], settings.General.PaletteRandomized);
-                Dispatcher.Invoke(() =>
-                {
-                    player.File = file;
-                    scene.File = file;
-                    loadedFle = file;
-                    timeSlider.Maximum = file.MidiLength;
-                    loadingForm.Close();
-                    loadingForm.Dispose();
-                    loadingForm = null;
-                    GC.Collect(2, GCCollectionMode.Forced);
-                    Time.Play();
-                });
+                player.File = file;
+                scene.File = file;
+                loadedFle = file;
+                timeSlider.Maximum = file.MidiLength;
+                loadingForm.Close();
+                loadingForm.Dispose();
+                loadingForm = null;
+                GC.Collect(2, GCCollectionMode.Forced);
+                Time.Play();
             };
             loadingForm.ParseCancelled += () =>
             {
-                Dispatcher.Invoke(() =>
-                {
-                    loadingForm.Close();
-                    loadingForm.Dispose();
-                    GC.Collect(2, GCCollectionMode.Forced);
-                    loadingForm = null;
-                });
+                loadingForm.Close();
+                loadingForm.Dispose();
+                GC.Collect(2, GCCollectionMode.Forced);
+                loadingForm = null;
             };
             loadingForm.ShowDialog();
         }

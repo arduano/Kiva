@@ -16,6 +16,10 @@ namespace KivaShared
 {
     public static class KivaUpdates
     {
+        public static readonly string DefaultUpdatePackagePath = "Updates/pkg.zip";
+        public static readonly string DataAssetName = "KivaPortable.zip";
+        public static readonly string InstallerPath = "Updates/ins.exe";
+
         public static dynamic GetHTTPJSON(string uri)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
@@ -118,6 +122,13 @@ namespace KivaShared
             var stream = new StreamWriter(new GZipStream(File.Open(path, FileMode.Create), CompressionMode.Compress));
             stream.Write("{\"version\":\"" + version + "\",\"enableUpdates\":" + autoUpdate + ",\"installed\":" + installed + "}");
             stream.Close();
+        }
+
+        public static void CopySelfInside(string path)
+        {
+            var p = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva", path);
+            if (!Directory.Exists(Path.GetDirectoryName(p))) Directory.CreateDirectory(Path.GetDirectoryName(p));
+            File.Copy(System.Reflection.Assembly.GetEntryAssembly().Location, p, true);
         }
     }
 }

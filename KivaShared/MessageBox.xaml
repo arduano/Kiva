@@ -9,7 +9,7 @@
         TextElement.FontSize="16"
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"        
-        Title="MessageBox" Loaded="Window_Loaded" MinHeight="100" MinWidth="200" WindowStyle="None" WindowStartupLocation="CenterOwner" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SizeToContent="WidthAndHeight" SizeChanged="Window_SizeChanged">
+        Title="MessageBox" Loaded="Window_Loaded" MinHeight="100" MinWidth="200" WindowStyle="None" WindowStartupLocation="CenterScreen" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SizeToContent="WidthAndHeight" SizeChanged="Window_SizeChanged">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

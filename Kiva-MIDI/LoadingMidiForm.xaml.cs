@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MessageBox = KivaShared.MessageBox;
 
 namespace Kiva_MIDI
 {
@@ -102,16 +103,33 @@ namespace Kiva_MIDI
             LoadedFile = new MIDIMemoryFile(filepath, loaderSettings, cancel.Token);
             LoadedFile.ParseFinished += () =>
             {
-                ParseFinished?.Invoke();
+                Dispatcher.InvokeAsync(() =>
+                {
+                    ParseFinished?.Invoke();
+                }).Task.GetAwaiter().GetResult();
             };
             LoadedFile.ParseCancelled += () =>
             {
                 Dispose();
-                ParseCancelled?.Invoke();
+                Dispatcher.InvokeAsync(() =>
+                {
+                    ParseCancelled?.Invoke();
+                }).Task.GetAwaiter().GetResult();
             };
             Task.Run(() =>
             {
-                LoadedFile.Parse();
+                try
+                {
+                    LoadedFile.Parse();
+                }
+                catch  (Exception e)
+                {
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        MessageBox.Show(e.Message, "Couldn't load midi file");
+                        ParseCancelled?.Invoke();
+                    }).Task.GetAwaiter().GetResult();
+                }
             });
 
             rotateStoryboard.Children.Add(rotate);
