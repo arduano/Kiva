@@ -14,12 +14,11 @@ namespace Kiva_MIDI
         class loadingSettings { public dynamic version, midi, general; };
         class versionSettings { public string version; public bool enableUpdates; public bool installed; };
 
-        public string VersionName { get; } = "Beta";
+        public string VersionName { get; } = "v1.0";
         public bool Installed { get; } = false;
         public bool EnableUpdates { get; } = false;
 
         public string InstallPath;
-        //static readonly string SettingsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva/Settings");
         static readonly string SettingsFolderPath = Path.Combine("Settings");
 
         string versionPath;
