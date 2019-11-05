@@ -104,6 +104,9 @@
     <Prefer32Bit>true</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=4.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.4.1.0\lib\net40\Costura.dll</HintPath>
@@ -188,9 +191,6 @@
     <Compile Include="GeneralSettings.cs" />
     <Compile Include="KDMAPI.cs" />
     <Compile Include="Material.WPF\InplaceConverter.cs" />
-    <Compile Include="MessageBox.xaml.cs">
-      <DependentUpon>MessageBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MIDIMemoryFile.cs" />
     <Compile Include="MIDIParseFile.cs" />
     <Compile Include="MIDIPlayer.cs" />
@@ -273,10 +273,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Material.WPF\NumberSelect.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -372,6 +368,15 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KivaShared\KivaShared.csproj">
+      <Project>{181949ba-6424-4ad0-966b-1db6cdf1777d}</Project>
+      <Name>KivaShared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />

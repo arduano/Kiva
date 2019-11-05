@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KivaShared;
+using MessageBox = KivaShared.MessageBox;
 
 namespace Kiva_MIDI
 {
@@ -62,7 +64,7 @@ namespace Kiva_MIDI
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show(Title, Text);
+            MessageBox.Show(Text, Title);
         }
     }
 }

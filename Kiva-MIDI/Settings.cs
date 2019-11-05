@@ -12,10 +12,12 @@ namespace Kiva_MIDI
     public class Settings
     {
         class loadingSettings { public dynamic version, midi, general; };
-        class versionSettings { public string version; };
+        class versionSettings { public string version; public bool enableUpdates; public bool installed; };
 
-        public static readonly string VersionName = "Beta";
-        public static readonly string SettingsVersion = "1";
+        public string VersionName { get; } = "Beta";
+        public bool Installed { get; } = false;
+        public bool EnableUpdates { get; } = false;
+
         public string InstallPath;
         //static readonly string SettingsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kiva/Settings");
         static readonly string SettingsFolderPath = Path.Combine("Settings");
@@ -54,8 +56,7 @@ namespace Kiva_MIDI
             if (File.Exists(versionPath)) loading.version = LoadSetings<versionSettings>(versionPath);
             else
             {
-                loading.version = new versionSettings() { version = SettingsVersion };
-                saveSettings = true;
+                loading.version = new versionSettings() { version = VersionName, enableUpdates = EnableUpdates, installed = Installed };
             }
             if (File.Exists(midiPath)) loading.midi = LoadSetings<MIDILoaderSettings>(midiPath);
             else
@@ -70,15 +71,12 @@ namespace Kiva_MIDI
                 saveSettings = true;
             }
 
-            while ((loading.version).version != SettingsVersion)
-            {
-                loading = UpdateSettings(loading);
-                saveSettings = true;
-            }
+            VersionName = (string)loading.version.version;
+            EnableUpdates = (bool)loading.version.enableUpdates;
+            Installed = (bool)loading.version.installed;
 
             if (saveSettings)
             {
-                SaveSetings(loading.version, versionPath);
                 SaveSetings(loading.midi, midiPath);
                 SaveSetings(loading.general, generalPath);
             }

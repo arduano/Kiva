@@ -229,7 +229,7 @@ namespace Kiva_MIDI
             speedSlider.Value = settings.Volatile.Speed;
             sizeSlider.Value = settings.Volatile.Size;
 
-            versionLabel.Content = Settings.VersionName;
+            versionLabel.Content = settings.VersionName;
 
             d3d.FPSLock = settings.General.FPSLock;
 

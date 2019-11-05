@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Kiva_MIDI
+namespace KivaShared
 {
     /// <summary>
     /// Interaction logic for MessageBox.xaml
@@ -63,7 +63,7 @@ namespace Kiva_MIDI
             }
         }
 
-        public static void Show(string title, string message)
+        public static void Show(string message, string title)
         {
             new MessageBox(title, message).ShowDialog();
         }
