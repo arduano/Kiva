@@ -660,18 +660,18 @@ namespace Kiva_MIDI
                 if (settings.General.KeyboardStyle == KeyboardStyle.Big)
                 {
                     BigWhiteKeyShader.SetShaders(context);
-                    context.Draw(257, 0);
+                    context.Draw(kblastNote - kbfirstNote, kbfirstNote);
                     BigBarShader.SetShaders(context);
                     context.Draw(1, 0);
                     BigBlackKeyShader.SetShaders(context);
-                    context.Draw(257, 0);
+                    context.Draw(kblastNote - kbfirstNote, kbfirstNote);
                 }
                 else
                 {
                     SmallWhiteKeyShader.SetShaders(context);
-                    context.Draw(257, 0);
+                    context.Draw(kblastNote - kbfirstNote, kbfirstNote);
                     SmallBlackKeyShader.SetShaders(context);
-                    context.Draw(257, 0);
+                    context.Draw(kblastNote - kbfirstNote, kbfirstNote);
                 }
             }
         }

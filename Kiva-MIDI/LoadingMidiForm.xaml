@@ -57,7 +57,7 @@
                     <Label FontSize="16" Foreground="White" HorizontalAlignment="Center">Audio Player Threads</Label>
                     <local:NumberSelect Value="1" x:Name="audioThreads" ValueChanged="AudioThreads_ValueChanged" WindowChrome.IsHitTestVisibleInChrome="True" Minimum="1" Maximum="1" Width="80" VerticalAlignment="Center"/>
                     <TextBlock FontSize="10" Foreground="White" Background="Transparent" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center">
-                        Faster load times when merging events, faster performance when playing. But can sometimes miss notes. Recommended for massive midis.
+                        Faster load times when merging events, faster performance when playing.
                     </TextBlock>
                     <Button Content="Save As Defaults" Foreground="White" Name="saveDefaults" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TransparentButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="110" Height="26" Grid.Row="1" Margin="0,10,0,0" PreviewMouseDown="SaveDefaults_Click" />
                 </StackPanel>

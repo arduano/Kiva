@@ -97,6 +97,7 @@ namespace KivaInstaller
                     if(command == "uninstall")
                     {
                         KivaUpdates.DeleteStartShortcut();
+                        KivaUpdates.DeleteDesktopShortcut();
                         KivaUpdates.DeleteKivaFolder();
                         if (!Silent) MessageBox.Show("Successfully uninstalled Kiva!");
                     }
@@ -163,6 +164,7 @@ namespace KivaInstaller
             KivaUpdates.CopySelfInside(KivaUpdates.InstallerPath);
             KivaUpdates.CreateStartShortcut();
             KivaUpdates.CreateUninstallScript();
+            KivaUpdates.CreateDesktopShortcut();
         }
     }
 }
