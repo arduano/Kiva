@@ -320,7 +320,8 @@ namespace Kiva_MIDI
 
 
             loadingForm = new LoadingMidiForm(filename, settings);
-            loadingForm.Owner = this;
+            if (IsVisible)
+                loadingForm.Owner = this;
             loadingForm.ParseFinished += () =>
             {
                 var file = loadingForm.LoadedFile;
