@@ -78,7 +78,7 @@ void renderQuad(inout TriangleStream<PS_IN> OutputStream, QUAD quad) {
 	OutputStream.RestartStrip();
 }
 
-[maxvertexcount(6 * 5)]
+[maxvertexcount(6 * 1)]
 void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 {
 	KEY k = input[0];
@@ -93,13 +93,6 @@ void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	float top = Height + Height * 0.08 - dist;
 	float bottom = 0 - dist;
 
-	float bez = 0.07;
-
-	float ileft = left + bez * Height * Aspect;
-	float iright = right - bez * Height * Aspect;
-	float itop = top - bez * Height;
-	float ibottom = bottom + bez * Height;
-
 	float4 colorlConv = float4((float)(k.colorl >> 24 & 0xff) / 255.0, (float)(k.colorl >> 16 & 0xff) / 255.0, (float)(k.colorl >> 8 & 0xff) / 255.0, (float)(k.colorl & 0xff) / 255.0);
 	float4 colorrConv = float4((float)(k.colorr >> 24 & 0xff) / 255.0, (float)(k.colorr >> 16 & 0xff) / 255.0, (float)(k.colorr >> 8 & 0xff) / 255.0, (float)(k.colorr & 0xff) / 255.0);
 	float4 colorl = float4(colorlConv.xyz * colorlConv.w + (1 - colorlConv.w), 1);
@@ -112,55 +105,11 @@ void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.c2 = coll;
 	q.c3 = colr;
 	q.c4 = colr;
-	q.v1 = float2(ileft, itop);
-	q.v2 = float2(iright, itop);
-	q.v3 = float2(iright, ibottom);
-	q.v4 = float2(ileft, ibottom);
-	renderQuad(OutputStream, dim(q, -0.1));
-
-	//Left
-	q.c1 = coll;
-	q.c2 = coll;
-	q.c3 = colr;
-	q.c4 = colr;
-	q.v1 = float2(left, top);
-	q.v2 = float2(ileft, itop);
-	q.v3 = float2(ileft, ibottom);
-	q.v4 = float2(left, bottom);
-	renderQuad(OutputStream, dim(q, -0.0));
-
-	//Top
-	q.c1 = coll;
-	q.c2 = coll;
-	q.c3 = coll;
-	q.c4 = coll;
 	q.v1 = float2(left, top);
 	q.v2 = float2(right, top);
-	q.v3 = float2(iright, itop);
-	q.v4 = float2(ileft, itop);
-	renderQuad(OutputStream, dim(q, -0.1));
-
-	//Right
-	q.c1 = coll;
-	q.c2 = colr;
-	q.c3 = colr;
-	q.c4 = coll;
-	q.v1 = float2(right, top);
-	q.v2 = float2(right, bottom);
-	q.v3 = float2(iright, ibottom);
-	q.v4 = float2(iright, itop);
-	renderQuad(OutputStream, dim(q, -0.3));
-
-	//Bottom
-	q.c1 = colr;
-	q.c2 = colr;
-	q.c3 = colr;
-	q.c4 = colr;
-	q.v1 = float2(ileft, ibottom);
-	q.v2 = float2(iright, ibottom);
 	q.v3 = float2(right, bottom);
 	q.v4 = float2(left, bottom);
-	renderQuad(OutputStream, dim(q, -0.3));
+	renderQuad(OutputStream, q);
 }
 
 [maxvertexcount(6 * 9)]
@@ -201,7 +150,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(iright, itop);
 	q.v3 = float2(iright, ibottom);
 	q.v4 = float2(ileft, ibottom);
-	renderQuad(OutputStream, dim(q, 0.1));
+	renderQuad(OutputStream, dim(q, 0.0));
 
 	//Left
 	q.c1 = coll;
@@ -212,7 +161,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(ileft, itop);
 	q.v3 = float2(ileft, ibottom);
 	q.v4 = float2(left, ibottom);
-	renderQuad(OutputStream, dim(q, 0.2));
+	renderQuad(OutputStream, dim(q, 0.0));
 
 	//Top
 	q.c1 = coll;
@@ -223,7 +172,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(iright, top);
 	q.v3 = float2(iright, itop);
 	q.v4 = float2(ileft, itop);
-	renderQuad(OutputStream, dim(q, 0.2));
+	renderQuad(OutputStream, dim(q, 0.0));
 
 	//Right
 	q.c1 = coll;
@@ -234,7 +183,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(right, ibottom);
 	q.v3 = float2(iright, ibottom);
 	q.v4 = float2(iright, itop);
-	renderQuad(OutputStream, dim(q, 0.05));
+	renderQuad(OutputStream, dim(q, 0.0));
 
 	//Bottom
 	q.c1 = colr;
@@ -245,7 +194,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(iright, ibottom);
 	q.v3 = float2(iright, bottom);
 	q.v4 = float2(ileft, bottom);
-	renderQuad(OutputStream, dim(q, 0.05));
+	renderQuad(OutputStream, dim(q, 0.0));
 
 	//Top Left
 	q.c1 = coll;
@@ -256,7 +205,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(ileft, itop);
 	q.v3 = float2(left, itop);
 	q.v4 = float2(ileft, top);
-	renderQuad(OutputStream, dim(q, 0.3));
+	renderQuad(OutputStream, dim(q, 0.0));
 
 	//Top Right
 	q.c1 = coll;
@@ -267,7 +216,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(iright, itop);
 	q.v3 = float2(iright, top);
 	q.v4 = float2(right, itop);
-	renderQuad(OutputStream, dim(q, 0.1));
+	renderQuad(OutputStream, dim(q, 0.0));
 
 	//Bottom Left
 	q.c1 = colr;
@@ -289,7 +238,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(ileft, ibottom);
 	q.v3 = float2(ileft, bottom);
 	q.v4 = float2(left, ibottom);
-	renderQuad(OutputStream, dim(q, 0.1));
+	renderQuad(OutputStream, dim(q, 0.0));
 }
 
 float4 PS(PS_IN input) : SV_Target

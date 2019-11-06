@@ -31,7 +31,7 @@ NOTE VS_Note(NOTE input)
 	return input;
 }
 
-[maxvertexcount(12)]
+[maxvertexcount(6)]
 void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 {
 	NOTE n = input[0];
@@ -45,11 +45,6 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	float4 cl = colorlConv;
     float4 cr = colorrConv;
-
-	cl.xyz *= 0.3f;
-	cr.xyz *= 0.3f;
-	cl.xyz += 0.1f;
-	cr.xyz -= 0.3f;
 	cl.xyz = clamp(cl.xyz, 0, 1);
 	cr.xyz = clamp(cr.xyz, 0, 1);
 
@@ -85,41 +80,6 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 	cr.xyz -= 0.3f;
 	cl.xyz = clamp(cl.xyz, 0, 1);
 	cr.xyz = clamp(cr.xyz, 0, 1);
-
-
-	float borderTop = n.end - NoteBorder / ScreenAspect;
-	float borderBottom = n.start + NoteBorder / ScreenAspect;
-	if (borderTop < borderBottom) {
-		return;
-	}
-	float borderLeft = NoteLeft + NoteBorder;
-	float borderRight = NoteRight - NoteBorder;
-
-	v.col = cl;
-	v.pos = float4(borderLeft, borderBottom, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
-	OutputStream.Append(v);
-	v.pos = float4(borderLeft, borderTop, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
-	OutputStream.Append(v);
-	v.col = cr;
-	v.pos = float4(borderRight, borderTop, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
-	OutputStream.Append(v);
-	OutputStream.RestartStrip();
-
-	v.col = cr;
-	v.pos = float4(borderRight, borderTop, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
-	OutputStream.Append(v);
-	v.pos = float4(borderRight, borderBottom, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
-	OutputStream.Append(v);
-	v.col = cl;
-	v.pos = float4(borderLeft, borderBottom, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
-	OutputStream.Append(v);
-	OutputStream.RestartStrip();
 }
 
 float4 PS( PS_IN input ) : SV_Target
