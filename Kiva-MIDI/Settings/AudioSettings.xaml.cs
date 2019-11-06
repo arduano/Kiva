@@ -47,7 +47,7 @@ namespace Kiva_MIDI
             {
                 kdmapiDisabled = !KDMAPI.IsKDMAPIAvailable();
             }
-            catch { kdmapiDisabled = false; }
+            catch { kdmapiDisabled = true; }
             InitializeComponent();
 
             for (int i = -1; i < OutputDevice.DeviceCount; i++)

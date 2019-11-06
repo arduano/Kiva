@@ -15,6 +15,8 @@ namespace Kiva_MIDI
         [DllImport("ntdll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int NtDelayExecution([MarshalAs(UnmanagedType.I1)] bool alertable, ref Int64 DelayInterval);
 
+        Settings settings;
+
         public int BufferLen => eventFeed == null ? 0 : eventFeed.Count;
 
         public int DeviceID
@@ -25,7 +27,8 @@ namespace Kiva_MIDI
                 if (deviceID != value)
                 {
                     deviceID = value;
-                    cancelConsumer.Cancel();
+                    if (cancelConsumer != null)
+                        cancelConsumer.Cancel();
                     if (deviceThread != null)
                         deviceThread.GetAwaiter().GetResult();
                     cancelConsumer = new CancellationTokenSource();
@@ -76,6 +79,11 @@ namespace Kiva_MIDI
 
         CancellationTokenSource cancelConsumer;
 
+        public MIDIPlayer(Settings settings)
+        {
+            this.settings = settings;
+        }
+
         public void Dispose()
         {
             File = null;
@@ -86,10 +94,12 @@ namespace Kiva_MIDI
 
         public void RunPlayer()
         {
-            cancelConsumer = new CancellationTokenSource();
-            eventFeed = new BlockingCollection<MIDIEvent>();
+            if (cancelConsumer != null)
+                cancelConsumer.Cancel();
             if (deviceThread != null)
                 deviceThread.GetAwaiter().GetResult();
+            cancelConsumer = new CancellationTokenSource();
+            eventFeed = new BlockingCollection<MIDIEvent>();
             if (deviceID < 0)
                 deviceThread = Task.Factory.StartNew(() => RunEventConsumerKDMAPI(cancelConsumer.Token), TaskCreationOptions.LongRunning);
             else
@@ -223,7 +233,16 @@ namespace Kiva_MIDI
 
         void RunEventConsumerKDMAPI(CancellationToken cancel)
         {
-            KDMAPI.InitializeKDMAPIStream();
+            try
+            {
+                KDMAPI.InitializeKDMAPIStream();
+            }
+            catch
+            {
+                settings.General.SelectedMIDIDevice = 0;
+                settings.General.SelectedMIDIDeviceName = "";
+                return;
+            }
             try
             {
                 foreach (var e in eventFeed.GetConsumingEnumerable(cancel))

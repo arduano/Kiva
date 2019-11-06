@@ -126,7 +126,7 @@ namespace Kiva_MIDI
                 {
                     Dispatcher.InvokeAsync(() =>
                     {
-                        MessageBox.Show(e.Message, "Couldn't load midi file");
+                        MessageBox.Show(e.Message, "Couldn't load midi file", this);
                         ParseCancelled?.Invoke();
                     }).Task.GetAwaiter().GetResult();
                 }

@@ -19,6 +19,8 @@ namespace Kiva_MIDI
         [STAThread]
         static void Main(string[] args)
         {
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
+
             try
             {
                 var s = new Settings();

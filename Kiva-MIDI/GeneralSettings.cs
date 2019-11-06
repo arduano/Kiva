@@ -37,7 +37,7 @@ namespace Kiva_MIDI
         public bool CompatibilityFPS { get; set; } = false;
 
         public int SelectedMIDIDevice { get; set; } = -1;
-        public string SelectedMIDIDeviceName { get; set; } = "KDMAPI";
+        public string SelectedMIDIDeviceName { get; set; } = "";
 
         public Color BackgroundColor { get; set; } = Color.FromArgb(255, 142, 142, 142);
         public Color ForegroundColor { get; set; } = Color.FromArgb(255, 142, 142, 142);
@@ -47,6 +47,8 @@ namespace Kiva_MIDI
         public bool PaletteRandomized { get; set; } = true;
 
         public bool HideInfoCard { get; set; } = false;
+
+        public bool MainWindowTopmost { get; set; } = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -68,6 +68,11 @@ namespace KivaShared
             new MessageBox(title, message).ShowDialog();
         }
 
+        public static void Show(string message, string title, Window parent)
+        {
+            new MessageBox(title, message) { Owner = parent }.ShowDialog();
+        }
+
         public static void Show(string message)
         {
             Show(message, "");

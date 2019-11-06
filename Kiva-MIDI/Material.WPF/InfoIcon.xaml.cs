@@ -64,7 +64,7 @@ namespace Kiva_MIDI
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show(Text, Title);
+            MessageBox.Show(Text, Title, Window.GetWindow(this));
         }
     }
 }

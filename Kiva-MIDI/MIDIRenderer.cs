@@ -92,7 +92,7 @@ namespace Kiva_MIDI
             get => _time;
             set
             {
-                if(Time != null)
+                if (Time != null)
                     Time.TimeChanged -= onTimeChanged;
                 _time = value;
                 Time.TimeChanged += onTimeChanged;
@@ -101,11 +101,13 @@ namespace Kiva_MIDI
         public long LastRenderedNoteCount { get; private set; } = 0;
         public long LastNPS => notesPassedPerFrame.Sum();
         public long LastPolyphony { get; private set; } = 0;
+        public long NotesPassedSum { get; private set; } = 0;
 
         FastList<int> notesPassedPerFrame = new FastList<int>();
         FastList<double> notesPassedTimes = new FastList<double>();
 
         bool timeChanged = false;
+        bool resetNps = false;
 
         ShaderManager notesShader;
         ShaderManager SmallWhiteKeyShader;
@@ -505,7 +507,7 @@ namespace Kiva_MIDI
                                 float right = (float)((x1array[k] + wdtharray[k] - fullLeft) / fullWidth);
                                 bool pressed = false;
                                 NoteCol col = new NoteCol();
-                                int lastHitNote = file.FirstUnhitNote[k];
+                                int lastHitNote = file.FirstUnhitNote[k] - 1;
                                 unsafe
                                 {
                                     RenderNote* rn = stackalloc RenderNote[noteBufferLength];
@@ -539,7 +541,11 @@ namespace Kiva_MIDI
                                     while (noff != notes.Length && notes[noff].start < renderCutoff)
                                     {
                                         var n = notes[noff++];
-                                        if (n.end < time) continue;
+                                        if (n.end < time)
+                                        {
+                                            lastHitNote = noff - 1;
+                                            continue;
+                                        }
                                         if (n.start < time)
                                         {
                                             polyphony++;
@@ -547,7 +553,7 @@ namespace Kiva_MIDI
                                             NoteCol kcol = file.MidiNoteColors[n.colorPointer];
                                             col.rgba = NoteCol.Blend(col.rgba, kcol.rgba);
                                             col.rgba2 = NoteCol.Blend(col.rgba2, kcol.rgba2);
-                                            lastHitNote = noff;
+                                            lastHitNote = noff - 1;
                                         }
                                         _notesRendered++;
                                         rn[nid++] = new RenderNote()
@@ -569,10 +575,13 @@ namespace Kiva_MIDI
                                     if (pressed && keyEases[k].End == 0) keyEases[k].SetEnd(1);
                                     else if (!pressed && keyEases[k].End == 1) keyEases[k].SetEnd(0);
                                     renderKeys[k].distance = (float)keyEases[k].GetValue(0, 1);
+                                    if (_notesRendered == 0) lastHitNote = file.FirstRenderNote[k] - 1;
                                     lock (addLock)
                                     {
                                         polyphonySum += polyphony;
-                                        notesHitSum += lastHitNote - file.FirstUnhitNote[k];
+                                        notesHitSum += lastHitNote - file.FirstUnhitNote[k] + 1;
+                                        if(lastHitNote - file.FirstUnhitNote[k] + 1 < 0)
+                                        { }
                                         notesRendered += _notesRendered;
                                         if (_notesRendered > 0)
                                         {
@@ -580,7 +589,7 @@ namespace Kiva_MIDI
                                             if (lastRenderKey < k) lastRenderKey = k;
                                         }
                                     }
-                                    file.FirstUnhitNote[k] = lastHitNote;
+                                    file.FirstUnhitNote[k] = lastHitNote + 1;
                                 }
                             });
                         }
@@ -601,6 +610,7 @@ namespace Kiva_MIDI
                             }
                         }
 
+                        if (notesHitSum < 0) notesHitSum = 0;
                         notesPassedPerFrame.Add(notesHitSum);
                         notesPassedTimes.Add(time);
                         while (!notesPassedTimes.ZeroLen && notesPassedTimes.First < time - 1)
@@ -608,14 +618,17 @@ namespace Kiva_MIDI
                             notesPassedPerFrame.Pop();
                             notesPassedTimes.Pop();
                         }
-                        if (timeChanged)
+                        if (timeChanged || resetNps)
                         {
                             notesPassedPerFrame.Unlink();
                             notesPassedTimes.Unlink();
                             timeChanged = false;
+                            if (!resetNps) resetNps = true;
+                            else resetNps = false;
                         }
                         LastRenderedNoteCount = notesRendered;
                         LastPolyphony = polyphonySum;
+                        NotesPassedSum = file.FirstUnhitNote.Select(s => s).Sum();
                         file.lastRenderTime = time;
                     }
                 }
@@ -628,6 +641,7 @@ namespace Kiva_MIDI
                     }
                     LastRenderedNoteCount = 0;
                     LastPolyphony = 0;
+                    NotesPassedSum = 0;
                     for (int i = 0; i < renderKeys.Length; i++)
                     {
                         renderKeys[i].colorl = 0;

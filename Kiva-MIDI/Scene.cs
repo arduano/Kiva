@@ -51,6 +51,11 @@ namespace Kiva_MIDI
             get => render.LastNPS;
         }
 
+        public long NotesPassedSum
+        {
+            get => render.NotesPassedSum;
+        }
+
         public virtual D3D11 Renderer
         {
             get { return context; }

@@ -97,6 +97,7 @@ namespace Kiva_MIDI
         public int FirstKey { get; protected set; } = 255;
         public int LastKey { get; protected set; } = 0;
         public double MidiLength { get; protected set; } = 0;
+        public long MidiNoteCount { get; protected set; } = 0;
 
         public ParsingStage ParseStage { get; protected set; } = ParsingStage.Opening;
         public double ParseNumber { get; protected set; }
@@ -231,6 +232,7 @@ namespace Kiva_MIDI
             cancel.ThrowIfCancellationRequested();
             var temposMerge = TimedMerger<TempoEvent>.MergeMany(parsers.Select(p => p.Tempos).ToArray(), t => t.time);
             globalTempos = temposMerge.Cast<TempoEvent>().ToArray();
+            MidiNoteCount = parsers.Select(p => p.noteCount).Sum();
          }
 
         protected void SetColors()

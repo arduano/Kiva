@@ -221,7 +221,8 @@ namespace Kiva_MIDI
             dx11img.MouseDown += (s, e) => Focus();
             scene.Time = Time;
 
-            player = new MIDIPlayer();
+            player = new MIDIPlayer(settings);
+            player.DeviceID = settings.General.SelectedMIDIDevice;
             player.RunPlayer();
             player.Time = Time;
 
@@ -249,6 +250,8 @@ namespace Kiva_MIDI
                     glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
                 if (e.PropertyName == "HideInfoCard")
                     infoCard.Visibility = settings.General.HideInfoCard ? Visibility.Hidden : Visibility.Visible;
+                if (e.PropertyName == "MainWindowTopmost")
+                    Topmost = settings.General.MainWindowTopmost;
                 if (loadedFle != null)
                 {
                     if (e.PropertyName == "PaletteName" || e.PropertyName == "PaletteRandomized")
@@ -261,6 +264,7 @@ namespace Kiva_MIDI
             d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
             glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
             infoCard.Visibility = settings.General.HideInfoCard ? Visibility.Hidden : Visibility.Visible;
+            Topmost = settings.General.MainWindowTopmost;
 
             Func<TimeSpan, string> timeSpanString = (s) =>
             s.Minutes + ":" +
@@ -273,6 +277,7 @@ namespace Kiva_MIDI
                 var midiTime = Time.GetTime();
                 var renderText = timeSpanString(TimeSpan.FromSeconds(Time.GetTime())) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen)) + "\n" +
                                  "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
+                                 "" + scene.NotesPassedSum.ToString("#,##0") + "/" + (loadedFle != null ? loadedFle.MidiNoteCount : 0).ToString("#,##0") + "\n" +
                                  "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0") + "\n" +
                                  "NPS: " + scene.LastNPS.ToString("#,##0") + "\n" +
                                  "Polyphony: " + scene.LastPolyphony.ToString("#,##0");
@@ -304,7 +309,7 @@ namespace Kiva_MIDI
         {
             if (!File.Exists(filename))
             {
-                MessageBox.Show("File " + filename + "not found", "Couldn't open midi file");
+                MessageBox.Show("File " + filename + "not found", "Couldn't open midi file", this);
                 return;
             }
             Time.Reset();
@@ -315,6 +320,7 @@ namespace Kiva_MIDI
 
 
             loadingForm = new LoadingMidiForm(filename, settings);
+            loadingForm.Owner = this;
             loadingForm.ParseFinished += () =>
             {
                 var file = loadingForm.LoadedFile;
