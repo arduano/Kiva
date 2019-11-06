@@ -46,33 +46,41 @@ QUAD dim(QUAD q, float val) {
 	return q;
 }
 
+
+float2 polarise(float2 vert) {
+	return float2(
+		cos(-vert.x * 3.141592 * 2) * (vert.y + 0.1),
+		sin(-vert.x * 3.141592 * 2) * (vert.y + 0.1) / Aspect
+		);
+}
+
 void renderQuad(inout TriangleStream<PS_IN> OutputStream, QUAD quad) {
 	PS_IN v = (PS_IN)0;
 
 	v.pos = float4(quad.v1, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	v.col = quad.c1;
 	OutputStream.Append(v);
 	v.pos = float4(quad.v2, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	v.col = quad.c2;
 	OutputStream.Append(v);
 	v.pos = float4(quad.v3, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	v.col = quad.c3;
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
 
 	v.pos = float4(quad.v1, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	v.col = quad.c1;
 	OutputStream.Append(v);
 	v.pos = float4(quad.v3, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	v.col = quad.c3;
 	OutputStream.Append(v);
 	v.pos = float4(quad.v4, 0, 1);
-	v.pos.xy = v.pos.xy * 2 - 1;
+	v.pos.xy = polarise(v.pos.xy);
 	v.col = quad.c4;
 	OutputStream.Append(v);
 	OutputStream.RestartStrip();
