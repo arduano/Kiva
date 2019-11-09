@@ -373,7 +373,15 @@ namespace Kiva_MIDI
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-
+            if(e.Key == Key.O && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+            {
+                var open = new OpenFileDialog();
+                open.Filter = "Midi files (*.mid)|*.mid";
+                if ((bool)open.ShowDialog())
+                {
+                    LoadMidi(open.FileName);
+                }
+            }
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
