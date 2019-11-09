@@ -580,8 +580,6 @@ namespace Kiva_MIDI
                                     {
                                         polyphonySum += polyphony;
                                         notesHitSum += lastHitNote - file.FirstUnhitNote[k] + 1;
-                                        if(lastHitNote - file.FirstUnhitNote[k] + 1 < 0)
-                                        { }
                                         notesRendered += _notesRendered;
                                         if (_notesRendered > 0)
                                         {

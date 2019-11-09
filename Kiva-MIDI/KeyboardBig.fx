@@ -89,7 +89,7 @@ void GS_Bar(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	
 	q.c1 = color;
 	q.c2 = color;
-	//color.xyz *= 0.8;
+	color.xyz *= 0.8;
 	q.c3 = color;
 	q.c4 = color;
 	q.v1 = float2(0, Height);
@@ -108,14 +108,14 @@ void GS_Bar(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v4 = float2(0, Height);
 	renderQuad(OutputStream, dim(q, -0.0));
 
-	q.c1 = float4(0, 0, 0, 0.2);
-	q.c2 = float4(0, 0, 0, 0.2);
+	q.c1 = float4(0, 0, 0, 0.4);
+	q.c2 = float4(0, 0, 0, 0.4);
 	q.c3 = float4(0, 0, 0, 0);
 	q.c4 = float4(0, 0, 0, 0);
 	q.v1 = float2(0, Height * 0.95);
 	q.v2 = float2(1, Height * 0.95);
-	q.v3 = float2(1, Height * 0.93);
-	q.v4 = float2(0, Height * 0.93);
+	q.v3 = float2(1, Height * 0.91);
+	q.v4 = float2(0, Height * 0.91);
 	renderQuad(OutputStream, dim(q, -0.0));
 }
 
@@ -216,7 +216,8 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	float ileft = left + bez * height * Aspect;
 	float iright = right - bez * height * Aspect;
-	float itop = top + bez * height;
+	//float itop = top + bez * height;
+	float itop = top;
 	float ibottom = bottom + bez * height;
 
 	float4 colorlConv = float4((float)(k.colorl >> 24 & 0xff) / 255.0, (float)(k.colorl >> 16 & 0xff) / 255.0, (float)(k.colorl >> 8 & 0xff) / 255.0, (float)(k.colorl & 0xff) / 255.0);
