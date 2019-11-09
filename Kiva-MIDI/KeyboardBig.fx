@@ -126,7 +126,6 @@ void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 {
 	KEY k = input[0];
 	if (k.meta & 1) return;
-	int pressed = k.meta & 2;
 	PS_IN v = (PS_IN)0;
 	QUAD q = (QUAD)0;
 
@@ -137,10 +136,12 @@ void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	float top = height;
 	float bottom = 0;
 
-	float bez = 0.04;
+	float bez = 0.015;
+
+	float ileft = left + bez * height * Aspect;
+	float iright = right - bez * height * Aspect;
 	float itop = top - bez * height;
 	float ibottom = bottom + bez * height;
-	if(pressed) ibottom = bottom + bez * height / 3;
 
 	float4 colorlConv = float4((float)(k.colorl >> 24 & 0xff) / 255.0, (float)(k.colorl >> 16 & 0xff) / 255.0, (float)(k.colorl >> 8 & 0xff) / 255.0, (float)(k.colorl & 0xff) / 255.0);
 	float4 colorrConv = float4((float)(k.colorr >> 24 & 0xff) / 255.0, (float)(k.colorr >> 16 & 0xff) / 255.0, (float)(k.colorr >> 8 & 0xff) / 255.0, (float)(k.colorr & 0xff) / 255.0);
@@ -154,43 +155,48 @@ void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	float4 colorR = float4(1, 0, 0, 1);
 
 	//Center
-	float4 coll2 = coll;
-	coll2.xyz *= 0.8;
-	q.c1 = coll2;
-	q.c2 = coll2;
+	q.c1 = coll;
+	q.c2 = coll;
+	q.c3 = colr;
+	q.c4 = colr;
+	q.v1 = float2(ileft, top);
+	q.v2 = float2(iright, top);
+	q.v3 = float2(iright, ibottom);
+	q.v4 = float2(ileft, ibottom);
+	renderQuad(OutputStream, dim(q, -0.0));
+
+	//Left
+	q.c1 = coll;
+	q.c2 = coll;
 	q.c3 = colr;
 	q.c4 = colr;
 	q.v1 = float2(left, top);
-	q.v2 = float2(right, top);
-	q.v3 = float2(right, ibottom);
-	q.v4 = float2(left, ibottom);
-	renderQuad(OutputStream, dim(q, -0.0));
+	q.v2 = float2(ileft, top);
+	q.v3 = float2(ileft, ibottom);
+	q.v4 = float2(left, bottom);
+	renderQuad(OutputStream, dim(q, -0.1));
+
+	//Right
+	q.c1 = coll;
+	q.c2 = colr;
+	q.c3 = colr;
+	q.c4 = coll;
+	q.v1 = float2(right, top);
+	q.v2 = float2(right, bottom);
+	q.v3 = float2(iright, ibottom);
+	q.v4 = float2(iright, top);
+	renderQuad(OutputStream, dim(q, -0.2));
 
 	//Bottom
 	q.c1 = colr;
 	q.c2 = colr;
-	colr.xyz *= 0.7;
 	q.c3 = colr;
 	q.c4 = colr;
-	q.v1 = float2(left, ibottom);
-	q.v2 = float2(right, ibottom);
+	q.v1 = float2(ileft, ibottom);
+	q.v2 = float2(iright, ibottom);
 	q.v3 = float2(right, bottom);
 	q.v4 = float2(left, bottom);
 	renderQuad(OutputStream, dim(q, -0.3));
-
-	left = right - (1.0 / ScreenWidth);
-
-	q.c1 = float4(0.2, 0.2, 0.2, 1);
-	q.c2 = float4(0.2, 0.2, 0.2, 1);
-	q.c3 = float4(0.2, 0.2, 0.2, 1);
-	q.c4 = float4(0.2, 0.2, 0.2, 1);
-	q.v1 = float2(left, top);
-	q.v2 = float2(right, top);
-	q.v3 = float2(right, bottom);
-	q.v4 = float2(left, bottom);
-	renderQuad(OutputStream, dim(q, -0.0));
-
-
 }
 
 [maxvertexcount(6 * 4)]
@@ -198,7 +204,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 {
 	KEY k = input[0];
 	if (!(k.meta & 1)) return;
-	int pressed = k.meta & 2;
+	bool pressed = k.meta & 2;
 	PS_IN v = (PS_IN)0;
 	QUAD q = (QUAD)0;
 
@@ -214,9 +220,8 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	float ileft = left + bez * height * Aspect;
 	float iright = right - bez * height * Aspect;
 	float itop = top + bez * height;
-	if(pressed) itop = top;
+	//float itop = top;
 	float ibottom = bottom + bez * height;
-	if (!pressed) ibottom = bottom + bez * height * 3;
 
 	float4 colorlConv = float4((float)(k.colorl >> 24 & 0xff) / 255.0, (float)(k.colorl >> 16 & 0xff) / 255.0, (float)(k.colorl >> 8 & 0xff) / 255.0, (float)(k.colorl & 0xff) / 255.0);
 	float4 colorrConv = float4((float)(k.colorr >> 24 & 0xff) / 255.0, (float)(k.colorr >> 16 & 0xff) / 255.0, (float)(k.colorr >> 8 & 0xff) / 255.0, (float)(k.colorr & 0xff) / 255.0);
@@ -235,9 +240,9 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v3 = float2(iright, ibottom);
 	q.v4 = float2(ileft, ibottom);
 	if (pressed)
-		renderQuad(OutputStream, dim(q, -0.3));
+		renderQuad(OutputStream, dim(q, -0.2));
 	else
-		renderQuad(OutputStream, dim(q, 0.0));
+		renderQuad(OutputStream, dim(q, -0.0));
 
 	//Left
 	q.c1 = coll;
@@ -249,7 +254,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v3 = float2(ileft, ibottom);
 	q.v4 = float2(left, bottom);
 	if (pressed)
-		renderQuad(OutputStream, dim(q, -0.1));
+		renderQuad(OutputStream, dim(q, 0));
 	else
 		renderQuad(OutputStream, dim(q, 0.3));
 
@@ -263,7 +268,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v3 = float2(iright, ibottom);
 	q.v4 = float2(iright, itop);
 	if (pressed)
-		renderQuad(OutputStream, dim(q, -0.2));
+		renderQuad(OutputStream, dim(q, -0.1));
 	else
 		renderQuad(OutputStream, dim(q, 0.2));
 
@@ -277,7 +282,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v3 = float2(right, bottom);
 	q.v4 = float2(left, bottom);
 	if (pressed)
-		renderQuad(OutputStream, dim(q, -0.1));
+		renderQuad(OutputStream, dim(q, 0.0));
 	else
 		renderQuad(OutputStream, dim(q, 0.1));
 }
