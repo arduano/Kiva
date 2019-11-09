@@ -64,14 +64,14 @@ namespace Kiva_MIDI
 
             public void MarkPressed(bool ispressed)
             {
-                meta = (uint)(meta & 0b10111111);
+                meta = (uint)(meta & 0b11111101);
                 if (ispressed)
-                    meta = (uint)(meta | 0b01);
+                    meta = (uint)(meta | 0b10);
             }
 
             public void MarkBlack(bool black)
             {
-                meta = (uint)(meta & 0b01111111);
+                meta = (uint)(meta & 0b11111110);
                 if (black)
                     meta = (uint)(meta | 0b1);
             }
@@ -578,6 +578,7 @@ namespace Kiva_MIDI
                                     skipLoop:
                                     renderKeys[k].colorl = col.rgba;
                                     renderKeys[k].colorr = col.rgba2;
+                                    renderKeys[k].MarkPressed(pressed);
                                     if (pressed && keyEases[k].End == 0) keyEases[k].SetEnd(1);
                                     else if (!pressed && keyEases[k].End == 1) keyEases[k].SetEnd(0);
                                     renderKeys[k].distance = (float)keyEases[k].GetValue(0, 1);
