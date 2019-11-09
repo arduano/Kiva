@@ -28,6 +28,8 @@ namespace Kiva_MIDI
             public float NoteBorder;
             public float ScreenAspect;
             public float KeyboardHeight;
+            public int ScreenWidth;
+            public int ScreenHeight;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 16)]
@@ -38,6 +40,8 @@ namespace Kiva_MIDI
             public float Right;
             public float Aspect;
             public uint BarColor;
+            public int ScreenWidth;
+            public int ScreenHeight;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -450,6 +454,8 @@ namespace Kiva_MIDI
             notesShader.SetShaders(context);
             noteConstants.ScreenAspect = (float)(args.RenderSize.Height / args.RenderSize.Width);
             noteConstants.NoteBorder = 0.0015f;
+            noteConstants.ScreenWidth = (int)args.RenderSize.Width;
+            noteConstants.ScreenHeight = (int)args.RenderSize.Height;
             SetNoteShaderConstants(context, noteConstants);
 
             //context.ClearRenderTargetView(target, new Color4(0.4f, 0.4f, 0.4f, 1f));
@@ -659,7 +665,9 @@ namespace Kiva_MIDI
                     Left = (float)fullLeft,
                     Right = (float)fullRight,
                     Aspect = noteConstants.ScreenAspect,
-                    BarColor = NoteCol.Compress(col.R, col.G, col.B, col.A)
+                    BarColor = NoteCol.Compress(col.R, col.G, col.B, col.A),
+                    ScreenWidth = (int)args.RenderSize.Width,
+                    ScreenHeight = (int)args.RenderSize.Height
                 });
                 context.InputAssembler.InputLayout = keyLayout;
                 context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;

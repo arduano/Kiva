@@ -4,6 +4,8 @@ float Left;
 float Right;
 float Aspect;
 dword BarColor;
+int ScreenWidth;
+int ScreenHeight;
 
 struct KEY
 {
@@ -84,9 +86,9 @@ void GS_Bar(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	KEY k = input[0];
 	PS_IN v = (PS_IN)0;
 	QUAD q = (QUAD)0;
-	
+
 	float4 color = float4((float)(BarColor >> 24 & 0xff) / 255.0, (float)(BarColor >> 16 & 0xff) / 255.0, (float)(BarColor >> 8 & 0xff) / 255.0, (float)(BarColor & 0xff) / 255.0);
-	
+
 	q.c1 = color;
 	q.c2 = color;
 	color.xyz *= 0.8;
@@ -202,6 +204,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 {
 	KEY k = input[0];
 	if (!(k.meta & 1)) return;
+	bool pressed = k.meta & 2;
 	PS_IN v = (PS_IN)0;
 	QUAD q = (QUAD)0;
 
@@ -236,7 +239,10 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(iright, itop);
 	q.v3 = float2(iright, ibottom);
 	q.v4 = float2(ileft, ibottom);
-	renderQuad(OutputStream, dim(q, -0.0));
+	if (pressed)
+		renderQuad(OutputStream, dim(q, -0.2));
+	else
+		renderQuad(OutputStream, dim(q, -0.0));
 
 	//Left
 	q.c1 = coll;
@@ -247,7 +253,10 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(ileft, itop);
 	q.v3 = float2(ileft, ibottom);
 	q.v4 = float2(left, bottom);
-	renderQuad(OutputStream, dim(q, 0.3));
+	if (pressed)
+		renderQuad(OutputStream, dim(q, 0));
+	else
+		renderQuad(OutputStream, dim(q, 0.3));
 
 	//Right
 	q.c1 = coll;
@@ -258,7 +267,10 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(right, bottom);
 	q.v3 = float2(iright, ibottom);
 	q.v4 = float2(iright, itop);
-	renderQuad(OutputStream, dim(q, 0.2));
+	if (pressed)
+		renderQuad(OutputStream, dim(q, -0.1));
+	else
+		renderQuad(OutputStream, dim(q, 0.2));
 
 	//Bottom
 	q.c1 = colr;
@@ -269,7 +281,10 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.v2 = float2(iright, ibottom);
 	q.v3 = float2(right, bottom);
 	q.v4 = float2(left, bottom);
-	renderQuad(OutputStream, dim(q, 0.1));
+	if (pressed)
+		renderQuad(OutputStream, dim(q, 0.0));
+	else
+		renderQuad(OutputStream, dim(q, 0.1));
 }
 
 float4 PS(PS_IN input) : SV_Target

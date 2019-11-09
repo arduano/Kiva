@@ -4,6 +4,8 @@ float Left;
 float Right;
 float Aspect;
 dword BarColor;
+int ScreenWidth;
+int ScreenHeight;
 
 struct KEY
 {

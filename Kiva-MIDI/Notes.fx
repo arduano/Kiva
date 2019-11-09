@@ -4,6 +4,8 @@ float NoteRight;
 float NoteBorder;
 float ScreenAspect;
 float KeyboardHeight;
+int ScreenWidth;
+int ScreenHeight;
 
 struct NOTE {
 	float start : START;
