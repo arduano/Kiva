@@ -1,9 +1,9 @@
 <h1 align="center">Kiva</h1>
 
 <p align="center">
-    <img src="[insert image here]" width="256" />
+    <img src="https://i.imgur.com/g0XBUMN.png" width="256" />
     <br />
-    <strong>[insert tagline here]</strong>
+    <strong>Fast, Easy, Modern</strong>
 </p>
 
 <p align="center">
@@ -16,10 +16,17 @@
 </p>
 
 ## Features
-*insert features here*
+- Extremely fast multithreaded rendering, best optimized for medium to high end systems.
+- Support for switching between KDMAPI and WinMM in the settings. do not kdmapi patch kiva.
+- Support for Zenith color palettes and midi color events
+- Epic transparent or semi transparent background if you want
+- 256 key support, as well as dynamic key range option (animating between 88 and 128 keys depending on the notes on screen)
+- 2 different keyboard designs, as well as option to disable keyboard
 
 ## Instalation
-You can download the latest version of Kiva for Windows 64-bit [here](https://github.com/arduano/Kiva/releases/latest/download/InsertKivaInstallerNameHere.exe).
+You can download the latest version of Kiva for Windows 64-bit [here](https://github.com/arduano/Kiva/releases/latest/download/KivaInstaller.exe).
+Kiva has **fully automatic updates**, downloading the update in the background and installing it automatically next time the program restarts.
+If you wish to opt out from auto updates, use the portable version instead [here](https://github.com/arduano/Kiva/releases/latest/download/KivaPortable.zip).
 
 ## Usage
 After downloading the app, install and run the program.
@@ -28,4 +35,6 @@ After downloading the app, install and run the program.
 Kiva is licensed under the terms of the [GNU General Public License v3.0](https://github.com/arduano/Kiva/blob/master/LICENSE)
 
 ## Screenshots
-*insert screenshots here*
+<img src="https://i.imgur.com/YD0wHE1.png" width="256" />
+<img src="https://i.imgur.com/48GfALp.png" width="256" />
+<img src="https://i.imgur.com/QpgjYcv.png" width="256" />
