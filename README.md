@@ -37,6 +37,6 @@ After downloading the app, install and run the program. Many settings have a que
 Kiva is licensed under the terms of the [GNU General Public License v3.0](https://github.com/arduano/Kiva/blob/master/LICENSE)
 
 ## Screenshots
-<img src="https://i.imgur.com/YD0wHE1.png" width="256" />
-<img src="https://i.imgur.com/48GfALp.png" width="256" />
-<img src="https://i.imgur.com/QpgjYcv.png" width="256" />
+<img src="https://i.imgur.com/YD0wHE1.png" width="512" />
+<img src="https://i.imgur.com/48GfALp.png" width="512" />
+<img src="https://i.imgur.com/QpgjYcv.png" width="512" />
