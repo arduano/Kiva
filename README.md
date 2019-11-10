@@ -1,9 +1,9 @@
 <h1 align="center">Kiva</h1>
 
 <p align="center">
-    <img src="https://i.imgur.com/ffn8W81.png" width="256" style="transform:rotate(1440deg);-webkit-transition-duration:3s;-moz-transition-duration:3s;-o-transition-duration:3s;transition-duration:3s;-webkit-transition-property:-webkit-transform;-moz-transition-property:-moz-transform;-o-transition-property:-o-transform;transition-property:transform;overflow:hidden"/>
+    <img src="https://i.imgur.com/ffn8W81.png" width="256" style=""/>
     <br />
-    <strong>[insert tagline here]</strong>
+    <strong></strong>
 </p>
 
 <p align="center">
@@ -15,9 +15,6 @@
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=M9XRCSPYSMBCA&source=url"><img src="https://img.shields.io/badge/Donate-PayPal-green.svg?style=flat-square" alt="Donate"></a>
 </p>
 
-## Features
-*insert features here*
-
 ## Instalation
 You can download the latest version of Kiva for 64-bit version of Windows [here](https://github.com/arduano/Kiva/releases/latest/download/KivaInstaller.exe). Alternatively, you can download the portable version [here](https://github.com/arduano/Kiva/releases/download/latest/KivaPortable.zip).
 
@@ -28,6 +25,3 @@ After downloading the app, install and run the program.
 
 ## License
 Kiva is licensed under the terms of the [GNU General Public License v3.0](https://github.com/arduano/Kiva/blob/master/LICENSE)
-
-## Screenshots
-*insert screenshots here*
