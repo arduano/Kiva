@@ -57,6 +57,7 @@ namespace Kiva_MIDI
                                 foreach (var t in tasks) t.GetAwaiter().GetResult();
                                 tasks.Clear();
                             }
+                            changed = true;
                         }
                         file = value;
                     }
@@ -130,10 +131,13 @@ namespace Kiva_MIDI
             });
         }
 
+        bool changed = true;
+
         Task RunMemoryPlayerThread(int i)
         {
             return Task.Factory.StartNew(() =>
             {
+                changed = true;
                 MIDIEvent[] events;
                 if (i == -1)
                     try
@@ -150,7 +154,6 @@ namespace Kiva_MIDI
                 if (events.Length == 0) return;
                 int evid = 0;
                 double lastTime = 0;
-                bool changed = true;
                 Action onChanged = () => changed = true;
                 Time.TimeChanged += onChanged;
                 while (file != null)
