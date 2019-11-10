@@ -1,7 +1,7 @@
 <h1 align="center">Kiva</h1>
 
 <p align="center">
-    <img src="[insert image here]" width="256" />
+    <img src="https://i.imgur.com/ffn8W81.png" width="256" style="transform:rotate(1440deg);-webkit-transition-duration:3s;-moz-transition-duration:3s;-o-transition-duration:3s;transition-duration:3s;-webkit-transition-property:-webkit-transform;-moz-transition-property:-moz-transform;-o-transition-property:-o-transform;transition-property:transform;overflow:hidden"/>
     <br />
     <strong>[insert tagline here]</strong>
 </p>
@@ -19,7 +19,9 @@
 *insert features here*
 
 ## Instalation
-You can download the latest version of Kiva for Windows 64-bit [here](https://github.com/arduano/Kiva/releases/latest/download/InsertKivaInstallerNameHere.exe).
+You can download the latest version of Kiva for 64-bit version of Windows [here](https://github.com/arduano/Kiva/releases/latest/download/KivaInstaller.exe). Alternatively, you can download the portable version [here](https://github.com/arduano/Kiva/releases/download/latest/KivaPortable.zip).
+
+An internet connection is required for the installation process. DirectX 11 is required for the program to run, which you can find [here](https://www.microsoft.com/en-us/download/details.aspx?id=17431).
 
 ## Usage
 After downloading the app, install and run the program.
