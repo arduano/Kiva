@@ -48,8 +48,10 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 	float4 cl = colorlConv;
     float4 cr = colorrConv;
 
-	cl.xyz *= 0.3f;
-	cr.xyz *= 0.3f;
+	float noteBorder = 0.0013;
+
+	cl.xyz *= 0.2f;
+	cr.xyz *= 0.2f;
 	cl.xyz += 0.1f;
 	cr.xyz -= 0.3f;
 	cl.xyz = clamp(cl.xyz, 0, 1);
@@ -89,13 +91,13 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 	cr.xyz = clamp(cr.xyz, 0, 1);
 
 
-	float borderTop = n.end - NoteBorder / ScreenAspect;
-	float borderBottom = n.start + NoteBorder / ScreenAspect;
+	float borderTop = n.end - noteBorder / ScreenAspect;
+	float borderBottom = n.start + noteBorder / ScreenAspect;
 	if (borderTop < borderBottom) {
 		return;
 	}
-	float borderLeft = NoteLeft + NoteBorder;
-	float borderRight = NoteRight - NoteBorder;
+	float borderLeft = NoteLeft + noteBorder;
+	float borderRight = NoteRight - noteBorder;
 
 	v.col = cl;
 	v.pos = float4(borderLeft, borderBottom, 0, 1);
