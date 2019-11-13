@@ -102,6 +102,9 @@ namespace MIDIAudioFramework
 
         public static void DisposeBASS()
         {
+            soundOut.Stop();
+            soundOut.Dispose();
+            Bass.BASS_StreamFree(Handle);
             Bass.BASS_Free();
         }
 
@@ -217,11 +220,6 @@ namespace MIDIAudioFramework
         public static void SendEvent(uint e)
         {
             SendEvent(BASSMIDIEvent.MIDI_EVENT_NOTE, (127 << 8) | 64, 0, 0, (int)(DateTime.UtcNow.Ticks - lastReadTime.Ticks) << 3);
-        }
-
-        public static void Dispose()
-        {
-            Bass.BASS_StreamFree(Handle);
         }
     }
 }
