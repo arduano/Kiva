@@ -96,9 +96,10 @@ namespace Kiva_MIDI
         public static void Set<T>(ref T field, T newValue)
             where T : IDisposable
         {
-            if (field != null)
-                field.Dispose();
+            var old = field;
             field = newValue;
+            if (old != null)
+                old.Dispose();
         }
 
         public abstract System.Windows.Media.Imaging.WriteableBitmap ToImage();
@@ -113,7 +114,6 @@ namespace Kiva_MIDI
         public void Render(DrawEventArgs args)
         {
             RenderTime = args.TotalTime;
-
             if (renderThread == null)
             {
                 renderThread = StartRenderThread();
@@ -125,7 +125,8 @@ namespace Kiva_MIDI
                     TrueRender();
                 }
             }
-            argsPointer.args = args;
+            lock (argsPointer)
+                argsPointer.args = args;
         }
 
         Task StartRenderThread()

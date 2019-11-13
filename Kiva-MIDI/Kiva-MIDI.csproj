@@ -375,6 +375,10 @@
       <Project>{181949ba-6424-4ad0-966b-1db6cdf1777d}</Project>
       <Name>KivaShared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MIDIAudioFramework\MIDIAudioFramework.csproj">
+      <Project>{12907daa-ee53-4303-a646-3b846ca079cc}</Project>
+      <Name>MIDIAudioFramework</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logo.ico" />
