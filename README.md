@@ -23,7 +23,7 @@
 - 256 key support, as well as dynamic key range option (animating between 88 and 128 keys depending on the notes on screen)
 - 2 different keyboard designs, as well as option to disable keyboard
 
-## Instalation
+## Installation
 You can download the latest version of Kiva for Windows 64-bit using the [installer](https://github.com/arduano/Kiva/releases/latest/download/KivaInstaller.exe). An internet connection is required.
 Kiva has **fully automatic updates**, downloading the update in the background and installing it automatically next time the program restarts.
 If you wish to opt out from auto updates, use the [portable version](https://github.com/arduano/Kiva/releases/latest/download/KivaPortable.zip).
