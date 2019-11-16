@@ -9,71 +9,38 @@ using System.Threading.Tasks;
 using Un4seen.Bass;
 using Un4seen.Bass.AddOn.Midi;
 
-namespace MIDIAudioFramework
+namespace Kiva_MIDI
 {
-    public static class BASSMIDI
+    public class BASSMIDI : ISampleSource
     {
-        class PlayerSource : ISampleSource
-        {
-            public bool CanSeek => false;
+        public int Handle { get; private set; }
 
-            public WaveFormat WaveFormat => WaveFormatStatic;
+        public bool CanSeek => false;
 
-            public long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public WaveFormat WaveFormat { get; }
+        public static WaveFormat WaveFormatStatic { get; private set; }
 
-            public long Length => throw new NotImplementedException();
+        public long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-            public void Dispose()
-            {
-
-            }
-
-            public unsafe int Read(float[] buffer, int offset, int count)
-            {
-                fixed (float* buff = buffer)
-                {
-                    var obuff = buff + offset;
-                    int ret = Bass.BASS_ChannelGetData(Handle, (IntPtr)obuff, (count * 4) | (int)BASSData.BASS_DATA_FLOAT);
-                    if (ret == 0)
-                    {
-                        var err = Bass.BASS_ErrorGetCode();
-                        if (err != BASSError.BASS_ERROR_ENDED)
-                            throw new Exception("ret " + ret + " " + Bass.BASS_ErrorGetCode());
-                    }
-                    lastReadTime = DateTime.UtcNow;
-                    return ret / 4;
-                }
-            }
-        }
-
-        static DateTime lastReadTime = DateTime.UtcNow;
-
-        static int Handle { get; set; }
-
-        public static WaveFormat WaveFormatStatic { get; private set; } = new WaveFormat(48000, 32, 2);
-        public static int Voices { get; set; } = 50000;
-
-        static ISoundOut soundOut;
-        static ISampleSource player;
+        public long Length => throw new NotImplementedException();
 
         static BASS_MIDI_FONTEX[] fontarr;
 
-        static ISoundOut GetSoundOut()
+        public static void InitBASS(WaveFormat format)
         {
-            if (WasapiOut.IsSupportedOnCurrentPlatform)
-                return new WasapiOut();
-            else
-                return new DirectSoundOut();
-        }
-
-        public static void InitBASS()
-        {
+            WaveFormatStatic = format;
             Bass.BASS_Free();
             if (!Bass.BASS_Init(0, WaveFormatStatic.SampleRate, BASSInit.BASS_DEVICE_NOSPEAKER, IntPtr.Zero))
                 throw new Exception();
+        }
 
-            LoadDefaultSoundfont();
+        public static void DisposeBASS()
+        {
+            Bass.BASS_Free();
+        }
 
+        public BASSMIDI(int voices)
+        {
             Handle = BassMidi.BASS_MIDI_StreamCreate(16,
                 BASSFlag.BASS_SAMPLE_FLOAT |
                 BASSFlag.BASS_STREAM_DECODE |
@@ -86,26 +53,12 @@ namespace MIDIAudioFramework
                 throw new Exception(error.ToString());
             }
 
-            Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_MIDI_VOICES, Voices);
+            Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_MIDI_VOICES, voices);
             Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_SRC, 3);
 
             Bass.BASS_ChannelFlags(Handle, BASSFlag.BASS_MIDI_NOFX, BASSFlag.BASS_MIDI_NOFX);
 
             BassMidi.BASS_MIDI_StreamSetFonts(Handle, fontarr, fontarr.Length);
-
-            soundOut = GetSoundOut();
-            player = new PlayerSource();
-            soundOut.Initialize(player.ToWaveSource());
-            lastReadTime = DateTime.UtcNow;
-            soundOut.Play();
-        }
-
-        public static void DisposeBASS()
-        {
-            soundOut.Stop();
-            soundOut.Dispose();
-            Bass.BASS_StreamFree(Handle);
-            Bass.BASS_Free();
         }
 
         public static void LoadDefaultSoundfont()
@@ -203,23 +156,130 @@ namespace MIDIAudioFramework
             }
         }
 
-        public static int SendEvent(BASSMIDIEvent type, int param, int chan, int tick, int time)
+        public bool WriteBass(int buflen, Stream bs, ref ulong progress)
+        {
+            buflen <<= 3;
+            byte[] buf = new byte[buflen];
 
+            int ret = Bass.BASS_ChannelGetData(Handle, buf, buflen | (int)BASSData.BASS_DATA_FLOAT);
+            if (ret > 0)
+            {
+                progress += (uint)ret;
+                bs.Write(buf, 0, ret);
+                return true;
+            }
+            else
+            {
+                var err = Bass.BASS_ErrorGetCode();
+                if (err != BASSError.BASS_ERROR_ENDED)
+                    throw new Exception("ret " + ret + " " + Bass.BASS_ErrorGetCode());
+                return false;
+            }
+        }
+
+        public float[] WriteFloatArray(int buflen, ref ulong progress)
+        {
+            byte[] buf = new byte[buflen * 4];
+            float[] flt = new float[buflen];
+
+            int ret = Bass.BASS_ChannelGetData(Handle, buf, buflen * 4);
+            if (ret > 0)
+            {
+                progress += (uint)ret;
+                Buffer.BlockCopy(buf, 0, flt, 0, buflen * 4);
+                return flt;
+            }
+            else
+            {
+                var err = Bass.BASS_ErrorGetCode();
+                if (err != BASSError.BASS_ERROR_ENDED)
+                    throw new Exception("ret " + ret + " " + Bass.BASS_ErrorGetCode());
+                return null;
+            }
+        }
+
+        public int KShortMessage(int dwParam1, int sampleoffset)
+        {
+            if ((byte)dwParam1 == 0xFF)
+                return 1;
+
+            byte cmd = (byte)dwParam1;
+
+            BASS_MIDI_EVENT ev;
+
+            if (cmd < 0xA0) //Note
+            {
+                ev = new BASS_MIDI_EVENT(BASSMIDIEvent.MIDI_EVENT_NOTE,
+                    cmd < 0x90 ? (byte)(dwParam1 >> 8) : (ushort)(dwParam1 >> 8), (int)dwParam1 & 0xF, 0, sampleoffset << 3);
+            }
+            else if (cmd < 0xB0) //AfterTouch
+            {
+                ev = new BASS_MIDI_EVENT(BASSMIDIEvent.MIDI_EVENT_KEYPRES,
+                    (ushort)(dwParam1 >> 8), (int)dwParam1 & 0xF, 0, sampleoffset << 3);
+            }
+            else if (cmd < 0xC0) //Control
+            {
+                //TODO
+                return 0;
+            }
+            else if (cmd < 0xD0) //InstrumentSelect
+            {
+                ev = new BASS_MIDI_EVENT(BASSMIDIEvent.MIDI_EVENT_PROGRAM,
+                    (byte)(dwParam1 >> 8), (int)dwParam1 & 0xF, 0, sampleoffset << 3);
+            }
+            else if (cmd < 0xE0) //???
+            {
+                ev = new BASS_MIDI_EVENT(BASSMIDIEvent.MIDI_EVENT_CHANPRES,
+                    (byte)(dwParam1 >> 8), (int)dwParam1 & 0xF, 0, sampleoffset << 3);
+            }
+            else if (cmd < 0xF0) //PitchBend
+            {
+                //TODO: check bit pack
+                ev = new BASS_MIDI_EVENT(BASSMIDIEvent.MIDI_EVENT_PITCH,
+                    (int)((byte)(dwParam1 >> 16) | ((dwParam1 & 0x7F00) >> 1)), (int)dwParam1 & 0xF, 0, sampleoffset << 3);
+            }
+            else
+            {
+                return 0;
+            }
+
+            BassStreamEvents(new BASS_MIDI_EVENT[] { ev });
+
+            return 0;
+        }
+
+        public int SendEvent(BASSMIDIEvent type, int param, int chan, int tick, int time)
         {
             var ev = new BASS_MIDI_EVENT(type, param, chan, tick, time << 3);
             var mode = BASSMIDIEventMode.BASS_MIDI_EVENTS_TIME | BASSMIDIEventMode.BASS_MIDI_EVENTS_STRUCT;
             return BassMidi.BASS_MIDI_StreamEvents(Handle, mode, new BASS_MIDI_EVENT[] { ev });
         }
 
-        public static int BassStreamEvents(BASS_MIDI_EVENT[] events)
+        public int BassStreamEvents(BASS_MIDI_EVENT[] events)
         {
             var mode = BASSMIDIEventMode.BASS_MIDI_EVENTS_TIME | BASSMIDIEventMode.BASS_MIDI_EVENTS_STRUCT;
             return BassMidi.BASS_MIDI_StreamEvents(Handle, mode, events);
         }
 
-        public static void SendEvent(uint e)
+        public unsafe int Read(float[] buffer, int offset, int count)
         {
-            SendEvent(BASSMIDIEvent.MIDI_EVENT_NOTE, (127 << 8) | 64, 0, 0, (int)(DateTime.UtcNow.Ticks - lastReadTime.Ticks) << 3);
+            fixed (float* buff = buffer)
+            {
+                var obuff = buff + offset;
+                int ret = Bass.BASS_ChannelGetData(Handle, (IntPtr)obuff, (count * 4) | (int)BASSData.BASS_DATA_FLOAT);
+                if (ret == 0)
+                {
+                    var err = Bass.BASS_ErrorGetCode();
+                    if (err != BASSError.BASS_ERROR_ENDED)
+                        throw new Exception("ret " + ret + " " + Bass.BASS_ErrorGetCode());
+                }
+                return ret / 4;
+            }
+        }
+
+        public void Dispose()
+        {
+            Bass.BASS_StreamFree(Handle);
         }
     }
 }

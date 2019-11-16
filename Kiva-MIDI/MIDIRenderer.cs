@@ -430,7 +430,7 @@ namespace Kiva_MIDI
             else if (settings.General.KeyRange == KeyRangeTypes.Key88)
             {
                 firstNote = 21;
-                lastNote = 108;
+                lastNote = 109;
             }
             else if (settings.General.KeyRange == KeyRangeTypes.Custom)
             {

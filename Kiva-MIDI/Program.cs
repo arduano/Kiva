@@ -8,7 +8,6 @@ using KivaShared;
 using System.IO;
 using System.IO.Compression;
 using System.Diagnostics;
-using MIDIAudioFramework;
 
 namespace Kiva_MIDI
 {
@@ -17,21 +16,25 @@ namespace Kiva_MIDI
         public static bool UpdateReady { get; private set; } = false;
         public static bool UpdateDownloading { get; private set; } = false;
 
+        static IEnumerable<MIDIEvent> feedevents()
+        {
+            for (int i = 0; i < 1000000; i++)
+            {
+                int vel = 0x7f;
+                int key = i % 128;
+                yield return new MIDIEvent() { data = (uint)((vel << 16) | (key << 8) | 0x90), time = i * 0.34534f };
+            }
+        }
+
         [STAThread]
         static void Main(string[] args)
         {
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
-                                          
-            BASSMIDI.InitBASS();
-            Thread.Sleep(2000);
-            for(int i = 0; true; i++)
-            {
-                BASSMIDI.SendEvent(0);
-                Thread.Sleep(0);
-            }
-            Thread.Sleep(-1);
 
-            Console.ReadLine();
+            MIDIAudio.Init();
+            var ma = new MIDIAudio(48000 * 60);
+            ma.Start(0, feedevents());
+            Thread.Sleep(-1);
 
             try
             {
