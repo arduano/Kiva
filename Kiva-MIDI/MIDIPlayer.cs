@@ -113,10 +113,10 @@ namespace Kiva_MIDI
                     if (disposed) break;
                     try
                     {
-                        tasks.Add(RunMemoryPlayerThread(-1));
+                        tasks.Add(RunPlayerThread(-1));
                         for (int i = 0; i < (file as MIDIMemoryFile).MIDINoteEvents.Length; i++)
                         {
-                            tasks.Add(RunMemoryPlayerThread(i));
+                            tasks.Add(RunPlayerThread(i));
                         }
                         lock (tasks)
                         {
@@ -133,7 +133,7 @@ namespace Kiva_MIDI
 
         bool changed = true;
 
-        Task RunMemoryPlayerThread(int i)
+        Task RunPlayerThread(int i)
         {
             return Task.Factory.StartNew(() =>
             {
