@@ -167,6 +167,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BASSMIDI.cs" />
+    <Compile Include="LoudMaxStream.cs" />
     <Compile Include="Material.WPF\InfoIcon.xaml.cs">
       <DependentUpon>InfoIcon.xaml</DependentUpon>
     </Compile>
@@ -213,6 +214,7 @@
     <Compile Include="MIDIFile.cs" />
     <Compile Include="MIDIParsing\MIDITrackParser.cs" />
     <Compile Include="MIDIParsing\SkipIterator.cs" />
+    <Compile Include="MIDIPreRenderPlayer.cs" />
     <Compile Include="MIDIRenderer.cs" />
     <Compile Include="Material.WPF\NumberSelect.xaml.cs">
       <DependentUpon>NumberSelect.xaml</DependentUpon>

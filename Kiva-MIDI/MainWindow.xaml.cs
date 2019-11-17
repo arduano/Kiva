@@ -193,6 +193,7 @@ namespace Kiva_MIDI
         Scene scene;
         D3D11 d3d;
         MIDIPlayer player;
+        MIDIPreRenderPlayer preRenderPlayer;
 
         MIDIFile loadedFle;
 
@@ -221,10 +222,12 @@ namespace Kiva_MIDI
             dx11img.MouseDown += (s, e) => Focus();
             scene.Time = Time;
 
-            player = new MIDIPlayer(settings);
-            player.DeviceID = settings.General.SelectedMIDIDevice;
-            player.RunPlayer();
-            player.Time = Time;
+            //player = new MIDIPlayer(settings);
+            //player.DeviceID = settings.General.SelectedMIDIDevice;
+            //player.RunPlayer();
+            //player.Time = Time;
+            preRenderPlayer = new MIDIPreRenderPlayer(settings);
+            preRenderPlayer.Time = Time;
 
             speedSlider.nudToSlider = v => Math.Log(v, 2);
             speedSlider.sliderToNud = v => Math.Pow(2, v);
@@ -242,8 +245,8 @@ namespace Kiva_MIDI
             {
                 if (e.PropertyName == "FPSLock")
                     d3d.FPSLock = settings.General.FPSLock;
-                if (e.PropertyName == "SelectedMIDIDevice")
-                    player.DeviceID = settings.General.SelectedMIDIDevice;
+                //if (e.PropertyName == "SelectedMIDIDevice")
+                //    player.DeviceID = settings.General.SelectedMIDIDevice;
                 if (e.PropertyName == "CompatibilityFPS")
                     d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
                 if (e.PropertyName == "BackgroundColor")
@@ -260,7 +263,7 @@ namespace Kiva_MIDI
             };
 
             d3d.FPSLock = settings.General.FPSLock;
-            player.DeviceID = settings.General.SelectedMIDIDevice;
+            //player.DeviceID = settings.General.SelectedMIDIDevice;
             d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
             glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
             infoCard.Visibility = settings.General.HideInfoCard ? Visibility.Hidden : Visibility.Visible;
@@ -284,7 +287,7 @@ namespace Kiva_MIDI
 
                 if (midiTime > midiLen + 1) Time.Pause();
 
-                double eventSkip = Math.Floor(player.BufferLen / 100.0);
+                double eventSkip = 0;//Math.Floor(player.BufferLen / 100.0);
                 if (eventSkip > 0)
                 {
                     audioDesyncLabel.Visibility = Visibility.Visible;
@@ -313,7 +316,8 @@ namespace Kiva_MIDI
                 return;
             }
             Time.Reset();
-            player.File = null;
+            //player.File = null;
+            preRenderPlayer.File = null;
             scene.File = null;
             loadedFle = null;
             GC.Collect(2, GCCollectionMode.Forced);
@@ -326,7 +330,8 @@ namespace Kiva_MIDI
             {
                 var file = loadingForm.LoadedFile;
                 file.SetColors(settings.PaletteSettings.Palettes[settings.General.PaletteName], settings.General.PaletteRandomized);
-                player.File = file;
+                //player.File = file;
+                preRenderPlayer.File = file;
                 scene.File = file;
                 loadedFle = file;
                 timeSlider.Maximum = file.MidiLength;
@@ -537,8 +542,9 @@ namespace Kiva_MIDI
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            player.File = null;
-            player.Dispose();
+            //player.File = null;
+            //player.Dispose();
+            preRenderPlayer.Dispose();
             scene.File = null;
             d3d.Dispose();
         }

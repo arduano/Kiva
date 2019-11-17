@@ -32,10 +32,7 @@ namespace Kiva_MIDI
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
 
             MIDIAudio.Init();
-            var ma = new MIDIAudio(48000 * 60);
-            ma.Start(0, feedevents());
-            Thread.Sleep(-1);
-
+            
             try
             {
                 var s = new Settings();
