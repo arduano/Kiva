@@ -10,8 +10,8 @@ int ScreenHeight;
 struct NOTE {
 	float start : START;
 	float end : END;
-    dword colorl : COLORL;
-    dword colorr : COLORR;
+	dword colorl : COLORL;
+	dword colorr : COLORR;
 };
 
 struct VS_IN
@@ -39,16 +39,18 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 	NOTE n = input[0];
 	PS_IN v = (PS_IN)0;
 
-    float4 colorlConv = float4((float)(n.colorl >> 24 & 0xff) / 255.0, (float)(n.colorl >> 16 & 0xff) / 255.0, (float)(n.colorl >> 8 & 0xff) / 255.0, (float)(n.colorl & 0xff) / 255.0);
-    float4 colorrConv = float4((float)(n.colorr >> 24 & 0xff) / 255.0, (float)(n.colorr >> 16 & 0xff) / 255.0, (float)(n.colorr >> 8 & 0xff) / 255.0, (float)(n.colorr & 0xff) / 255.0);
+	float4 colorlConv = float4((float)(n.colorl >> 24 & 0xff) / 255.0, (float)(n.colorl >> 16 & 0xff) / 255.0, (float)(n.colorl >> 8 & 0xff) / 255.0, (float)(n.colorl & 0xff) / 255.0);
+	float4 colorrConv = float4((float)(n.colorr >> 24 & 0xff) / 255.0, (float)(n.colorr >> 16 & 0xff) / 255.0, (float)(n.colorr >> 8 & 0xff) / 255.0, (float)(n.colorr & 0xff) / 255.0);
 
 	colorlConv.w *= colorlConv.w;
 	colorlConv.w *= colorlConv.w;
 
 	float4 cl = colorlConv;
-    float4 cr = colorrConv;
+	float4 cr = colorrConv;
 
 	float noteBorder = 0.0013;
+	float noteBorderh = round(noteBorder * ScreenWidth) / ScreenWidth;
+	float noteBorderv = round(noteBorder * ScreenHeight) / ScreenHeight / ScreenAspect;
 
 	cl.xyz *= 0.2f;
 	cr.xyz *= 0.2f;
@@ -91,13 +93,13 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 	cr.xyz = clamp(cr.xyz, 0, 1);
 
 
-	float borderTop = n.end - noteBorder / ScreenAspect;
-	float borderBottom = n.start + noteBorder / ScreenAspect;
+	float borderTop = n.end - noteBorderv;
+	float borderBottom = n.start + noteBorderv;
 	if (borderTop < borderBottom) {
 		return;
 	}
-	float borderLeft = NoteLeft + noteBorder;
-	float borderRight = NoteRight - noteBorder;
+	float borderLeft = NoteLeft + noteBorderh;
+	float borderRight = NoteRight - noteBorderh;
 
 	v.col = cl;
 	v.pos = float4(borderLeft, borderBottom, 0, 1);
@@ -126,7 +128,7 @@ void GS_Note(point NOTE input[1], inout TriangleStream<PS_IN> OutputStream)
 	OutputStream.RestartStrip();
 }
 
-float4 PS( PS_IN input ) : SV_Target
+float4 PS(PS_IN input) : SV_Target
 {
 	return input.col;
 }
