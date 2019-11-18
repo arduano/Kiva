@@ -141,7 +141,8 @@ void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	float ileft = left + bez * height * Aspect;
 	float iright = right - bez * height * Aspect;
 	float itop = top - bez * height;
-	float ibottom = bottom + bez * height;
+	float ibottom = bottom + bez * height * 1.5;
+	if(pressed) ibottom = bottom + bez * height / 3;
 
 	float4 colorlConv = float4((float)(k.colorl >> 24 & 0xff) / 255.0, (float)(k.colorl >> 16 & 0xff) / 255.0, (float)(k.colorl >> 8 & 0xff) / 255.0, (float)(k.colorl & 0xff) / 255.0);
 	float4 colorrConv = float4((float)(k.colorr >> 24 & 0xff) / 255.0, (float)(k.colorr >> 16 & 0xff) / 255.0, (float)(k.colorr >> 8 & 0xff) / 255.0, (float)(k.colorr & 0xff) / 255.0);
@@ -219,8 +220,8 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	float ileft = left + bez * height * Aspect;
 	float iright = right - bez * height * Aspect;
-	float itop = top + bez * height;
-	//float itop = top;
+	float itop = top + bez * height * 3;
+	if(pressed) itop = top;
 	float ibottom = bottom + bez * height;
 
 	float4 colorlConv = float4((float)(k.colorl >> 24 & 0xff) / 255.0, (float)(k.colorl >> 16 & 0xff) / 255.0, (float)(k.colorl >> 8 & 0xff) / 255.0, (float)(k.colorl & 0xff) / 255.0);
