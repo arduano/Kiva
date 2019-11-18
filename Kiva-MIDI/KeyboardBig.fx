@@ -96,8 +96,8 @@ void GS_Bar(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.c4 = color;
 	q.v1 = float2(0, Height);
 	q.v2 = float2(1, Height);
-	q.v3 = float2(1, Height * 0.92);
-	q.v4 = float2(0, Height * 0.92);
+	q.v3 = float2(1, Height * 0.94);
+	q.v4 = float2(0, Height * 0.94);
 	renderQuad(OutputStream, dim(q, -0.0));
 
 	q.c1 = float4(0, 0, 0, 0);
@@ -114,10 +114,10 @@ void GS_Bar(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	q.c2 = float4(0, 0, 0, 0.4);
 	q.c3 = float4(0, 0, 0, 0);
 	q.c4 = float4(0, 0, 0, 0);
-	q.v1 = float2(0, Height * 0.92);
-	q.v2 = float2(1, Height * 0.92);
-	q.v3 = float2(1, Height * 0.88);
-	q.v4 = float2(0, Height * 0.88);
+	q.v1 = float2(0, Height * 0.94);
+	q.v2 = float2(1, Height * 0.94);
+	q.v3 = float2(1, Height * 0.90);
+	q.v4 = float2(0, Height * 0.90);
 	renderQuad(OutputStream, dim(q, -0.0));
 }
 
@@ -130,7 +130,7 @@ void GS_White(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	PS_IN v = (PS_IN)0;
 	QUAD q = (QUAD)0;
 
-	float height = Height * 0.92;
+	float height = Height * 0.94;
 
 	float left = (k.left - Left) / (Right - Left);
 	float right = (k.right - Left) / (Right - Left);
@@ -202,7 +202,7 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 	PS_IN v = (PS_IN)0;
 	QUAD q = (QUAD)0;
 
-	float height = Height * 0.92;
+	float height = Height * 0.94;
 
 	float bez = 0.02;
 
@@ -213,10 +213,10 @@ void GS_Black(point KEY input[1], inout TriangleStream<PS_IN> OutputStream)
 
 	float ileft = left + bez * height * Aspect;
 	float iright = right - bez * height * Aspect;
-	float itop = top + bez * height * 3;
+	float itop = top + bez * height * 2.5;
 	if (pressed) itop = top;
 	float ibottom = bottom + bez * height;
-	if (!pressed) ibottom = bottom + bez * height * 3;
+	if (!pressed) ibottom = bottom + bez * height * 2.5;
 
 	float4 colorlConv = float4((float)(k.colorl >> 24 & 0xff) / 255.0, (float)(k.colorl >> 16 & 0xff) / 255.0, (float)(k.colorl >> 8 & 0xff) / 255.0, (float)(k.colorl & 0xff) / 255.0);
 	float4 colorrConv = float4((float)(k.colorr >> 24 & 0xff) / 255.0, (float)(k.colorr >> 16 & 0xff) / 255.0, (float)(k.colorr >> 8 & 0xff) / 255.0, (float)(k.colorr & 0xff) / 255.0);
