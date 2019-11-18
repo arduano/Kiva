@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Threading;
 using Un4seen.Bass.AddOn.Midi;
 using CSCore.SoundOut;
+using System.IO;
 
 namespace Kiva_MIDI
 {
@@ -33,34 +33,46 @@ namespace Kiva_MIDI
 
             public void Dispose()
             {
-                throw new NotImplementedException();
+
             }
 
             public int Read(float[] buffer, int offset, int count)
             {
-                if (count % 2 != 0) throw new Exception("Expected a multiple of 2");
-                var readpos = audioSource.bufferReadPos % (audioSource.AudioBuffer.Length / 2);
-                var writepos = audioSource.bufferReadPos % (audioSource.AudioBuffer.Length / 2);
-                if (audioSource.bufferReadPos + count / 2 > audioSource.bufferWritePos)
+                lock (audioSource.AudioBuffer)
                 {
-                    int copyCount = audioSource.bufferReadPos - (audioSource.bufferWritePos + count / 2);
-                    if (copyCount > count / 2) copyCount = count / 2;
-                    if (copyCount > 0) WrappedCopy(audioSource.AudioBuffer, readpos * 2, buffer, offset, copyCount * 2);
+                    if (audioSource.Paused)
+                    {
+                        for (int i = 0; i < count; i++)
+                        {
+                            buffer[i + offset] = 0;
+                        }
+                        return count;
+                    }
+                    if (count % 2 != 0) throw new Exception("Expected a multiple of 2");
+                    var readpos = audioSource.bufferReadPos % (audioSource.AudioBuffer.Length / 2);
+                    var writepos = audioSource.bufferReadPos % (audioSource.AudioBuffer.Length / 2);
+                    if (audioSource.bufferReadPos + count / 2 > audioSource.bufferWritePos)
+                    {
+                        int copyCount = audioSource.bufferReadPos - (audioSource.bufferWritePos + count / 2);
+                        if (copyCount > count / 2) copyCount = count / 2;
+                        if (copyCount > 0) WrappedCopy(audioSource.AudioBuffer, readpos * 2, buffer, offset, copyCount * 2);
+                        else
+                        {
+                            copyCount = 0;
+                        }
+                        for (int i = copyCount * 2; i < count; i++)
+                        {
+                            buffer[i + offset] = 0;
+                        }
+                    }
                     else
                     {
-                        copyCount = 0;
+                        WrappedCopy(audioSource.AudioBuffer, readpos * 2, buffer, offset, count);
                     }
-                    for (int i = copyCount * 2; i < count; i++)
-                    {
-                        buffer[i + offset] = 0;
-                    }
+                    audioSource.bufferReadPos += count / 2;
+                    audioSource.lastReadtime = DateTime.UtcNow;
+                    return count;
                 }
-                else
-                {
-                    WrappedCopy(audioSource.AudioBuffer, readpos * 2, buffer, offset, count);
-                }
-                audioSource.bufferReadPos += count / 2;
-                return count;
             }
         }
 
@@ -78,8 +90,28 @@ namespace Kiva_MIDI
         float[] AudioBuffer;
         int bufferReadPos = 0;
         int bufferWritePos = 0;
+        double startTime = 0;
+
+        DateTime lastReadtime = DateTime.UtcNow;
+
+        public int SkippingVelocity
+        {
+            get
+            {
+                if (Paused) return 0;
+                var diff = 127 + 10 - (bufferWritePos - bufferReadPos) / 100;
+                if (diff > 127) diff = 127;
+                if (diff < 0) diff = 0;
+                return diff;
+            }
+        }
+
+        public double BufferSeconds => Math.Max(0, bufferWritePos - bufferReadPos) / 48000.0;
+        public double PlayerTime => startTime + bufferReadPos / 48000.0;
 
         static WaveFormat format = new WaveFormat(48000, 32, 2);
+
+        public bool Paused { get; set; } = true;
 
         Task generatorThread = null;
         CancellationTokenSource cancelGenerator = null;
@@ -90,7 +122,7 @@ namespace Kiva_MIDI
         public static void Init()
         {
             BASSMIDI.InitBASS(format);
-            BASSMIDI.LoadDefaultSoundfont();
+            BASSMIDI.LoadGlobalSoundfonts();
         }
 
         private ISoundOut GetSoundOut()
@@ -108,6 +140,7 @@ namespace Kiva_MIDI
             soundOut = GetSoundOut();
             soundOut.Initialize(new LoudMaxStream(audioStream).ToWaveSource());
             soundOut.Play();
+            lastReadtime = DateTime.UtcNow;
         }
 
         void BassWriteWrapped(BASSMIDI bass, int start, int count)
@@ -126,19 +159,21 @@ namespace Kiva_MIDI
             }
         }
 
-        void GeneratorFunc(double time, IEnumerable<MIDIEvent> events, Action<double, int> skipEvents)
+        void GeneratorFunc(IEnumerable<MIDIEvent> events, double speed, Action<double, int> skipEvents)
         {
             var bass = new BASSMIDI(1000);
             bufferWritePos = 0;
             bufferReadPos = 0;
+            lastReadtime = DateTime.UtcNow;
             foreach (var e in events)
             {
+                var shiftedBufferReadPos = bufferReadPos + (int)((DateTime.UtcNow - lastReadtime).TotalSeconds * 48000);
                 if (bufferWritePos < bufferReadPos)
                 {
                     bufferWritePos = bufferReadPos;
                 }
 
-                double offset = e.time - time;
+                double offset = (e.time - startTime) / speed;
                 int samples = (int)(offset * 48000) - bufferWritePos;
 
                 if (samples > 0)
@@ -168,11 +203,33 @@ namespace Kiva_MIDI
 
                 byte cmd = (byte)ev;
 
-                if (cmd < 0xA0)
+                if (cmd < 0xA0) //Note
                 {
-                    if (samples >= 0 && bufferWritePos - bufferReadPos > (128 - e.vel) * 100)
+                    if (samples >= 0 && bufferWritePos - shiftedBufferReadPos > (127 - e.vel + 10) * 100)
                         bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_NOTE, cmd < 0x90 ? (byte)(ev >> 8) : (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
-                    else skipEvents(time + bufferReadPos / 48000.0, 128 - (bufferWritePos - bufferReadPos) / 100);
+                    else skipEvents(startTime + shiftedBufferReadPos / 48000.0, 127 - (bufferWritePos - shiftedBufferReadPos) / 100);
+                }
+                else if (cmd < 0xB0) //AfterTouch
+                {
+                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_KEYPRES, (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
+                }
+                else if (cmd < 0xC0) //Control
+                {
+                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_CONTROL, (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
+                }
+                else if (cmd < 0xD0) //InstrumentSelect
+                {
+                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_PROGRAM, (byte)(ev >> 8), (int)ev & 0xF, 0, 0);
+                }
+                else if (cmd < 0xE0) //Channel Pressure
+                {
+                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_CHANPRES, (byte)(ev >> 8), (int)ev & 0xF, 0, 0);
+                }
+                else if (cmd < 0xF0) //PitchBend
+                {
+                    var b1 = (ev >> 8) & 0x7f;
+                    var b2 = (ev >> 16) & 0x7f;
+                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_PITCH, (int)(b1 | (b2 << 7)), (int)ev & 0xF, 0, 0);
                 }
                 if (cancelGenerator.Token.IsCancellationRequested) break;
             }
@@ -198,11 +255,12 @@ namespace Kiva_MIDI
             if (generatorThread != null) generatorThread.GetAwaiter().GetResult();
         }
 
-        public void Start(double time, IEnumerable<MIDIEvent> events, Action<double, int> skipEvents)
+        public void Start(double time, IEnumerable<MIDIEvent> events, double speed, Action<double, int> skipEvents)
         {
             KillLastGenerator();
             cancelGenerator = new CancellationTokenSource();
-            generatorThread = Task.Run(() => GeneratorFunc(time, events, skipEvents));
+            startTime = time;
+            generatorThread = Task.Run(() => GeneratorFunc(events, speed, skipEvents));
         }
 
         public void Stop()
@@ -214,9 +272,24 @@ namespace Kiva_MIDI
             bufferReadPos = 0;
         }
 
+        public void SyncPlayer(double time)
+        {
+            lock (AudioBuffer)
+            {
+                var t = startTime + bufferReadPos / 48000.0;
+                var offset = time - t;
+                var newPos = bufferReadPos + (int)(offset * 48000);
+                if (newPos < 0) newPos = 0;
+                bufferReadPos = newPos;
+            }
+        }
+
         public void Dispose()
         {
-
+            KillLastGenerator();
+            soundOut.Stop();
+            soundOut.Dispose();
+            audioStream = null;
         }
     }
 }

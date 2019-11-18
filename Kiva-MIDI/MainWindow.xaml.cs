@@ -281,13 +281,14 @@ namespace Kiva_MIDI
                 var renderText = timeSpanString(TimeSpan.FromSeconds(Time.GetTime())) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen)) + "\n" +
                                  "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
                                  "" + scene.NotesPassedSum.ToString("#,##0") + "/" + (loadedFle != null ? loadedFle.MidiNoteCount : 0).ToString("#,##0") + "\n" +
+                                 "Audio Buffer: " + timeSpanString(TimeSpan.FromSeconds(preRenderPlayer.BufferSeconds)) + "\n" +
                                  "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0") + "\n" +
                                  "NPS: " + scene.LastNPS.ToString("#,##0") + "\n" +
                                  "Polyphony: " + scene.LastPolyphony.ToString("#,##0");
 
                 if (midiTime > midiLen + 1) Time.Pause();
 
-                double eventSkip = 0;//Math.Floor(player.BufferLen / 100.0);
+                double eventSkip = preRenderPlayer.SkippingVelocity;//Math.Floor(player.BufferLen / 100.0);
                 if (eventSkip > 0)
                 {
                     audioDesyncLabel.Visibility = Visibility.Visible;

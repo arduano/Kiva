@@ -161,7 +161,8 @@ namespace Kiva_MIDI
                         s.Start();
                         if (remaining < 0)
                         {
-                            NtDelayExecution(false, ref remaining);
+                            //NtDelayExecution(false, ref remaining);
+                            Thread.Sleep(-(int)remaining / 10000);
                         }
                         var excess = desired - frameTimer.ElapsedTicks;
                         delayExtraDelay = (delayExtraDelay * 60 + excess) / 61;

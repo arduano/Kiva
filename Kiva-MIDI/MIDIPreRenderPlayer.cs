@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -11,7 +12,11 @@ namespace Kiva_MIDI
     {
         Settings settings;
 
+        FileSystemWatcher soundfontWatcher;
 
+        public int SkippingVelocity => ma.SkippingVelocity;
+        public double BufferSeconds => ma.BufferSeconds;
+        
         public MIDIFile File
         {
             get => file;
@@ -42,26 +47,33 @@ namespace Kiva_MIDI
                 {
                     Time.TimeChanged -= OnTimeChange;
                     Time.PauseChanged -= OnPauseChange;
+                    Time.SpeedChanged -= OnSpeedChanged;
                 }
                 time = value;
                 Time.TimeChanged += OnTimeChange;
                 Time.PauseChanged += OnPauseChange;
+                Time.SpeedChanged += OnSpeedChanged;
+                ma.Paused = Time.Paused;
             }
         }
         MIDIAudio ma;
         private PlayingState time = new PlayingState();
 
+        Task syncThread;
+        bool disposed = false;
+
         IEnumerable<MIDIEvent> EventArrayEnumerable(MIDIEvent[] array, double time, List<Action<double, int>> skipList)
         {
-            int i = GetEventPos(array, time);
+            int i = GetEventPos(array, time) - 1;
+            if(i < 0) i = 0;
             skipList.Add((t, v) =>
             {
                 if (v > 127) v = 127;
                 while(i != array.Length)
                 {
                     var ev = array[i];
-                    if (ev.time > t && ev.vel >= v) break;
-                    if (ev.time - t > (v + 1) / 48000.0 * 100) break;
+                    if (ev.time > t && ev.vel > v) break;
+                    if (ev.time - t > (128 - ev.vel + 10) / 48000.0 * 100) break;
                     i++;
                 }
             });
@@ -82,6 +94,11 @@ namespace Kiva_MIDI
             return TimedMerger<MIDIEvent>.MergeMany(events.ToArray(), e => e.time);
         }
 
+        void OnSpeedChanged()
+        {
+            StartRender(true);
+        }
+
         void OnTimeChange()
         {
             StartRender(false);
@@ -89,15 +106,35 @@ namespace Kiva_MIDI
 
         void OnPauseChange()
         {
-
+            ma.Paused = Time.Paused;
+            ma.SyncPlayer(Time.GetTime());
         }
 
         void StartRender(bool force)
         {
             if (file == null) return;
-            var skipList = new List<Action<double, int>>();
-            ma.Start(Time.GetTime(), EventStream(Time.GetTime(), skipList), (t, v) => skipList.ForEach(s => s(t, v)));
+
+            if (!force)
+            {
+                var time = Time.GetTime();
+                if (time + 0.1 > ma.PlayerTime + ma.BufferSeconds || time + 0.1 < ma.PlayerTime)
+                {
+                    force = true;
+                }
+            }
+
+            if (force)
+            {
+                var skipList = new List<Action<double, int>>();
+                ma.Start(Time.GetTime(), EventStream(Time.GetTime(), skipList), time.Speed, (t, v) => skipList.ForEach(s => s(t, v)));
+            }
+            else
+            {
+                ma.SyncPlayer(Time.GetTime());
+            }
         }
+
+
 
         public MIDIPreRenderPlayer(Settings settings)
         {
@@ -105,11 +142,46 @@ namespace Kiva_MIDI
             ma = new MIDIAudio(48000 * 60);
             Time.TimeChanged += OnTimeChange;
             Time.PauseChanged += OnPauseChange;
+
+            soundfontWatcher = new FileSystemWatcher();
+            soundfontWatcher.Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Common SoundFonts");
+            soundfontWatcher.NotifyFilter = NotifyFilters.LastWrite;
+            soundfontWatcher.Filter = "SoundFontList.csflist";
+            soundfontWatcher.Changed += OnSoundfontsChanged;
+            soundfontWatcher.EnableRaisingEvents = true;
+
+            syncThread = Task.Run(() =>
+            {
+                while (!disposed)
+                {
+                    if(file != null && !Time.Paused)
+                    {
+                        var time = Time.GetTime();
+                        if (time + 0.1 < ma.PlayerTime)
+                        {
+                            ma.SyncPlayer(Time.GetTime());
+                        }
+                    }
+                    Thread.Sleep(100);
+                }
+            });
+        }
+
+        private void OnSoundfontsChanged(object sender, FileSystemEventArgs e)
+        {
+            ma.Paused = true;
+            ma.Stop();
+            BASSMIDI.LoadGlobalSoundfonts();
+            ma.Paused = Time.Paused;
+            StartRender(true);
         }
 
         public void Dispose()
         {
             ma.Dispose();
+            soundfontWatcher.Dispose();
+            disposed = true;
+            syncThread.GetAwaiter().GetResult();
         }
 
         int GetEventPos(MIDIEvent[] events, double time)

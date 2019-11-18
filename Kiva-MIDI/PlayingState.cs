@@ -15,6 +15,7 @@ namespace Kiva_MIDI
 
         public event Action TimeChanged;
         public event Action PauseChanged;
+        public event Action SpeedChanged;
 
         public void Pause()
         {
@@ -61,6 +62,7 @@ namespace Kiva_MIDI
             MIDITime = GetTime();
             Time = DateTime.UtcNow;
             Speed = speed;
+            SpeedChanged?.Invoke();
         }
     }
 }

@@ -44,7 +44,8 @@ namespace Kiva_MIDI
             Handle = BassMidi.BASS_MIDI_StreamCreate(16,
                 BASSFlag.BASS_SAMPLE_FLOAT |
                 BASSFlag.BASS_STREAM_DECODE |
-                BASSFlag.BASS_MIDI_SINCINTER,
+                BASSFlag.BASS_MIDI_SINCINTER | 
+                BASSFlag.BASS_MIDI_NOTEOFF1,
                 WaveFormatStatic.SampleRate);
 
             if (Handle == 0)
@@ -61,29 +62,33 @@ namespace Kiva_MIDI
             BassMidi.BASS_MIDI_StreamSetFonts(Handle, fontarr, fontarr.Length);
         }
 
-        public static void LoadDefaultSoundfont()
+        public static void LoadGlobalSoundfonts()
         {
-            String omconfig = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            if (!String.IsNullOrEmpty(omconfig))
-                omconfig = Path.Combine(omconfig, "OmniMIDI", "lists", "OmniMIDI_A.omlist");
+            if(fontarr != null)
+            {
+                foreach (var f in fontarr) BassMidi.BASS_MIDI_FontFree(f.font);
+            }
+
+            string omconfig = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (!string.IsNullOrEmpty(omconfig))
+                omconfig = Path.Combine(omconfig, "Common SoundFonts", "SoundFontList.csflist");
             List<BASS_MIDI_FONTEX> fonts = new List<BASS_MIDI_FONTEX>();
             if (File.Exists(omconfig))
             {
-                String[] lines = File.ReadAllLines(omconfig, Encoding.UTF8);
-
+                string[] lines = File.ReadAllLines(omconfig, Encoding.UTF8);
 
                 BASS_MIDI_FONTEX currfont = new BASS_MIDI_FONTEX();
-                String currfilename = null;
+                string currfilename = null;
                 bool xgdrums = false;
                 bool add = true;
 
                 int lineno = 0;
 
-                foreach (String line in lines)
+                foreach (string line in lines)
                 {
                     lineno++;
 
-                    if (String.IsNullOrWhiteSpace(line) || line.StartsWith("//"))
+                    if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//"))
                         continue;
 
                     if (line == "sf.start")
@@ -129,8 +134,8 @@ namespace Kiva_MIDI
                         throw new Exception("Invalid instruction at line " + lineno);
                     }
 
-                    String instr = line.Substring(3, idx - 3);
-                    String idata = line.Substring(idx + 3);
+                    string instr = line.Substring(3, idx - 3);
+                    string idata = line.Substring(idx + 3);
 
                     switch (instr)
                     {
