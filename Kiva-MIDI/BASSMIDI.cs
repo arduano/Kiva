@@ -237,7 +237,7 @@ namespace Kiva_MIDI
                 ev = new BASS_MIDI_EVENT(BASSMIDIEvent.MIDI_EVENT_CHANPRES,
                     (byte)(dwParam1 >> 8), (int)dwParam1 & 0xF, 0, sampleoffset << 3);
             }
-            else if (cmd < 0xF0) //PitchBend
+            else if (cmd == 0xF0) //PitchBend
             {
                 //TODO: check bit pack
                 ev = new BASS_MIDI_EVENT(BASSMIDIEvent.MIDI_EVENT_PITCH,
@@ -258,6 +258,12 @@ namespace Kiva_MIDI
             var ev = new BASS_MIDI_EVENT(type, param, chan, tick, time << 3);
             var mode = BASSMIDIEventMode.BASS_MIDI_EVENTS_TIME | BASSMIDIEventMode.BASS_MIDI_EVENTS_STRUCT;
             return BassMidi.BASS_MIDI_StreamEvents(Handle, mode, new BASS_MIDI_EVENT[] { ev });
+        }
+
+        public unsafe int SendEventRaw(BASSMIDIEvent type, uint data, int channel)
+        {
+            var mode = BASSMIDIEventMode.BASS_MIDI_EVENTS_RAW;
+            return BassMidi.BASS_MIDI_StreamEvents(Handle, mode, channel, (IntPtr)(&data), 3);
         }
 
         public int BassStreamEvents(BASS_MIDI_EVENT[] events)

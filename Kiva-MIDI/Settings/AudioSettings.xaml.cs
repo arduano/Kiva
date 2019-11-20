@@ -21,12 +21,6 @@ namespace Kiva_MIDI
     /// </summary>
     public partial class AudioSettings : UserControl
     {
-        struct DeviceData
-        {
-            public int id;
-            public string name;
-        }
-
         private Settings settings;
 
         public Settings Settings
@@ -38,92 +32,38 @@ namespace Kiva_MIDI
             }
         }
 
-        bool kdmapiDisabled = false;
         SolidColorBrush selectBrush = new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
 
         public AudioSettings()
         {
-            try
-            {
-                kdmapiDisabled = !KDMAPI.IsKDMAPIAvailable();
-            }
-            catch { kdmapiDisabled = true; }
             InitializeComponent();
-
-            for (int i = -1; i < OutputDevice.DeviceCount; i++)
-            {
-                string name;
-                if (i == -1)
-                {
-                    if (kdmapiDisabled) continue;
-                    name = "KDMAPI (direct API)";
-                }
-                else
-                {
-                    var device = OutputDevice.GetDeviceCapabilities(i);
-                    name = device.name;
-                }
-                var item = new Grid()
-                {
-                    Tag = new DeviceData() { id = i, name = name },
-                };
-                item.Children.Add(
-                    new RippleEffectDecorator()
-                    {
-                        Content = new Label
-                        {
-                            Content = name
-                        }
-                    }
-                );
-                item.PreviewMouseDown += (s, e) =>
-                {
-                    ClearSelectedDevice();
-                    SelectDevice(devicesList.Children.IndexOf(item));
-                };
-                devicesList.Children.Add(item);
-            }
-
-            ClearSelectedDevice();
+            kdmapiEngine.PreviewMouseDown += (s, e) => { settings.General.SelectedAudioEngine = AudioEngine.KDMAPI; SetValues(); };
+            winmmEngine.PreviewMouseDown += (s, e) => { settings.General.SelectedAudioEngine = AudioEngine.WinMM; SetValues(); };
+            prerenderEngine.PreviewMouseDown += (s, e) => { settings.General.SelectedAudioEngine = AudioEngine.PreRender; SetValues(); };
         }
 
-        public void SelectDevice(int index)
+        void Deselect()
         {
-            ClearSelectedDevice();
-            ((Grid)devicesList.Children[index]).Background = selectBrush;
-            var tag = (DeviceData)((Grid)devicesList.Children[index]).Tag;
-            settings.General.SelectedMIDIDevice = tag.id;
-            settings.General.SelectedMIDIDeviceName = tag.name;
+            kdmapiEngine.Background = Brushes.Transparent;
+            winmmEngine.Background = Brushes.Transparent;
+            prerenderEngine.Background = Brushes.Transparent;
         }
 
         public void SetValues()
         {
-            ClearSelectedDevice();
-            int i = 0;
-            bool selected = false;
-            foreach (var b in devicesList.Children.Cast<Grid>())
+            Deselect();
+            switch (settings.General.SelectedAudioEngine)
             {
-                var tag = (DeviceData)b.Tag;
-                if (tag.name == settings.General.SelectedMIDIDeviceName)
-                {
-                    if (settings.General.SelectedMIDIDevice == tag.id)
-                    {
-                        SelectDevice(i);
-                        selected = true;
-                        break;
-                    }
-                }
-                i++;
+                case AudioEngine.KDMAPI:
+                    kdmapiEngine.Background = selectBrush;
+                    break;
+                case AudioEngine.WinMM:
+                    winmmEngine.Background = selectBrush;
+                    break;
+                case AudioEngine.PreRender:
+                    prerenderEngine.Background = selectBrush;
+                    break;
             }
-            if (!selected)
-            {
-                SelectDevice(0);
-            }
-        }
-
-        public void ClearSelectedDevice()
-        {
-            foreach (var b in devicesList.Children.Cast<Grid>()) b.Background = Brushes.Transparent;
         }
     }
 }

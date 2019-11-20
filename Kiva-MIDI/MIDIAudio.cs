@@ -167,7 +167,7 @@ namespace Kiva_MIDI
             lastReadtime = DateTime.UtcNow;
             foreach (var e in events)
             {
-                var shiftedBufferReadPos = bufferReadPos + (int)((DateTime.UtcNow - lastReadtime).TotalSeconds * 48000);
+                var shiftedBufferReadPos = bufferReadPos;// + (int)((DateTime.UtcNow - lastReadtime).TotalSeconds * 48000);
                 if (bufferWritePos < bufferReadPos)
                 {
                     bufferWritePos = bufferReadPos;
@@ -201,35 +201,37 @@ namespace Kiva_MIDI
 
                 var ev = e.data;
 
-                byte cmd = (byte)ev;
+                byte cmd = (byte)(ev & 0xF0);
 
                 if (cmd < 0xA0) //Note
                 {
-                    if (samples >= 0 && bufferWritePos - shiftedBufferReadPos > (127 - e.vel + 10) * 100)
+                    if (samples >= 0 && !(bufferWritePos - shiftedBufferReadPos < (127 - e.vel + 10) * 20 && bufferReadPos > 1000))
                         bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_NOTE, cmd < 0x90 ? (byte)(ev >> 8) : (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
                     else skipEvents(startTime + shiftedBufferReadPos / 48000.0, 127 - (bufferWritePos - shiftedBufferReadPos) / 100);
                 }
-                else if (cmd < 0xB0) //AfterTouch
-                {
-                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_KEYPRES, (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
-                }
-                else if (cmd < 0xC0) //Control
-                {
-                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_CONTROL, (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
-                }
-                else if (cmd < 0xD0) //InstrumentSelect
-                {
-                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_PROGRAM, (byte)(ev >> 8), (int)ev & 0xF, 0, 0);
-                }
-                else if (cmd < 0xE0) //Channel Pressure
-                {
-                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_CHANPRES, (byte)(ev >> 8), (int)ev & 0xF, 0, 0);
-                }
-                else if (cmd < 0xF0) //PitchBend
+                else if (cmd == 0xE0) //PitchBend
                 {
                     var b1 = (ev >> 8) & 0x7f;
                     var b2 = (ev >> 16) & 0x7f;
                     bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_PITCH, (int)(b1 | (b2 << 7)), (int)ev & 0xF, 0, 0);
+                }
+                else if (cmd == 0xC0) //InstrumentSelect
+                {
+                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_PROGRAM, (byte)(ev >> 8), (int)ev & 0xF, 0, 0);
+                }
+                else if (cmd == 0xA0) //AfterTouch
+                {
+                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_KEYPRES, (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
+                }
+                else if (cmd == 0xD0) //Channel Pressure
+                {
+                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_CHANPRES, (byte)(ev >> 8), (int)ev & 0xF, 0, 0);
+                }
+                else if (cmd == 0xB0) //Control
+                {
+                    var b1 = (ev >> 8) & 0x7f;
+                    var b2 = (ev >> 16) & 0x7f;
+                    bass.SendEventRaw(BASSMIDIEvent.MIDI_EVENT_CONTROL, ev & 0xFFFFF0, (int)ev & 0xF);
                 }
                 if (cancelGenerator.Token.IsCancellationRequested) break;
             }

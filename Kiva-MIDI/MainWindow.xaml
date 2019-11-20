@@ -71,7 +71,7 @@
                         </Grid>
                     </DockPanel>
                     <!--<Slider Name="timeSlider" Margin="10,8,10,7" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged" VerticalAlignment="Center"/>-->
-                    <local:BetterSlider x:Name="timeSlider" UserValueChanged="TimeSlider_UserValueChanged" Margin="10,0,10,0" Minimum="0" Maximum="3" Value="1" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True"/>
+                    <local:BetterSlider Focusable="False" x:Name="timeSlider" UserValueChanged="TimeSlider_UserValueChanged" Margin="10,0,10,0" Minimum="0" Maximum="3" Value="1" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True"/>
                 </Grid>
             </Border>
             <Grid Name="glContainer" MouseDown="GlContainer_MouseDown">

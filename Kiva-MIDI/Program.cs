@@ -16,23 +16,13 @@ namespace Kiva_MIDI
         public static bool UpdateReady { get; private set; } = false;
         public static bool UpdateDownloading { get; private set; } = false;
 
-        static IEnumerable<MIDIEvent> feedevents()
-        {
-            for (int i = 0; i < 1000000; i++)
-            {
-                int vel = 0x7f;
-                int key = i % 128;
-                yield return new MIDIEvent() { data = (uint)((vel << 16) | (key << 8) | 0x90), time = i * 0.34534f };
-            }
-        }
-
         [STAThread]
         static void Main(string[] args)
         {
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
 
             MIDIAudio.Init();
-            
+
             try
             {
                 var s = new Settings();

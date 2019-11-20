@@ -6,24 +6,32 @@
              xmlns:local="clr-namespace:Kiva_MIDI"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="600">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Border Padding="10">
-            <DockPanel LastChildFill="True">
-                <Label DockPanel.Dock="Top">MIDI Output Device</Label>
-                <Border BorderBrush="Black" BorderThickness="1">
-                    <StackPanel Name="devicesList" Background="Transparent">
-
-                    </StackPanel>
-                </Border>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../ButtonTemplates.xaml"/>
+                <ResourceDictionary Source="../Scrollbar.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Top">
+            <DockPanel HorizontalAlignment="Center">
+                <Label FontSize="16">
+                    Rendering Engine:
+                </Label>
+                <Button Name="kdmapiEngine" FontSize="16" Width="120" Style="{DynamicResource TransparentButtonStyle}">
+                    KDMAPI
+                </Button>
+                <Button Name="winmmEngine" FontSize="16" Width="120" Style="{DynamicResource TransparentButtonStyle}">
+                    WinMM
+                </Button>
+                <Button Name="prerenderEngine" FontSize="16" Width="120" Style="{DynamicResource TransparentButtonStyle}">
+                    Pre-Render
+                </Button>
             </DockPanel>
-        </Border>
-        <Border Grid.Column="1" Padding="10">
-            <StackPanel>
-            </StackPanel>
-        </Border>
-    </Grid>
+        </Grid>
+        <Grid>
+        </Grid>
+    </DockPanel>
 </UserControl>

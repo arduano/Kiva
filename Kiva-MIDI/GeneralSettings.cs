@@ -25,6 +25,13 @@ namespace Kiva_MIDI
         Small,
     }
 
+    public enum AudioEngine
+    {
+        KDMAPI,
+        WinMM,
+        PreRender
+    }
+
     public class GeneralSettings : INotifyPropertyChanged
     {
         public KeyRangeTypes KeyRange { get; set; } = KeyRangeTypes.KeyDynamic;
@@ -36,9 +43,6 @@ namespace Kiva_MIDI
         public int FPSLock { get; set; } = 60;
         public bool CompatibilityFPS { get; set; } = false;
 
-        public int SelectedMIDIDevice { get; set; } = -1;
-        public string SelectedMIDIDeviceName { get; set; } = "";
-
         public Color BackgroundColor { get; set; } = Color.FromArgb(255, 142, 142, 142);
         public Color ForegroundColor { get; set; } = Color.FromArgb(255, 142, 142, 142);
         public Color BarColor { get; set; } = Color.FromArgb(255, 255, 0, 0);
@@ -49,6 +53,11 @@ namespace Kiva_MIDI
         public bool HideInfoCard { get; set; } = false;
 
         public bool MainWindowTopmost { get; set; } = false;
+
+        public AudioEngine SelectedAudioEngine { get; set; } = AudioEngine.PreRender;
+
+        public int SelectedMIDIDevice { get; set; } = -1;
+        public string SelectedMIDIDeviceName { get; set; } = "";
 
         public event PropertyChangedEventHandler PropertyChanged;
 

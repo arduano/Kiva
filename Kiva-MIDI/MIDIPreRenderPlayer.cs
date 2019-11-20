@@ -16,7 +16,7 @@ namespace Kiva_MIDI
 
         public int SkippingVelocity => ma.SkippingVelocity;
         public double BufferSeconds => ma.BufferSeconds;
-        
+
         public MIDIFile File
         {
             get => file;
@@ -65,11 +65,11 @@ namespace Kiva_MIDI
         IEnumerable<MIDIEvent> EventArrayEnumerable(MIDIEvent[] array, double time, List<Action<double, int>> skipList)
         {
             int i = GetEventPos(array, time) - 1;
-            if(i < 0) i = 0;
+            if (i < 0) i = 0;
             skipList.Add((t, v) =>
             {
                 if (v > 127) v = 127;
-                while(i != array.Length)
+                while (i != array.Length)
                 {
                     var ev = array[i];
                     if (ev.time > t && ev.vel > v) break;
@@ -87,10 +87,11 @@ namespace Kiva_MIDI
         {
             var _file = (MIDIMemoryFile)file;
             List<IEnumerable<MIDIEvent>> events = new List<IEnumerable<MIDIEvent>>();
-            events.Add(_file.MIDIControlEvents);
+            if (_file.MIDIControlEvents.Length != 0)
+                events.Add(_file.MIDIControlEvents);
             for (int i = 0; i < _file.MIDINoteEvents.Length; i++)
-                events.Add(EventArrayEnumerable(_file.MIDINoteEvents[i], time, skipList));
-                //events.Add(new SkipIterator<MIDIEvent>(_file.MIDINoteEvents[i], GetEventPos(_file.MIDINoteEvents[i], time), 1));
+                if (_file.MIDINoteEvents[i].Length != 0)
+                    events.Add(EventArrayEnumerable(_file.MIDINoteEvents[i], time, skipList));
             return TimedMerger<MIDIEvent>.MergeMany(events.ToArray(), e => e.time);
         }
 
@@ -117,7 +118,7 @@ namespace Kiva_MIDI
             if (!force)
             {
                 var time = Time.GetTime();
-                if (time + 0.1 > ma.PlayerTime + ma.BufferSeconds || time + 0.1 < ma.PlayerTime)
+                if (time + 0.1 > ma.PlayerTime + ma.BufferSeconds || time + 0.01 < ma.PlayerTime)
                 {
                     force = true;
                 }
@@ -154,7 +155,7 @@ namespace Kiva_MIDI
             {
                 while (!disposed)
                 {
-                    if(file != null && !Time.Paused)
+                    if (file != null && !Time.Paused)
                     {
                         var time = Time.GetTime();
                         if (time + 0.1 < ma.PlayerTime)

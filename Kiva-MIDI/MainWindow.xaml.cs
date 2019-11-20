@@ -270,15 +270,23 @@ namespace Kiva_MIDI
             Topmost = settings.General.MainWindowTopmost;
 
             Func<TimeSpan, string> timeSpanString = (s) =>
-            s.Minutes + ":" +
-            (s.Seconds > 9 ? s.Seconds.ToString() : "0" + s.Seconds) + "." +
-            (s.Milliseconds - (s.Milliseconds % 100)) / 100;
+            {
+                bool minus = false;
+                if (s.TotalSeconds < 0)
+                {
+                    s = TimeSpan.FromSeconds(-s.TotalSeconds);
+                    minus = true;
+                }
+                return (minus ? "-" : "") +  s.Minutes + ":" +
+                (s.Seconds > 9 ? s.Seconds.ToString() : "0" + s.Seconds) + "." +
+                (s.Milliseconds - (s.Milliseconds % 100)) / 100;
+            };
 
             CompositionTarget.Rendering += (s, e) =>
             {
                 var midiLen = loadedFle == null ? 0 : loadedFle.MidiLength;
                 var midiTime = Time.GetTime();
-                var renderText = timeSpanString(TimeSpan.FromSeconds(Time.GetTime())) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen)) + "\n" +
+                var renderText = timeSpanString(TimeSpan.FromSeconds(Math.Min(Time.GetTime(), timeSlider.Maximum))) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen)) + "\n" +
                                  "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
                                  "" + scene.NotesPassedSum.ToString("#,##0") + "/" + (loadedFle != null ? loadedFle.MidiNoteCount : 0).ToString("#,##0") + "\n" +
                                  "Audio Buffer: " + timeSpanString(TimeSpan.FromSeconds(preRenderPlayer.BufferSeconds)) + "\n" +
@@ -286,7 +294,7 @@ namespace Kiva_MIDI
                                  "NPS: " + scene.LastNPS.ToString("#,##0") + "\n" +
                                  "Polyphony: " + scene.LastPolyphony.ToString("#,##0");
 
-                if (midiTime > midiLen + 1) Time.Pause();
+                //if (midiTime > midiLen + 10) Time.Pause();
 
                 double eventSkip = preRenderPlayer.SkippingVelocity;//Math.Floor(player.BufferLen / 100.0);
                 if (eventSkip > 0)
@@ -333,8 +341,10 @@ namespace Kiva_MIDI
                 file.SetColors(settings.PaletteSettings.Palettes[settings.General.PaletteName], settings.General.PaletteRandomized);
                 //player.File = file;
                 preRenderPlayer.File = file;
+                Time.Navigate(-1);
                 scene.File = file;
                 loadedFle = file;
+                timeSlider.Minimum = -1;
                 timeSlider.Maximum = file.MidiLength;
                 loadingForm.Close();
                 loadingForm.Dispose();
