@@ -221,6 +221,9 @@
     </Compile>
     <Compile Include="PaletteSettings.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Settings\KDMAPIAudioSettings.xaml.cs">
+      <DependentUpon>KDMAPIAudioSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\MiscSettings.xaml.cs">
       <DependentUpon>MiscSettings.xaml</DependentUpon>
     </Compile>
@@ -231,11 +234,17 @@
     <Compile Include="Settings\AudioSettings.xaml.cs">
       <DependentUpon>AudioSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\PreRenderAudioSettings.xaml.cs">
+      <DependentUpon>PreRenderAudioSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\VisualSettings.xaml.cs">
       <DependentUpon>VisualSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\WinMMAudioSettings.xaml.cs">
+      <DependentUpon>WinMMAudioSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShaderManager.cs" />
     <Compile Include="Material.WPF\ValueSlider.xaml.cs">
@@ -287,11 +296,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Settings\KDMAPIAudioSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Settings\MiscSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings\AudioSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\PreRenderAudioSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -310,6 +327,10 @@
     <Page Include="Settings\VisualSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\WinMMAudioSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

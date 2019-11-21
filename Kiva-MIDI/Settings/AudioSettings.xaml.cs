@@ -29,6 +29,7 @@ namespace Kiva_MIDI
             {
                 settings = value;
                 SetValues();
+                winmmSettings.Settings = settings;
             }
         }
 
@@ -47,6 +48,10 @@ namespace Kiva_MIDI
             kdmapiEngine.Background = Brushes.Transparent;
             winmmEngine.Background = Brushes.Transparent;
             prerenderEngine.Background = Brushes.Transparent;
+
+            kdmapiSettings.Visibility = Visibility.Collapsed;
+            winmmSettings.Visibility = Visibility.Collapsed;
+            prerenderSettings.Visibility = Visibility.Collapsed;
         }
 
         public void SetValues()
@@ -56,12 +61,15 @@ namespace Kiva_MIDI
             {
                 case AudioEngine.KDMAPI:
                     kdmapiEngine.Background = selectBrush;
+                    kdmapiSettings.Visibility = Visibility.Visible;
                     break;
                 case AudioEngine.WinMM:
                     winmmEngine.Background = selectBrush;
+                    winmmSettings.Visibility = Visibility.Visible;
                     break;
                 case AudioEngine.PreRender:
                     prerenderEngine.Background = selectBrush;
+                    prerenderSettings.Visibility = Visibility.Visible;
                     break;
             }
         }

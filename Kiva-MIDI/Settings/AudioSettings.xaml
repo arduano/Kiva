@@ -32,6 +32,9 @@
             </DockPanel>
         </Grid>
         <Grid>
+            <local:KDMAPIAudioSettings x:Name="kdmapiSettings"/>
+            <local:WinMMAudioSettings x:Name="winmmSettings"/>
+            <local:PreRenderAudioSettings x:Name="prerenderSettings"/>
         </Grid>
     </DockPanel>
 </UserControl>

@@ -135,8 +135,6 @@ namespace Kiva_MIDI
             }
         }
 
-
-
         public MIDIPreRenderPlayer(Settings settings)
         {
             this.settings = settings;
