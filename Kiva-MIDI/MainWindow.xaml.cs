@@ -194,6 +194,7 @@ namespace Kiva_MIDI
         D3D11 d3d;
         MIDIPlayer player;
         MIDIPreRenderPlayer preRenderPlayer;
+        AudioEngine selectedAudioEngine;
 
         MIDIFile loadedFle;
 
@@ -201,6 +202,62 @@ namespace Kiva_MIDI
 
         SettingsWindow settingsWindow = null;
         LoadingMidiForm loadingForm = null;
+
+        void StartMIDIPlayer(bool kdmapi)
+        {
+            player = new MIDIPlayer(settings);
+            if (kdmapi)
+                player.DeviceID = -1;
+            else
+                player.DeviceID = settings.General.SelectedMIDIDevice;
+            player.RunPlayer();
+            player.Time = Time;
+            if (loadedFle != null) player.File = loadedFle;
+        }
+
+        void StartPreRenderPlayer()
+        {
+            preRenderPlayer = new MIDIPreRenderPlayer(settings);
+            preRenderPlayer.Time = Time;
+            if (loadedFle != null) preRenderPlayer.File = loadedFle;
+        }
+
+        void SwitchAudioEngine(AudioEngine engine)
+        {
+            if (engine == AudioEngine.KDMAPI)
+            {
+                if (selectedAudioEngine == AudioEngine.WinMM)
+                {
+                    player.DeviceID = -1;
+                }
+                else if (selectedAudioEngine == AudioEngine.PreRender)
+                {
+                    preRenderPlayer.Dispose();
+                    StartMIDIPlayer(true);
+                }
+            }
+            else if (engine == AudioEngine.WinMM)
+            {
+                if (selectedAudioEngine == AudioEngine.KDMAPI)
+                {
+                    player.DeviceID = settings.General.SelectedMIDIDevice;
+                }
+                else if (selectedAudioEngine == AudioEngine.PreRender)
+                {
+                    preRenderPlayer.Dispose();
+                    StartMIDIPlayer(false);
+                }
+            }
+            else if (engine == AudioEngine.PreRender)
+            {
+                if (selectedAudioEngine == AudioEngine.WinMM || selectedAudioEngine == AudioEngine.KDMAPI)
+                {
+                    player.Dispose();
+                    StartPreRenderPlayer();
+                }
+            }
+            selectedAudioEngine = engine;
+        }
 
         public MainWindow(Settings settings)
         {
@@ -222,12 +279,25 @@ namespace Kiva_MIDI
             dx11img.MouseDown += (s, e) => Focus();
             scene.Time = Time;
 
+            switch (settings.General.SelectedAudioEngine)
+            {
+                case AudioEngine.KDMAPI:
+                    StartMIDIPlayer(true);
+                    break;
+                case AudioEngine.WinMM:
+                    StartMIDIPlayer(false);
+                    break;
+                case AudioEngine.PreRender:
+                    StartPreRenderPlayer();
+                    break;
+            }
+            selectedAudioEngine = settings.General.SelectedAudioEngine;
             //player = new MIDIPlayer(settings);
             //player.DeviceID = settings.General.SelectedMIDIDevice;
             //player.RunPlayer();
             //player.Time = Time;
-            preRenderPlayer = new MIDIPreRenderPlayer(settings);
-            preRenderPlayer.Time = Time;
+            //preRenderPlayer = new MIDIPreRenderPlayer(settings);
+            //preRenderPlayer.Time = Time;
 
             speedSlider.nudToSlider = v => Math.Log(v, 2);
             speedSlider.sliderToNud = v => Math.Pow(2, v);
@@ -245,8 +315,8 @@ namespace Kiva_MIDI
             {
                 if (e.PropertyName == "FPSLock")
                     d3d.FPSLock = settings.General.FPSLock;
-                //if (e.PropertyName == "SelectedMIDIDevice")
-                //    player.DeviceID = settings.General.SelectedMIDIDevice;
+                if (e.PropertyName == "SelectedMIDIDevice")
+                    player.DeviceID = settings.General.SelectedMIDIDevice;
                 if (e.PropertyName == "CompatibilityFPS")
                     d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
                 if (e.PropertyName == "BackgroundColor")
@@ -255,6 +325,8 @@ namespace Kiva_MIDI
                     infoCard.Visibility = settings.General.HideInfoCard ? Visibility.Hidden : Visibility.Visible;
                 if (e.PropertyName == "MainWindowTopmost")
                     Topmost = settings.General.MainWindowTopmost;
+                if (e.PropertyName == "SelectedAudioEngine")
+                    SwitchAudioEngine(settings.General.SelectedAudioEngine);
                 if (loadedFle != null)
                 {
                     if (e.PropertyName == "PaletteName" || e.PropertyName == "PaletteRandomized")
@@ -277,7 +349,7 @@ namespace Kiva_MIDI
                     s = TimeSpan.FromSeconds(-s.TotalSeconds);
                     minus = true;
                 }
-                return (minus ? "-" : "") +  s.Minutes + ":" +
+                return (minus ? "-" : "") + s.Minutes + ":" +
                 (s.Seconds > 9 ? s.Seconds.ToString() : "0" + s.Seconds) + "." +
                 (s.Milliseconds - (s.Milliseconds % 100)) / 100;
             };
@@ -289,14 +361,18 @@ namespace Kiva_MIDI
                 var renderText = timeSpanString(TimeSpan.FromSeconds(Math.Min(Time.GetTime(), timeSlider.Maximum))) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen)) + "\n" +
                                  "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
                                  "" + scene.NotesPassedSum.ToString("#,##0") + "/" + (loadedFle != null ? loadedFle.MidiNoteCount : 0).ToString("#,##0") + "\n" +
-                                 "Audio Buffer: " + timeSpanString(TimeSpan.FromSeconds(preRenderPlayer.BufferSeconds)) + "\n" +
+                                 //"Audio Buffer: " + timeSpanString(TimeSpan.FromSeconds(preRenderPlayer.BufferSeconds)) + "\n" +
                                  "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0") + "\n" +
                                  "NPS: " + scene.LastNPS.ToString("#,##0") + "\n" +
                                  "Polyphony: " + scene.LastPolyphony.ToString("#,##0");
 
                 //if (midiTime > midiLen + 10) Time.Pause();
 
-                double eventSkip = preRenderPlayer.SkippingVelocity;//Math.Floor(player.BufferLen / 100.0);
+                double eventSkip;
+                if (selectedAudioEngine == AudioEngine.PreRender)
+                    eventSkip = preRenderPlayer.SkippingVelocity;
+                else
+                    eventSkip = Math.Floor(player.BufferLen / 100.0);
                 if (eventSkip > 0)
                 {
                     audioDesyncLabel.Visibility = Visibility.Visible;
@@ -325,8 +401,10 @@ namespace Kiva_MIDI
                 return;
             }
             Time.Reset();
-            //player.File = null;
-            preRenderPlayer.File = null;
+            if (selectedAudioEngine == AudioEngine.PreRender)
+                preRenderPlayer.File = null;
+            else
+                player.File = null;
             scene.File = null;
             loadedFle = null;
             GC.Collect(2, GCCollectionMode.Forced);
@@ -339,8 +417,10 @@ namespace Kiva_MIDI
             {
                 var file = loadingForm.LoadedFile;
                 file.SetColors(settings.PaletteSettings.Palettes[settings.General.PaletteName], settings.General.PaletteRandomized);
-                //player.File = file;
-                preRenderPlayer.File = file;
+                if (selectedAudioEngine == AudioEngine.PreRender)
+                    preRenderPlayer.File = file;
+                else
+                    player.File = file;
                 Time.Navigate(-1);
                 scene.File = file;
                 loadedFle = file;
@@ -389,7 +469,7 @@ namespace Kiva_MIDI
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.O && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+            if (e.Key == Key.O && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
             {
                 var open = new OpenFileDialog();
                 open.Filter = "Midi files (*.mid)|*.mid";
@@ -553,9 +633,9 @@ namespace Kiva_MIDI
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //player.File = null;
-            //player.Dispose();
-            preRenderPlayer.Dispose();
+            player.File = null;
+            player.Dispose();
+            //preRenderPlayer.Dispose();
             scene.File = null;
             d3d.Dispose();
         }

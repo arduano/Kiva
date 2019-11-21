@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO.Compression;
+using KivaShared;
 
 namespace Kiva_MIDI
 {
@@ -21,13 +22,18 @@ namespace Kiva_MIDI
         public string InstallPath;
         static readonly string SettingsFolderPath = Path.Combine("Settings");
 
+        public static readonly string CommonSoundfonts = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Common SoundFonts", "SoundFontList.csflist");
+
         string versionPath;
         string midiPath;
         string generalPath;
 
         public VolatileSettings Volatile { get; set; } = new VolatileSettings();
         public GeneralSettings General { get; set; } = new GeneralSettings();
+        public SoundfontSettings Soundfonts { get; set; } = new SoundfontSettings();
         MIDILoaderSettings loaderSettings;
+
+        FileSystemWatcher soundfontWatcher;
 
         public PaletteSettings PaletteSettings { get; } = new PaletteSettings();
 
@@ -119,6 +125,50 @@ namespace Kiva_MIDI
             var obj = JsonConvert.DeserializeObject<T>(text);
             stream.Close();
             return obj;
+        }
+
+        bool justWroteSF = false;
+
+        void ParseSoundfonts()
+        {
+            try
+            {
+                Soundfonts.ParseFile(File.ReadAllLines(CommonSoundfonts));
+            }
+            catch
+            {
+                MessageBox.Show("Corrupt shared soundfonts file, resetting");
+                File.WriteAllText(CommonSoundfonts, "");
+            }
+        }
+
+        public void InitSoundfontListner()
+        {
+            if (!File.Exists(CommonSoundfonts)) File.WriteAllText(CommonSoundfonts, "");
+
+            soundfontWatcher = new FileSystemWatcher();
+            soundfontWatcher.Path = Path.GetDirectoryName(CommonSoundfonts);
+            soundfontWatcher.NotifyFilter = NotifyFilters.LastWrite;
+            soundfontWatcher.Filter = Path.GetFileName(CommonSoundfonts);
+            soundfontWatcher.Changed += OnSoundfontsChanged;
+            soundfontWatcher.EnableRaisingEvents = true;
+
+            ParseSoundfonts();
+            Soundfonts.OnSave += (s) =>
+            {
+                justWroteSF = true;
+                File.WriteAllText(CommonSoundfonts, s);
+            };
+        }
+
+        private void OnSoundfontsChanged(object sender, FileSystemEventArgs e)
+        {
+            if (justWroteSF)
+            {
+                justWroteSF = false;
+                return;
+            }
+            ParseSoundfonts();
         }
     }
 }

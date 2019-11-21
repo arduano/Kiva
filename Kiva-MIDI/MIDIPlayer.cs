@@ -178,7 +178,7 @@ namespace Kiva_MIDI
                     if (changed || lastTime > time)
                     {
                         time = Time.GetTime();
-                        if (deviceID == 01)
+                        if (deviceID == -1)
                             KDMAPI.ResetKDMAPIStream();
                         else if (device != null)
                             try

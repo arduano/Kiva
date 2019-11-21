@@ -250,6 +250,7 @@
     <Compile Include="Material.WPF\ValueSlider.xaml.cs">
       <DependentUpon>ValueSlider.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SoundfontSettings.cs" />
     <Compile Include="VelocityEase.cs" />
     <Compile Include="VolatileSettings.cs" />
     <Page Include="Material.WPF\InfoIcon.xaml">

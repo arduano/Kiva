@@ -232,7 +232,7 @@ namespace Kiva_MIDI
                 {
                     var b1 = (ev >> 8) & 0x7f;
                     var b2 = (ev >> 16) & 0x7f;
-                    bass.SendEventRaw(BASSMIDIEvent.MIDI_EVENT_CONTROL, ev & 0xFFFFF0, (int)ev & 0xF);
+                    bass.SendEventRaw(ev & 0xFFFFF0, (int)ev & 0xF);
                 }
                 if (cancelGenerator.Token.IsCancellationRequested) break;
             }

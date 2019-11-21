@@ -260,7 +260,7 @@ namespace Kiva_MIDI
             return BassMidi.BASS_MIDI_StreamEvents(Handle, mode, new BASS_MIDI_EVENT[] { ev });
         }
 
-        public unsafe int SendEventRaw(BASSMIDIEvent type, uint data, int channel)
+        public unsafe int SendEventRaw(uint data, int channel)
         {
             var mode = BASSMIDIEventMode.BASS_MIDI_EVENTS_RAW;
             return BassMidi.BASS_MIDI_StreamEvents(Handle, mode, channel, (IntPtr)(&data), 3);

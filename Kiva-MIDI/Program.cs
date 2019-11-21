@@ -23,40 +23,43 @@ namespace Kiva_MIDI
 
             MIDIAudio.Init();
 
+#if !DEBUG
             try
             {
-                var s = new Settings();
-
-                if (s.EnableUpdates)
+#endif
+            var s = new Settings();
+            s.InitSoundfontListner();
+            if (s.EnableUpdates)
+            {
+                if (File.Exists(KivaUpdates.DefaultUpdatePackagePath))
                 {
-                    if (File.Exists(KivaUpdates.DefaultUpdatePackagePath))
+                    try
                     {
-                        try
+                        using (var z = File.OpenRead(KivaUpdates.DefaultUpdatePackagePath))
+                        using (ZipArchive archive = new ZipArchive(z))
+                        { }
+                        UpdateReady = true;
+                        if (!KivaUpdates.IsAnotherKivaRunning())
                         {
-                            using (var z = File.OpenRead(KivaUpdates.DefaultUpdatePackagePath))
-                            using (ZipArchive archive = new ZipArchive(z))
-                            { }
-                            UpdateReady = true;
-                            if (!KivaUpdates.IsAnotherKivaRunning())
-                            {
-                                if(args.Length == 0) Process.Start(KivaUpdates.InstallerPath, "update -Reopen");
-                                else Process.Start(KivaUpdates.InstallerPath, "update -Reopen -ReopenArg \"" + args[0] + "\"");
-                            }
+                            if (args.Length == 0) Process.Start(KivaUpdates.InstallerPath, "update -Reopen");
+                            else Process.Start(KivaUpdates.InstallerPath, "update -Reopen -ReopenArg \"" + args[0] + "\"");
                         }
-                        catch (Exception e) { TryDownloadUpdatePackage(s.VersionName); }
                     }
-                    else
-                    {
-                        TryDownloadUpdatePackage(s.VersionName);
-                    }
+                    catch (Exception e) { TryDownloadUpdatePackage(s.VersionName); }
                 }
-
-                var window = new MainWindow(s);
-                if (args.Length != 0)
+                else
                 {
-                    window.LoadMidi(args[0]);
+                    TryDownloadUpdatePackage(s.VersionName);
                 }
-                window.ShowDialog();
+            }
+
+            var window = new MainWindow(s);
+            if (args.Length != 0)
+            {
+                window.LoadMidi(args[0]);
+            }
+            window.ShowDialog();
+#if !DEBUG
             }
             catch (Exception e)
             {
@@ -64,6 +67,7 @@ namespace Kiva_MIDI
                 msg += e.StackTrace;
                 MessageBox.Show(msg, "Kiva has crashed!");
             }
+#endif
         }
 
         static void TryDownloadUpdatePackage(string currVersion)
