@@ -36,9 +36,17 @@ namespace Kiva_MIDI
 
         SolidColorBrush selectBrush = new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
 
+        bool kdmapiAvailable = false;
+
         public AudioSettings()
         {
             InitializeComponent();
+            try
+            {
+                kdmapiAvailable = KDMAPI.IsKDMAPIAvailable();
+            }
+            catch { }
+            if (!kdmapiAvailable) kdmapiEngine.Visibility = Visibility.Collapsed;
             kdmapiEngine.PreviewMouseDown += (s, e) => { settings.General.SelectedAudioEngine = AudioEngine.KDMAPI; SetValues(); };
             winmmEngine.PreviewMouseDown += (s, e) => { settings.General.SelectedAudioEngine = AudioEngine.WinMM; SetValues(); };
             prerenderEngine.PreviewMouseDown += (s, e) => { settings.General.SelectedAudioEngine = AudioEngine.PreRender; SetValues(); };
