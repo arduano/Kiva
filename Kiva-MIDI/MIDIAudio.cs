@@ -40,7 +40,7 @@ namespace Kiva_MIDI
             {
                 lock (audioSource.AudioBuffer)
                 {
-                    if (audioSource.Paused)
+                    if (audioSource.Paused || audioSource.awaitingReset)
                     {
                         for (int i = 0; i < count; i++)
                         {
@@ -92,6 +92,10 @@ namespace Kiva_MIDI
         int bufferWritePos = 0;
         double startTime = 0;
 
+        public int defaultVoices = 1000;
+
+        bool awaitingReset = false;
+
         DateTime lastReadtime = DateTime.UtcNow;
 
         public int SkippingVelocity
@@ -122,7 +126,6 @@ namespace Kiva_MIDI
         public static void Init()
         {
             BASSMIDI.InitBASS(format);
-            BASSMIDI.LoadGlobalSoundfonts();
         }
 
         private ISoundOut GetSoundOut()
@@ -161,7 +164,7 @@ namespace Kiva_MIDI
 
         void GeneratorFunc(IEnumerable<MIDIEvent> events, double speed, Action<double, int> skipEvents)
         {
-            var bass = new BASSMIDI(1000);
+            var bass = new BASSMIDI(defaultVoices);
             bufferWritePos = 0;
             bufferReadPos = 0;
             lastReadtime = DateTime.UtcNow;
@@ -264,6 +267,7 @@ namespace Kiva_MIDI
             cancelGenerator = new CancellationTokenSource();
             startTime = time;
             generatorThread = Task.Run(() => GeneratorFunc(events, speed, skipEvents));
+            awaitingReset = false;
         }
 
         public void Stop()
@@ -285,6 +289,12 @@ namespace Kiva_MIDI
                 if (newPos < 0) newPos = 0;
                 bufferReadPos = newPos;
             }
+        }
+
+        public void ResizeBuffer(int size)
+        {
+            awaitingReset = true;
+            AudioBuffer = new float[size * 2];
         }
 
         public void Dispose()

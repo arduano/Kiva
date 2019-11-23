@@ -30,6 +30,7 @@ namespace Kiva_MIDI
                 settings = value;
                 SetValues();
                 winmmSettings.Settings = settings;
+                prerenderSettings.Settings = settings;
             }
         }
 

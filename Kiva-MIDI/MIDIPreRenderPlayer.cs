@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,6 @@ namespace Kiva_MIDI
     class MIDIPreRenderPlayer : IDisposable
     {
         Settings settings;
-
-        FileSystemWatcher soundfontWatcher;
 
         public int SkippingVelocity => ma.SkippingVelocity;
         public double BufferSeconds => ma.BufferSeconds;
@@ -138,16 +137,13 @@ namespace Kiva_MIDI
         public MIDIPreRenderPlayer(Settings settings)
         {
             this.settings = settings;
-            ma = new MIDIAudio(48000 * 60);
+            ma = new MIDIAudio(48000 * settings.General.RenderBufferLength);
             Time.TimeChanged += OnTimeChange;
             Time.PauseChanged += OnPauseChange;
 
-            soundfontWatcher = new FileSystemWatcher();
-            soundfontWatcher.Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Common SoundFonts");
-            soundfontWatcher.NotifyFilter = NotifyFilters.LastWrite;
-            soundfontWatcher.Filter = "SoundFontList.csflist";
-            soundfontWatcher.Changed += OnSoundfontsChanged;
-            soundfontWatcher.EnableRaisingEvents = true;
+            BASSMIDI.LoadSoundfonts(settings.Soundfonts.Soundfonts);
+
+            settings.Soundfonts.SoundfontsUpdated += OnSoundfontsChanged;
 
             syncThread = Task.Run(() =>
             {
@@ -164,13 +160,14 @@ namespace Kiva_MIDI
                     Thread.Sleep(100);
                 }
             });
+            settings.General.PropertyChanged += OnSettingsPropertyChanged;
         }
 
-        private void OnSoundfontsChanged(object sender, FileSystemEventArgs e)
+        private void OnSoundfontsChanged(bool reload)
         {
             ma.Paused = true;
             ma.Stop();
-            BASSMIDI.LoadGlobalSoundfonts();
+            BASSMIDI.LoadSoundfonts(settings.Soundfonts.Soundfonts);
             ma.Paused = Time.Paused;
             StartRender(true);
         }
@@ -178,9 +175,25 @@ namespace Kiva_MIDI
         public void Dispose()
         {
             ma.Dispose();
-            soundfontWatcher.Dispose();
+            BASSMIDI.FreeSoundfonts();
             disposed = true;
             syncThread.GetAwaiter().GetResult();
+            settings.Soundfonts.SoundfontsUpdated -= OnSoundfontsChanged;
+            settings.General.PropertyChanged -= OnSettingsPropertyChanged;
+        }
+
+        void OnSettingsPropertyChanged(object s, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "RenderVoices")
+            {
+                ma.defaultVoices = settings.General.RenderVoices;
+                StartRender(true);
+            }
+            if (e.PropertyName == "RenderBufferLength")
+            {
+                ma.ResizeBuffer(settings.General.RenderBufferLength * 48000);
+                StartRender(true);
+            }
         }
 
         int GetEventPos(MIDIEvent[] events, double time)

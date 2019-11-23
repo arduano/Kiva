@@ -44,7 +44,7 @@ namespace Kiva_MIDI
             Handle = BassMidi.BASS_MIDI_StreamCreate(16,
                 BASSFlag.BASS_SAMPLE_FLOAT |
                 BASSFlag.BASS_STREAM_DECODE |
-                BASSFlag.BASS_MIDI_SINCINTER | 
+                BASSFlag.BASS_MIDI_SINCINTER |
                 BASSFlag.BASS_MIDI_NOTEOFF1,
                 WaveFormatStatic.SampleRate);
 
@@ -62,103 +62,33 @@ namespace Kiva_MIDI
             BassMidi.BASS_MIDI_StreamSetFonts(Handle, fontarr, fontarr.Length);
         }
 
-        public static void LoadGlobalSoundfonts()
+        public static void FreeSoundfonts()
         {
-            if(fontarr != null)
+            if (fontarr != null)
             {
                 foreach (var f in fontarr) BassMidi.BASS_MIDI_FontFree(f.font);
+                fontarr = null;
             }
+        }
 
-            string omconfig = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            if (!string.IsNullOrEmpty(omconfig))
-                omconfig = Path.Combine(omconfig, "Common SoundFonts", "SoundFontList.csflist");
+        public static void LoadSoundfonts(SoundfontData[] soundfonts)
+        {
+            FreeSoundfonts();
             List<BASS_MIDI_FONTEX> fonts = new List<BASS_MIDI_FONTEX>();
-            if (File.Exists(omconfig))
+            foreach (var s in soundfonts)
             {
-                string[] lines = File.ReadAllLines(omconfig, Encoding.UTF8);
+                if (!s.enabled) continue;
+                var font = BassMidi.BASS_MIDI_FontInit(s.path,
+                    s.xgdrums ? BASSFlag.BASS_MIDI_FONT_XGDRUMS : BASSFlag.BASS_DEFAULT);
 
-                BASS_MIDI_FONTEX currfont = new BASS_MIDI_FONTEX();
-                string currfilename = null;
-                bool xgdrums = false;
-                bool add = true;
-
-                int lineno = 0;
-
-                foreach (string line in lines)
+                if (font != 0)
                 {
-                    lineno++;
+                    fonts.Add(new BASS_MIDI_FONTEX(font, s.srcp, s.srcb, s.desp, s.desb, s.xgdrums ? 1 : 0));
 
-                    if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//"))
-                        continue;
-
-                    if (line == "sf.start")
-                    {
-                        currfont = new BASS_MIDI_FONTEX(0, -1, -1, -1, 0, 0);
-                        currfilename = null;
-                        xgdrums = false;
-                        add = true;
-                        continue;
-                    }
-
-                    if (line == "sf.end")
-                    {
-                        if (add)
-                        {
-                            if (currfilename == null)
-                            {
-                                throw new Exception("Missing filename at line " + lineno);
-                            }
-
-                            currfont.font = BassMidi.BASS_MIDI_FontInit(currfilename,
-                                xgdrums ? BASSFlag.BASS_MIDI_FONT_XGDRUMS : BASSFlag.BASS_DEFAULT);
-
-                            if (currfont.font != 0)
-                            {
-                                fonts.Add(currfont);
-
-                                BassMidi.BASS_MIDI_FontLoad(currfont.font, currfont.spreset, currfont.sbank);
-                            }
-                        }
-                        currfilename = null;
-                        continue;
-                    }
-
-                    if (!line.StartsWith("sf."))
-                    {
-                        throw new Exception("Invalid line " + lineno);
-                    }
-
-                    int idx = line.IndexOf(" = ");
-                    if (idx < 4)
-                    {
-                        throw new Exception("Invalid instruction at line " + lineno);
-                    }
-
-                    string instr = line.Substring(3, idx - 3);
-                    string idata = line.Substring(idx + 3);
-
-                    switch (instr)
-                    {
-                        case "path": currfilename = idata; break;
-                        case "enabled": add = idata != "0"; break;
-                        case "srcb": currfont.sbank = int.Parse(idata); break;
-                        case "srcp": currfont.spreset = int.Parse(idata); break;
-                        case "desb": currfont.dbank = int.Parse(idata); break;
-                        case "desp": currfont.dpreset = int.Parse(idata); break;
-                        case "xgdrums": xgdrums = idata != "0"; break;
-
-                        default:
-                            throw new Exception("Invalid instruction at line " + lineno);
-                    }
+                    BassMidi.BASS_MIDI_FontLoad(font, s.srcp, s.srcb);
                 }
-
-                fontarr = fonts.ToArray();
-                Array.Reverse(fontarr);
             }
-            else
-            {
-                throw new Exception("OmniMIDI config file missing");
-            }
+            fontarr = fonts.ToArray();
         }
 
         public bool WriteBass(int buflen, Stream bs, ref ulong progress)

@@ -16,7 +16,7 @@
     <Grid>
         <DockPanel>
             <Label DockPanel.Dock="Top">MIDI Output Device</Label>
-            <Border BorderBrush="Black" BorderThickness="1">
+            <Border BorderBrush="Black" BorderThickness="0">
                 <ScrollViewer>
                     <StackPanel Name="devicesList" Background="Transparent">
 

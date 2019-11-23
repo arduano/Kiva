@@ -5,20 +5,67 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Kiva_MIDI"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <ListView Name="soundFontsList">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Finished">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label>Test</Label>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </Grid>
+             d:DesignHeight="450" d:DesignWidth="800" Unloaded="UserControl_Unloaded">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../ButtonTemplates.xaml"/>
+                <ResourceDictionary Source="../Scrollbar.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <DockPanel>
+                    <Label FontSize="14">
+                        Buffer length (seconds):
+                    </Label>
+                    <local:NumberSelect x:Name="bufferLength" Minimum="10" Maximum="3600" Value="60" DecimalPoints="0" VerticalAlignment="Bottom" Width="100" HorizontalAlignment="Left" ValueChanged="bufferLength_ValueChanged"/>
+                    <Label Name="bufferSizeLabel" FontSize="14">
+                        (0mb)
+                    </Label>
+                </DockPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <DockPanel>
+                    <Label FontSize="14">
+                        Voices:
+                    </Label>
+                    <local:NumberSelect x:Name="voices" Minimum="32" Maximum="5000" Value="500" DecimalPoints="0" VerticalAlignment="Bottom" Width="100" HorizontalAlignment="Left" ValueChanged="voices_ValueChanged"/>
+                </DockPanel>
+            </StackPanel>
+        </Grid>
+        <Grid>
+            <DockPanel Margin="10" LastChildFill="True">
+                <StackPanel DockPanel.Dock="Right">
+                    <Button Name="addButton" Width="20" Height="20" FontSize="18" Style="{DynamicResource TransparentButtonStyle}" Click="addButton_Click">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,3">+</TextBlock>
+                    </Button>
+                    <Button Name="removeButton" Width="20" Height="20" FontSize="18" Style="{DynamicResource TransparentButtonStyle}" Click="removeButton_Click">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,3">-</TextBlock>
+                    </Button>
+                    <Button Name="upButton" Width="20" Height="20" FontSize="18" Style="{DynamicResource TransparentButtonStyle}" Margin="0,10,0,0" Click="upButton_Click">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2">🡅</TextBlock>
+                    </Button>
+                    <Button Name="downButton" Width="20" Height="20" FontSize="18" Style="{DynamicResource TransparentButtonStyle}" Click="downButton_Click">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2">🡇</TextBlock>
+                    </Button>
+                </StackPanel>
+                <Border Name="sfPanel" BorderBrush="Black" BorderThickness="1" Background="Transparent"
+                        AllowDrop="True" PreviewDrop="sfPanel_PreviewDrop" PreviewDragEnter="sfPanel_PreviewDragEnter" 
+                        PreviewDragLeave="sfPanel_PreviewDragLeave" >
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Name="sfList">
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
 </UserControl>

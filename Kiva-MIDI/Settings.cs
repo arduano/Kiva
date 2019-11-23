@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO.Compression;
 using KivaShared;
+using System.Threading;
 
 namespace Kiva_MIDI
 {
@@ -129,23 +130,53 @@ namespace Kiva_MIDI
 
         bool justWroteSF = false;
 
+        string lastWrittenText = null;
+
         void ParseSoundfonts()
         {
-            try
+            //try
             {
-                Soundfonts.ParseFile(File.ReadAllLines(CommonSoundfonts));
+                string[] lines = null;
+                for (int i = 0; i < 100; i++)
+                {
+                    try
+                    {
+                        var text = File.ReadAllText(CommonSoundfonts);
+                        if (text == lastWrittenText) return;
+                        lines = text.Split('\n');
+                        break;
+                    }
+                    catch
+                    {
+                        Thread.Sleep(10);
+                    }
+                }
+                if (lines == null)
+                    Soundfonts.Soundfonts = new SoundfontData[0];
+                Soundfonts.ParseFile(lines);
             }
-            catch
-            {
-                MessageBox.Show("Corrupt shared soundfonts file, resetting");
-                File.WriteAllText(CommonSoundfonts, "");
-            }
+            //catch (Exception e)
+            //{
+            //    try
+            //    {
+            //        justWroteSF = true;
+            //        File.WriteAllText(CommonSoundfonts, "");
+            //        lastWrittenText = "";
+            //    }
+            //    catch
+            //    {
+            //        Soundfonts.Soundfonts = new SoundfontData[0];
+            //    }
+            //}
         }
 
         public void InitSoundfontListner()
         {
-            if (!File.Exists(CommonSoundfonts)) File.WriteAllText(CommonSoundfonts, "");
-
+            if (!File.Exists(CommonSoundfonts))
+            {
+                File.WriteAllText(CommonSoundfonts, "");
+                lastWrittenText = "";
+            }
             soundfontWatcher = new FileSystemWatcher();
             soundfontWatcher.Path = Path.GetDirectoryName(CommonSoundfonts);
             soundfontWatcher.NotifyFilter = NotifyFilters.LastWrite;
@@ -157,7 +188,19 @@ namespace Kiva_MIDI
             Soundfonts.OnSave += (s) =>
             {
                 justWroteSF = true;
-                File.WriteAllText(CommonSoundfonts, s);
+                for (int i = 0; i < 100; i++)
+                {
+                    try
+                    {
+                        File.WriteAllText(CommonSoundfonts, s);
+                        lastWrittenText = s;
+                        break;
+                    }
+                    catch
+                    {
+                        Thread.Sleep(10);
+                    }
+                }
             };
         }
 

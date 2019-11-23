@@ -242,8 +242,7 @@ namespace Kiva_MIDI
             }
             catch
             {
-                settings.General.SelectedMIDIDevice = 0;
-                settings.General.SelectedMIDIDeviceName = "";
+                settings.General.SelectedAudioEngine = AudioEngine.WinMM;
                 return;
             }
             try

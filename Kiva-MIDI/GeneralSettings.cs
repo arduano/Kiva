@@ -56,6 +56,9 @@ namespace Kiva_MIDI
 
         public AudioEngine SelectedAudioEngine { get; set; } = AudioEngine.PreRender;
 
+        public int RenderBufferLength { get; set; } = 60;
+        public int RenderVoices { get; set; } = 1000;
+
         public int SelectedMIDIDevice { get; set; } = -1;
         public string SelectedMIDIDeviceName { get; set; } = "";
 

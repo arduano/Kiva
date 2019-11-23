@@ -292,12 +292,6 @@ namespace Kiva_MIDI
                     break;
             }
             selectedAudioEngine = settings.General.SelectedAudioEngine;
-            //player = new MIDIPlayer(settings);
-            //player.DeviceID = settings.General.SelectedMIDIDevice;
-            //player.RunPlayer();
-            //player.Time = Time;
-            //preRenderPlayer = new MIDIPreRenderPlayer(settings);
-            //preRenderPlayer.Time = Time;
 
             speedSlider.nudToSlider = v => Math.Log(v, 2);
             speedSlider.sliderToNud = v => Math.Pow(2, v);
@@ -335,7 +329,6 @@ namespace Kiva_MIDI
             };
 
             d3d.FPSLock = settings.General.FPSLock;
-            //player.DeviceID = settings.General.SelectedMIDIDevice;
             d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
             glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
             infoCard.Visibility = settings.General.HideInfoCard ? Visibility.Hidden : Visibility.Visible;
@@ -361,12 +354,10 @@ namespace Kiva_MIDI
                 var renderText = timeSpanString(TimeSpan.FromSeconds(Math.Min(Time.GetTime(), timeSlider.Maximum))) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen)) + "\n" +
                                  "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
                                  "" + scene.NotesPassedSum.ToString("#,##0") + "/" + (loadedFle != null ? loadedFle.MidiNoteCount : 0).ToString("#,##0") + "\n" +
-                                 //"Audio Buffer: " + timeSpanString(TimeSpan.FromSeconds(preRenderPlayer.BufferSeconds)) + "\n" +
+                                 "Audio Buffer: " + (selectedAudioEngine == AudioEngine.PreRender ? timeSpanString(TimeSpan.FromSeconds(preRenderPlayer.BufferSeconds)) : "N/A") + "\n" +
                                  "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0") + "\n" +
                                  "NPS: " + scene.LastNPS.ToString("#,##0") + "\n" +
                                  "Polyphony: " + scene.LastPolyphony.ToString("#,##0");
-
-                //if (midiTime > midiLen + 10) Time.Pause();
 
                 double eventSkip;
                 if (selectedAudioEngine == AudioEngine.PreRender)
@@ -633,9 +624,13 @@ namespace Kiva_MIDI
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            player.File = null;
-            player.Dispose();
-            //preRenderPlayer.Dispose();
+            if (selectedAudioEngine == AudioEngine.PreRender)
+                preRenderPlayer.Dispose();
+            else
+            {
+                player.File = null;
+                player.Dispose();
+            }
             scene.File = null;
             d3d.Dispose();
         }

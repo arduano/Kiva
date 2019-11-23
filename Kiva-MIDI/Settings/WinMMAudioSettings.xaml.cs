@@ -38,31 +38,17 @@ namespace Kiva_MIDI
             }
         }
 
-        bool kdmapiDisabled = false;
         SolidColorBrush selectBrush = new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
 
         public WinMMAudioSettings()
         {
-            try
-            {
-                kdmapiDisabled = !KDMAPI.IsKDMAPIAvailable();
-            }
-            catch { kdmapiDisabled = true; }
             InitializeComponent();
 
-            for (int i = -1; i < OutputDevice.DeviceCount; i++)
+            for (int i = 0; i < OutputDevice.DeviceCount; i++)
             {
                 string name;
-                if (i == -1)
-                {
-                    if (kdmapiDisabled) continue;
-                    name = "KDMAPI (direct API)";
-                }
-                else
-                {
-                    var device = OutputDevice.GetDeviceCapabilities(i);
-                    name = device.name;
-                }
+                var device = OutputDevice.GetDeviceCapabilities(i);
+                name = device.name;
                 var item = new Grid()
                 {
                     Tag = new DeviceData() { id = i, name = name },
@@ -72,6 +58,8 @@ namespace Kiva_MIDI
                     {
                         Content = new Label
                         {
+                            FontSize = 14,
+                            HorizontalContentAlignment = HorizontalAlignment.Center,
                             Content = name
                         }
                     }
