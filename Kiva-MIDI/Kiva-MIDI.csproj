@@ -108,7 +108,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bass.Net">
-      <HintPath>..\MIDIAudioFramework\Bass.Net.dll</HintPath>
+      <HintPath>.\Bass.Net.dll</HintPath>
     </Reference>
     <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
       <HintPath>..\packages\CSCore.1.2.1.2\lib\net35-client\CSCore.dll</HintPath>
@@ -406,10 +406,6 @@
     <ProjectReference Include="..\KivaShared\KivaShared.csproj">
       <Project>{181949ba-6424-4ad0-966b-1db6cdf1777d}</Project>
       <Name>KivaShared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MIDIAudioFramework\MIDIAudioFramework.csproj">
-      <Project>{12907daa-ee53-4303-a646-3b846ca079cc}</Project>
-      <Name>MIDIAudioFramework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
