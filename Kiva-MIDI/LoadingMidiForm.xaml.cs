@@ -89,8 +89,7 @@ namespace Kiva_MIDI
             audioThresh.Value = ls.EventVelocityThreshold;
             visibleThresh.Value = ls.NoteVelocityThreshold;
             audioThreads.Value = ls.EventPlayerThreads;
-
-            visibleThresh.Maximum = audioThresh.Value;
+            removeOverlaps.IsChecked = loaderSettings.RemoveOverlaps;
         }
 
         void ContinueLoading()
@@ -186,7 +185,13 @@ namespace Kiva_MIDI
         private void VisibleThresh_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
         {
             if (IsInitialized)
+            {
                 loaderSettings.NoteVelocityThreshold = (byte)visibleThresh.Value;
+                if(audioThresh.Value < visibleThresh.Value)
+                {
+                    audioThresh.Value = visibleThresh.Value;
+                }
+            }
         }
 
         private void AudioThresh_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
@@ -194,7 +199,10 @@ namespace Kiva_MIDI
             if (IsInitialized)
             {
                 loaderSettings.EventVelocityThreshold = (byte)audioThresh.Value;
-                visibleThresh.Maximum = audioThresh.Value;
+                if (audioThresh.Value < visibleThresh.Value)
+                {
+                    visibleThresh.Value = audioThresh.Value;
+                }
             }
         }
 
@@ -208,6 +216,12 @@ namespace Kiva_MIDI
         {
             if (audioThresh.TextFocused || visibleThresh.TextFocused || audioThreads.TextFocused) return;
             ContinueLoading();
+        }
+
+        private void removeOverlaps_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            if (IsInitialized)
+                loaderSettings.RemoveOverlaps = removeOverlaps.IsChecked;
         }
     }
 

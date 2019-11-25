@@ -100,18 +100,23 @@ namespace Kiva_MIDI
             });
             cancel.ThrowIfCancellationRequested();
             ParseStage = ParsingStage.MergingKeys;
+            long noteCount = 0;
             Parallel.For(0, 256, new ParallelOptions() { CancellationToken = cancel }, (i) =>
             {
-                Notes[i] = TimedMerger<Note>.MergeMany(parsers.Select(p => p.Notes[i]).ToArray(), n => n.start).ToArray();
+                var en = TimedMerger<Note>.MergeMany(parsers.Select(p => p.Notes[i]).ToArray(), n => n.start);
+                if (loaderSettings.RemoveOverlaps) Notes[i] = RemoveOverlaps(en).ToArray();
+                else Notes[i] = en.ToArray();
                 foreach (var p in parsers) p.Notes[i] = null;
                 lock (l)
                 {
+                    noteCount += Notes[i].Length;
                     keysMerged++;
                     ParseNumber += 10;
                     ParseStatusText = "Merging Notes\nMerged keys " + keysMerged + " of " + 256;
                     Console.WriteLine("Merged key " + keysMerged + "/" + 256);
                 }
             });
+            MidiNoteCount = noteCount;
             List<ColorEvent[]> ce = new List<ColorEvent[]>();
             foreach (var p in parsers) ce.AddRange(p.ColorEvents);
             ColorEvents = ce.ToArray();
@@ -122,6 +127,47 @@ namespace Kiva_MIDI
             controlEventMerger.GetAwaiter().GetResult();
             eventMerger.GetAwaiter().GetResult();
             ParseStatusText = "Done!";
+        }
+
+        IEnumerable<Note> RemoveOverlaps(IEnumerable<Note> input)
+        {
+            List<Note> tickNotes = new List<Note>();
+            double currTick = -1;
+            double epsilon = 0.00001;
+            foreach (var n in input)
+            {
+                if (n.start > currTick)
+                {
+                    foreach (var _n in tickNotes) yield return _n;
+                    tickNotes.Clear();
+                    currTick = n.start + epsilon;
+                    tickNotes.Add(n);
+                }
+                else
+                {
+                    var count = tickNotes.Count;
+                    var end = n.end + epsilon;
+                    if (count != 0 && tickNotes[count - 1].end <= end)
+                    {
+                        int i = count - 1;
+                        for (; i >= 0; i--)
+                        {
+                            if (tickNotes[i].end > end) break;
+                        }
+                        i++;
+                        if (i == 0)
+                            tickNotes.Clear();
+                        else if (i != count)
+                            tickNotes.RemoveRange(i, count - i);
+                        tickNotes.Add(n);
+                    }
+                    else
+                    {
+                        tickNotes.Add(n);
+                    }
+                }
+            }
+            foreach (var _n in tickNotes) yield return _n;
         }
 
         public void SetColorEvents(double time)

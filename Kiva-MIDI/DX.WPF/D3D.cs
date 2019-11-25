@@ -140,7 +140,11 @@ namespace Kiva_MIDI
                 while (!disposed)
                 {
                     frameTimer.Start();
-                    while (SingleThreadedRender) Thread.Sleep(100);
+                    while (SingleThreadedRender)
+                    {
+                        Thread.Sleep(100);
+                        if (disposed) return;
+                    }
                     lock (argsPointer)
                     {
                         if (argsPointer.args == null || SingleThreadedRender) Thread.Sleep(100);

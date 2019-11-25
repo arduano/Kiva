@@ -15,7 +15,7 @@
         Loaded="Window_Loaded" SnapsToDevicePixels="True" PreviewKeyDown="MainWindow_PreviewKeyDown"  KeyDown="MainWindow_KeyDown"
         AllowDrop="True" PreviewDrop="MainWindow_PreviewDrop" PreviewDragEnter="MainWindow_PreviewDragEnter" 
         PreviewDragLeave="MainWindow_PreviewDragLeave" WindowStartupLocation="CenterScreen"
-        Focusable="True" Closing="MainWindow_Closing" AllowsTransparency="True">
+        Focusable="True" Closing="MainWindow_Closing" AllowsTransparency="True" VerticalAlignment="Center">
     <Window.Background>
         <SolidColorBrush Color="Transparent"/>
     </Window.Background>

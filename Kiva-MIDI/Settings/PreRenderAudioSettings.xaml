@@ -30,6 +30,7 @@
                         (0mb)
                     </Label>
                 </DockPanel>
+                <local:BetterCheckbox x:Name="disableFx" Margin="5" Text="Disable Soundfont Effects" CheckToggled="disableFx_CheckToggled"/>
             </StackPanel>
             <StackPanel Grid.Column="1">
                 <DockPanel>

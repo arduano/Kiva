@@ -39,7 +39,7 @@ namespace Kiva_MIDI
             Bass.BASS_Free();
         }
 
-        public BASSMIDI(int voices)
+        public BASSMIDI(int voices, bool nofx = true)
         {
             Handle = BassMidi.BASS_MIDI_StreamCreate(16,
                 BASSFlag.BASS_SAMPLE_FLOAT |
@@ -57,7 +57,7 @@ namespace Kiva_MIDI
             Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_MIDI_VOICES, voices);
             Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_SRC, 3);
 
-            Bass.BASS_ChannelFlags(Handle, BASSFlag.BASS_MIDI_NOFX, BASSFlag.BASS_MIDI_NOFX);
+            if(nofx) Bass.BASS_ChannelFlags(Handle, BASSFlag.BASS_MIDI_NOFX, BASSFlag.BASS_MIDI_NOFX);
 
             BassMidi.BASS_MIDI_StreamSetFonts(Handle, fontarr, fontarr.Length);
         }

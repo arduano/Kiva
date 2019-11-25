@@ -77,6 +77,7 @@ namespace Kiva_MIDI
         FirstPass,
         SecondPass,
         MergingKeys,
+        RemovingOverlaps,
         MergingEvents,
     }
 

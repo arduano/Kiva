@@ -93,6 +93,7 @@ namespace Kiva_MIDI
         double startTime = 0;
 
         public int defaultVoices = 1000;
+        public bool defaultNoFx = false;
 
         bool awaitingReset = false;
 
@@ -164,7 +165,7 @@ namespace Kiva_MIDI
 
         void GeneratorFunc(IEnumerable<MIDIEvent> events, double speed, Action<double, int> skipEvents)
         {
-            var bass = new BASSMIDI(defaultVoices);
+            var bass = new BASSMIDI(defaultVoices, defaultNoFx);
             bufferWritePos = 0;
             bufferReadPos = 0;
             lastReadtime = DateTime.UtcNow;
@@ -210,8 +211,10 @@ namespace Kiva_MIDI
                 {
                     if (samples >= 0 && !(bufferWritePos - shiftedBufferReadPos < (127 - e.vel + 10) * 20 && bufferReadPos > 1000))
                         bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_NOTE, cmd < 0x90 ? (byte)(ev >> 8) : (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
+                    //else if (bufferWritePos - shiftedBufferReadPos < (127 - e.vel + 9) * 20)
+                    //    continue;
                     else
-                        skipEvents(startTime + shiftedBufferReadPos / 48000.0, 127 - (bufferWritePos - shiftedBufferReadPos) / 100);
+                        skipEvents(startTime + shiftedBufferReadPos / 48000.0, 127 - (bufferWritePos - shiftedBufferReadPos) / 50);
                 }
                 else if (cmd == 0xE0) //PitchBend
                 {

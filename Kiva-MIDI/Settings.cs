@@ -134,7 +134,7 @@ namespace Kiva_MIDI
 
         void ParseSoundfonts()
         {
-            //try
+            try
             {
                 string[] lines = null;
                 for (int i = 0; i < 100; i++)
@@ -151,29 +151,32 @@ namespace Kiva_MIDI
                         Thread.Sleep(10);
                     }
                 }
-                if (lines == null)
+                if (lines == null || lines.Length == 0)
                     Soundfonts.Soundfonts = new SoundfontData[0];
                 Soundfonts.ParseFile(lines);
             }
-            //catch (Exception e)
-            //{
-            //    try
-            //    {
-            //        justWroteSF = true;
-            //        File.WriteAllText(CommonSoundfonts, "");
-            //        lastWrittenText = "";
-            //    }
-            //    catch
-            //    {
-            //        Soundfonts.Soundfonts = new SoundfontData[0];
-            //    }
-            //}
+            catch (Exception e)
+            {
+                try
+                {
+                    justWroteSF = true;
+                    File.WriteAllText(CommonSoundfonts, "");
+                    lastWrittenText = "";
+                    Soundfonts.Soundfonts = new SoundfontData[0];
+                }
+                catch
+                {
+                }
+
+                Soundfonts.Soundfonts = new SoundfontData[0];
+            }
         }
 
         public void InitSoundfontListner()
         {
             if (!File.Exists(CommonSoundfonts))
             {
+                if (!Directory.Exists(Path.GetDirectoryName(CommonSoundfonts))) Directory.CreateDirectory(Path.GetDirectoryName(CommonSoundfonts));
                 File.WriteAllText(CommonSoundfonts, "");
                 lastWrittenText = "";
             }

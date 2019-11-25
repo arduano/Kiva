@@ -213,6 +213,8 @@ namespace Kiva_MIDI
                         if ((eventFeed.Count > events[evid].vel * 100 || delay < -1) && i != -1)
                             while ((evid < events.Length && events[evid].time < Time.GetTime() && (eventFeed.Count > events[evid].vel * 100 || delay < -1)))
                             {
+                                if(events[evid].vel > 80) 
+                                { }
                                 evid++;
                             }
                         else

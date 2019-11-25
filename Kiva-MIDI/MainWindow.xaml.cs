@@ -310,7 +310,8 @@ namespace Kiva_MIDI
                 if (e.PropertyName == "FPSLock")
                     d3d.FPSLock = settings.General.FPSLock;
                 if (e.PropertyName == "SelectedMIDIDevice")
-                    player.DeviceID = settings.General.SelectedMIDIDevice;
+                    if (selectedAudioEngine == AudioEngine.WinMM)
+                        player.DeviceID = settings.General.SelectedMIDIDevice;
                 if (e.PropertyName == "CompatibilityFPS")
                     d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
                 if (e.PropertyName == "BackgroundColor")

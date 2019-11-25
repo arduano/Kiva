@@ -61,6 +61,7 @@ namespace Kiva_MIDI
         {
             bufferLength.Value = settings.General.RenderBufferLength;
             voices.Value = settings.General.RenderVoices;
+            disableFx.IsChecked = settings.General.RenderNoFx;
             SetSizeLabel();
 
             SetSfs();
@@ -239,8 +240,16 @@ namespace Kiva_MIDI
                         Dispatcher.Invoke(() =>
                         {
                             sfPanel.Background = Brushes.Transparent;
-                            foreach(var f in files)
+                            foreach (var f in files)
                             {
+                                var ext = System.IO.Path.GetExtension(f).ToLowerInvariant();
+                                if (!(
+                                    ext == ".sf1" ||
+                                    ext == ".sf2" ||
+                                    ext == ".sfz" ||
+                                    ext == ".sfark" ||
+                                    ext == ".sfpack"
+                                )) continue;
                                 if (IsValidSF(f))
                                 {
                                     SoundfontData sf = new SoundfontData(System.IO.Path.GetExtension(f).ToLowerInvariant() == ".sfz");
@@ -262,6 +271,11 @@ namespace Kiva_MIDI
         {
             if (!IsInitialized) return;
             sfPanel.Background = selectBrush;
+        }
+
+        private void disableFx_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            settings.General.RenderNoFx = disableFx.IsChecked;
         }
     }
 }

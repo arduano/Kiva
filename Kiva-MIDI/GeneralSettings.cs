@@ -58,6 +58,7 @@ namespace Kiva_MIDI
 
         public int RenderBufferLength { get; set; } = 60;
         public int RenderVoices { get; set; } = 1000;
+        public bool RenderNoFx { get; set; } = false;
 
         public int SelectedMIDIDevice { get; set; } = -1;
         public string SelectedMIDIDeviceName { get; set; } = "";

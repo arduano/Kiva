@@ -72,7 +72,7 @@ namespace Kiva_MIDI
                 {
                     var ev = array[i];
                     if (ev.time > t && ev.vel > v) break;
-                    if (ev.time - t > (128 - ev.vel + 10) / 48000.0 * 100) break;
+                    if (ev.time - t > (128 - ev.vel + 10) / 48000.0 * 50) break;
                     i++;
                 }
             });
@@ -141,6 +141,9 @@ namespace Kiva_MIDI
             Time.TimeChanged += OnTimeChange;
             Time.PauseChanged += OnPauseChange;
 
+            ma.defaultVoices = settings.General.RenderVoices;
+            ma.defaultNoFx = settings.General.RenderNoFx;
+
             BASSMIDI.LoadSoundfonts(settings.Soundfonts.Soundfonts);
 
             settings.Soundfonts.SoundfontsUpdated += OnSoundfontsChanged;
@@ -180,6 +183,10 @@ namespace Kiva_MIDI
             syncThread.GetAwaiter().GetResult();
             settings.Soundfonts.SoundfontsUpdated -= OnSoundfontsChanged;
             settings.General.PropertyChanged -= OnSettingsPropertyChanged;
+
+            Time.TimeChanged -= OnTimeChange;
+            Time.PauseChanged -= OnPauseChange;
+            Time.SpeedChanged -= OnSpeedChanged;
         }
 
         void OnSettingsPropertyChanged(object s, PropertyChangedEventArgs e)
@@ -187,6 +194,11 @@ namespace Kiva_MIDI
             if (e.PropertyName == "RenderVoices")
             {
                 ma.defaultVoices = settings.General.RenderVoices;
+                StartRender(true);
+            }
+            if (e.PropertyName == "RenderNoFx")
+            {
+                ma.defaultNoFx = settings.General.RenderNoFx;
                 StartRender(true);
             }
             if (e.PropertyName == "RenderBufferLength")
