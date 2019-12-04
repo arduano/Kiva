@@ -143,6 +143,7 @@ namespace Kiva_MIDI
 
             ma.defaultVoices = settings.General.RenderVoices;
             ma.defaultNoFx = settings.General.RenderNoFx;
+            ma.simulatedLagScale = settings.General.RenderSimulateLag;
 
             BASSMIDI.LoadSoundfonts(settings.Soundfonts.Soundfonts);
 
@@ -204,6 +205,11 @@ namespace Kiva_MIDI
             if (e.PropertyName == "RenderBufferLength")
             {
                 ma.ResizeBuffer(settings.General.RenderBufferLength * 48000);
+                StartRender(true);
+            }
+            if (e.PropertyName == "RenderSimulateLag")
+            {
+                ma.simulatedLagScale = settings.General.RenderSimulateLag;
                 StartRender(true);
             }
         }

@@ -98,9 +98,53 @@
                                 v1.0
                             </Label>
                         </DockPanel>
-                        <StackPanel Name="infoPanel">
-                            <TextBlock Foreground="White" Name="renderInfo" Padding="5"></TextBlock>
-                        </StackPanel>
+                        <Border Padding="5">
+                            <StackPanel Name="infoPanel">
+                                <StackPanel.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                                <DockPanel Name="timePanel">
+                                    <TextBlock Margin="0,0,4,0">Time:</TextBlock>
+                                    <TextBlock Name="timeLabel" DockPanel.Dock="Right" HorizontalAlignment="Right"></TextBlock>
+                                </DockPanel>
+                                <DockPanel Name="fpsPanel">
+                                    <TextBlock Margin="0,0,4,0">FPS:</TextBlock>
+                                    <TextBlock Name="fpsLabel" DockPanel.Dock="Right" HorizontalAlignment="Right"></TextBlock>
+                                </DockPanel>
+                                <DockPanel Name="fakeFpsPanel">
+                                    <TextBlock Margin="0,0,4,0">Estimated FPS:</TextBlock>
+                                    <TextBlock Name="fakeFpsLabel" DockPanel.Dock="Right" HorizontalAlignment="Right"></TextBlock>
+                                </DockPanel>
+                                <DockPanel Name="renderedNotesPanel">
+                                    <TextBlock Margin="0,0,4,0">Rendered Notes:</TextBlock>
+                                    <TextBlock Name="renderedNotesLabel" DockPanel.Dock="Right" HorizontalAlignment="Right"></TextBlock>
+                                </DockPanel>
+                                <DockPanel Name="npsPanel">
+                                    <TextBlock Margin="0,0,4,0">NPS:</TextBlock>
+                                    <TextBlock Name="npsLabelLabel" DockPanel.Dock="Right" HorizontalAlignment="Right"></TextBlock>
+                                </DockPanel>
+                                <DockPanel Name="polyphonyPanel">
+                                    <TextBlock Margin="0,0,4,0">Polyphony:</TextBlock>
+                                    <TextBlock Name="polyphonyLabel" DockPanel.Dock="Right" HorizontalAlignment="Right"></TextBlock>
+                                </DockPanel>
+                                <StackPanel Name="ncPanel">
+                                    <DockPanel>
+                                        <TextBlock Margin="0,0,4,0">NC:</TextBlock>
+                                        <TextBlock Name="ncLabel" DockPanel.Dock="Right" HorizontalAlignment="Right"></TextBlock>
+                                    </DockPanel>
+                                    <DockPanel>
+                                        <TextBlock Margin="0,0,4,0">Passed:</TextBlock>
+                                        <TextBlock Name="npLabel" DockPanel.Dock="Right" HorizontalAlignment="Right"></TextBlock>
+                                    </DockPanel>
+                                </StackPanel>
+                                <DockPanel Name="bufferLenPanel">
+                                    <TextBlock Margin="0,0,4,0">Audio Buffer:</TextBlock>
+                                    <TextBlock Name="bufferLenLabel" DockPanel.Dock="Right" HorizontalAlignment="Right"></TextBlock>
+                                </DockPanel>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Grid>
                 <local:DXElement x:Name="dx11img"/>

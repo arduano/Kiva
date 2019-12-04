@@ -32,6 +32,18 @@ namespace Kiva_MIDI
         PreRender
     }
 
+    public enum CardParams
+    {
+        FPS = 1,
+        NoteCount = 2,
+        NPS = 4,
+        Polyphony = 8,
+        Time = 16,
+        RenderedNotes = 32,
+        AudioBuffer = 64,
+        FakeFps = 128
+    }
+
     public class GeneralSettings : INotifyPropertyChanged
     {
         public KeyRangeTypes KeyRange { get; set; } = KeyRangeTypes.KeyDynamic;
@@ -51,6 +63,7 @@ namespace Kiva_MIDI
         public bool PaletteRandomized { get; set; } = true;
 
         public bool HideInfoCard { get; set; } = false;
+        public CardParams InfoCardParams { get; set; } = CardParams.AudioBuffer | CardParams.FPS | CardParams.NoteCount | CardParams.NPS | CardParams.Polyphony | CardParams.RenderedNotes | CardParams.Time;
 
         public bool MainWindowTopmost { get; set; } = false;
 
@@ -59,6 +72,7 @@ namespace Kiva_MIDI
         public int RenderBufferLength { get; set; } = 60;
         public int RenderVoices { get; set; } = 1000;
         public bool RenderNoFx { get; set; } = false;
+        public double RenderSimulateLag { get; set; } = 0;
 
         public int SelectedMIDIDevice { get; set; } = -1;
         public string SelectedMIDIDeviceName { get; set; } = "";

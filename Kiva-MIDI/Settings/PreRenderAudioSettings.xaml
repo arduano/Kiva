@@ -30,7 +30,13 @@
                         (0mb)
                     </Label>
                 </DockPanel>
-                <local:BetterCheckbox x:Name="disableFx" Margin="5" Text="Disable Soundfont Effects" CheckToggled="disableFx_CheckToggled"/>
+                <DockPanel>
+                    <Label FontSize="14">
+                        Simuated Realtime Lag (ms)
+                    </Label>
+                    <local:NumberSelect x:Name="simulatedLag" Minimum="0" Maximum="1000" Value="0" DecimalPoints="0" VerticalAlignment="Bottom" Width="100" HorizontalAlignment="Left" ValueChanged="simulatedLag_ValueChanged"/>
+                    <local:InfoIcon Title="Simulated Realtime Lag" Text="If you really want to use Pre-Renderd but want it to also sound realtime. 0 means disabled. Small values (10-20) can cause a nice subtle rendered sound." VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0,0,6"/>
+                </DockPanel>
             </StackPanel>
             <StackPanel Grid.Column="1">
                 <DockPanel>
@@ -39,6 +45,7 @@
                     </Label>
                     <local:NumberSelect x:Name="voices" Minimum="32" Maximum="5000" Value="500" DecimalPoints="0" VerticalAlignment="Bottom" Width="100" HorizontalAlignment="Left" ValueChanged="voices_ValueChanged"/>
                 </DockPanel>
+                <local:BetterCheckbox x:Name="disableFx" Margin="5" Text="Disable Soundfont Effects" CheckToggled="disableFx_CheckToggled"/>
             </StackPanel>
         </Grid>
         <Grid>

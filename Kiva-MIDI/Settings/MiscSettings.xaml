@@ -13,6 +13,25 @@
         </Grid.ColumnDefinitions>
         <Border Padding="10">
             <StackPanel>
+                <Label FontSize="16">Info Card Values</Label>
+                <local:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="timeLabel" Text="Time"/>
+                <local:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="fpsLabel" Text="FPS"/>
+                <DockPanel HorizontalAlignment="Left">
+                    <local:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="estimatedFpsLabel" Text="Estimated FPS"/>
+                    <local:InfoIcon Margin="5,1,0,0" Title="Estimated FPS" Text="Due to Kiva's multithreading, unlocking the FPS can make Kiva to fight for resources with all other programs causing stutter. This option allows Kiva to estimate what FPS you would have *if it was unlocked* while it's locked."/>
+                </DockPanel>
+                <local:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="ncLabel" Text="Note Count"/>
+                <local:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="npsLabel" Text="NPS"/>
+                <local:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="renderedNotesLabel" Text="Rendered Notes"/>
+                <local:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="polyphonyLabel" Text="Polyphony"/>
+                <DockPanel HorizontalAlignment="Left">
+                    <local:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="bufferLengthLabel" Text="Audio Buffer Length"/>
+                    <local:InfoIcon Margin="5,1,0,0" Title="Audio Buffer Length" Text="Length of the pre-render audio buffer. Doesn't show anything when KDMAPI or WinMM are selected."/>
+                </DockPanel>
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Padding="10">
+            <StackPanel>
                 <DockPanel>
                     <Label FontSize="14" HorizontalAlignment="Left">
                         Background Color
@@ -30,10 +49,6 @@
                     <local:BetterCheckbox x:Name="windowTopmost" Text="Main Window Topmost" CheckToggled="windowTopmost_CheckToggled"/>
                     <local:InfoIcon Margin="5,0,0,0" Title="Topmost" Text="The Kiva window will always appear above other windows"/>
                 </DockPanel>
-            </StackPanel>
-        </Border>
-        <Border Grid.Column="1" Padding="10">
-            <StackPanel>
             </StackPanel>
         </Border>
     </Grid>

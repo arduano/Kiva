@@ -259,6 +259,19 @@ namespace Kiva_MIDI
             selectedAudioEngine = engine;
         }
 
+        void SetInfoPanelVisibility()
+        {
+            var cp = settings.General.InfoCardParams;
+            timePanel.Visibility = (cp & CardParams.Time) > 0 ? Visibility.Visible : Visibility.Collapsed;
+            renderedNotesPanel.Visibility = (cp & CardParams.RenderedNotes) > 0 ? Visibility.Visible : Visibility.Collapsed;
+            polyphonyPanel.Visibility = (cp & CardParams.Polyphony) > 0 ? Visibility.Visible : Visibility.Collapsed;
+            npsPanel.Visibility = (cp & CardParams.NPS) > 0 ? Visibility.Visible : Visibility.Collapsed;
+            ncPanel.Visibility = (cp & CardParams.NoteCount) > 0 ? Visibility.Visible : Visibility.Collapsed;
+            fpsPanel.Visibility = (cp & CardParams.FPS) > 0 ? Visibility.Visible : Visibility.Collapsed;
+            fakeFpsPanel.Visibility = (cp & CardParams.FakeFps) > 0 ? Visibility.Visible : Visibility.Collapsed;
+            bufferLenPanel.Visibility = (cp & CardParams.AudioBuffer) > 0 ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         public MainWindow(Settings settings)
         {
             this.settings = settings;
@@ -322,6 +335,8 @@ namespace Kiva_MIDI
                     Topmost = settings.General.MainWindowTopmost;
                 if (e.PropertyName == "SelectedAudioEngine")
                     SwitchAudioEngine(settings.General.SelectedAudioEngine);
+                if (e.PropertyName == "InfoCardParams")
+                    SetInfoPanelVisibility();
                 if (loadedFle != null)
                 {
                     if (e.PropertyName == "PaletteName" || e.PropertyName == "PaletteRandomized")
@@ -334,6 +349,7 @@ namespace Kiva_MIDI
             glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
             infoCard.Visibility = settings.General.HideInfoCard ? Visibility.Hidden : Visibility.Visible;
             Topmost = settings.General.MainWindowTopmost;
+            SetInfoPanelVisibility();
 
             Func<TimeSpan, string> timeSpanString = (s) =>
             {
@@ -352,13 +368,16 @@ namespace Kiva_MIDI
             {
                 var midiLen = loadedFle == null ? 0 : loadedFle.MidiLength;
                 var midiTime = Time.GetTime();
-                var renderText = timeSpanString(TimeSpan.FromSeconds(Math.Min(Time.GetTime(), timeSlider.Maximum))) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen)) + "\n" +
-                                 "FPS: " + FPS.Value.ToString("#,##0.0") + "\n" +
-                                 "" + scene.NotesPassedSum.ToString("#,##0") + "/" + (loadedFle != null ? loadedFle.MidiNoteCount : 0).ToString("#,##0") + "\n" +
-                                 "Audio Buffer: " + (selectedAudioEngine == AudioEngine.PreRender ? timeSpanString(TimeSpan.FromSeconds(preRenderPlayer.BufferSeconds)) : "N/A") + "\n" +
-                                 "Rendered Notes: " + scene.LastRenderedNoteCount.ToString("#,##0") + "\n" +
-                                 "NPS: " + scene.LastNPS.ToString("#,##0") + "\n" +
-                                 "Polyphony: " + scene.LastPolyphony.ToString("#,##0");
+
+                timeLabel.Text = timeSpanString(TimeSpan.FromSeconds(Math.Min(Time.GetTime(), timeSlider.Maximum))) + " / " + timeSpanString(TimeSpan.FromSeconds(midiLen));
+                fpsLabel.Text = d3d.FPS.ToString("#,##0.0");
+                fakeFpsLabel.Text = d3d.FakeFPS.ToString("#,##0.0");
+                ncLabel.Text = (loadedFle != null ? loadedFle.MidiNoteCount : 0).ToString("#,##0");
+                npLabel.Text = scene.NotesPassedSum.ToString("#,##0");
+                bufferLenLabel.Text = (selectedAudioEngine == AudioEngine.PreRender ? timeSpanString(TimeSpan.FromSeconds(preRenderPlayer.BufferSeconds)) : "N/A");
+                renderedNotesLabel.Text = scene.LastRenderedNoteCount.ToString("#,##0");
+                npsLabelLabel.Text = scene.LastNPS.ToString("#,##0");
+                polyphonyLabel.Text = scene.LastPolyphony.ToString("#,##0");
 
                 double eventSkip;
                 if (selectedAudioEngine == AudioEngine.PreRender)
@@ -372,7 +391,6 @@ namespace Kiva_MIDI
                 }
                 else audioDesyncLabel.Visibility = Visibility.Hidden;
 
-                renderInfo.Text = renderText;
                 timeSlider.Value = Time.GetTime();
                 rotateLogo.Angle = timeSlider.Value * 4;
 

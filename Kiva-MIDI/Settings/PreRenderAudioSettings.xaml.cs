@@ -62,6 +62,7 @@ namespace Kiva_MIDI
             bufferLength.Value = settings.General.RenderBufferLength;
             voices.Value = settings.General.RenderVoices;
             disableFx.IsChecked = settings.General.RenderNoFx;
+            simulatedLag.Value = (decimal)(settings.General.RenderSimulateLag * 1000);
             SetSizeLabel();
 
             SetSfs();
@@ -276,6 +277,11 @@ namespace Kiva_MIDI
         private void disableFx_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             settings.General.RenderNoFx = disableFx.IsChecked;
+        }
+
+        private void simulatedLag_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+        {
+            settings.General.RenderSimulateLag = (double)simulatedLag.Value / 1000.0;
         }
     }
 }

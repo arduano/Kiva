@@ -19,14 +19,14 @@ namespace Kiva_MIDI
         [STAThread]
         static void Main(string[] args)
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
-
-            MIDIAudio.Init();
-
 #if !DEBUG
             try
             {
 #endif
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
+
+            MIDIAudio.Init();
+
             var s = new Settings();
             s.InitSoundfontListner();
             if (s.EnableUpdates)

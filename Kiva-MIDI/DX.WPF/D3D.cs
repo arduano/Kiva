@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +32,27 @@ namespace Kiva_MIDI
         double delayExtraDelay = 0;
 
         Stopwatch renderTimer = new Stopwatch();
+
+        object fpslock = new object();
+
+        public double FPS
+        {
+            get
+            {
+                lock (fpslock) return (10000000 / ((double)RealFrameTimes.Sum() / FrameTimes.Count));
+            }
+        }
+        public double FakeFPS
+        {
+            get
+            {
+                lock (fpslock) return (10000000 / ((double)FrameTimes.Sum() / FrameTimes.Count));
+            }
+        }
+
+
+        List<long> FrameTimes = new List<long>();
+        List<long> RealFrameTimes = new List<long>();
 
         public D3D()
         {
@@ -139,12 +161,12 @@ namespace Kiva_MIDI
                 frameTimes.Add(DateTime.UtcNow);
                 while (!disposed)
                 {
-                    frameTimer.Start();
                     while (SingleThreadedRender)
                     {
                         Thread.Sleep(100);
                         if (disposed) return;
                     }
+                    frameTimer.Start();
                     lock (argsPointer)
                     {
                         if (argsPointer.args == null || SingleThreadedRender) Thread.Sleep(100);
@@ -156,6 +178,7 @@ namespace Kiva_MIDI
                             TrueRender();
                         }
                     }
+                    lock (fpslock) FrameTimes.Add(frameTimer.ElapsedTicks);
                     if (FPSLock != 0)
                     {
                         var desired = 10000000 / FPSLock;
@@ -171,7 +194,17 @@ namespace Kiva_MIDI
                         var excess = desired - frameTimer.ElapsedTicks;
                         delayExtraDelay = (delayExtraDelay * 60 + excess) / 61;
                     }
+                    lock (fpslock) RealFrameTimes.Add(frameTimer.ElapsedTicks);
                     frameTimer.Reset();
+
+                    lock (fpslock)
+                    {
+                        while (RealFrameTimes.Sum() - RealFrameTimes[0] > 10000000)
+                        {
+                            RealFrameTimes.RemoveAt(0);
+                            FrameTimes.RemoveAt(0);
+                        }
+                    }
                 }
             });
         }

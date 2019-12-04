@@ -42,6 +42,17 @@ namespace Kiva_MIDI
             barColor.Color = settings.General.BarColor;
             hideInfoCard.IsChecked = settings.General.HideInfoCard;
             windowTopmost.IsChecked = settings.General.MainWindowTopmost;
+
+            var cp = settings.General.InfoCardParams;
+
+            timeLabel.IsChecked = (cp & CardParams.Time) > 0;
+            renderedNotesLabel.IsChecked = (cp & CardParams.RenderedNotes) > 0;
+            polyphonyLabel.IsChecked = (cp & CardParams.Polyphony) > 0;
+            npsLabel.IsChecked = (cp & CardParams.NPS) > 0;
+            ncLabel.IsChecked = (cp & CardParams.NoteCount) > 0;
+            fpsLabel.IsChecked = (cp & CardParams.FPS) > 0;
+            estimatedFpsLabel.IsChecked = (cp & CardParams.FakeFps) > 0;
+            bufferLengthLabel.IsChecked = (cp & CardParams.AudioBuffer) > 0;
         }
 
         private void BackgroundColor_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
@@ -64,6 +75,22 @@ namespace Kiva_MIDI
         private void windowTopmost_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             settings.General.MainWindowTopmost = windowTopmost.IsChecked;
+        }
+
+        private void cardLabel_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            CardParams cp = 0;
+
+            if (timeLabel.IsChecked) cp |= CardParams.Time;
+            if (renderedNotesLabel.IsChecked) cp |= CardParams.RenderedNotes;
+            if (polyphonyLabel.IsChecked) cp |= CardParams.Polyphony;
+            if (npsLabel.IsChecked) cp |= CardParams.NPS;
+            if (ncLabel.IsChecked) cp |= CardParams.NoteCount;
+            if (fpsLabel.IsChecked) cp |= CardParams.FPS;
+            if (estimatedFpsLabel.IsChecked) cp |= CardParams.FakeFps;
+            if (bufferLengthLabel.IsChecked) cp |= CardParams.AudioBuffer;
+
+            settings.General.InfoCardParams = cp;
         }
     }
 }

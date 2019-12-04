@@ -94,6 +94,7 @@ namespace Kiva_MIDI
 
         public int defaultVoices = 1000;
         public bool defaultNoFx = false;
+        public double simulatedLagScale = 0.01;
 
         bool awaitingReset = false;
 
@@ -169,6 +170,8 @@ namespace Kiva_MIDI
             bufferWritePos = 0;
             bufferReadPos = 0;
             lastReadtime = DateTime.UtcNow;
+            Random r = new Random();
+            double prevTime = -1;
             foreach (var e in events)
             {
                 var shiftedBufferReadPos = bufferReadPos;// + (int)((DateTime.UtcNow - lastReadtime).TotalSeconds * 48000);
@@ -176,8 +179,20 @@ namespace Kiva_MIDI
                 {
                     bufferWritePos = bufferReadPos;
                 }
-
-                double offset = (e.time - startTime) / speed;
+                double evTime = e.time;
+                if (simulatedLagScale != 0)
+                {
+                    var timeDist = (evTime - prevTime) / speed;
+                    if (evTime < prevTime) evTime = prevTime;
+                    if (timeDist < simulatedLagScale)
+                    {
+                        evTime += r.NextDouble() / 100 * (simulatedLagScale + timeDist);
+                        if(evTime - e.time >= simulatedLagScale)
+                        { }
+                    }
+                    prevTime = evTime;
+                }
+                double offset = (evTime - startTime) / speed;
                 int samples = (int)(offset * 48000) - bufferWritePos;
 
                 if (samples > 0)

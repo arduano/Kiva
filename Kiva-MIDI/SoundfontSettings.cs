@@ -153,6 +153,6 @@ namespace Kiva_MIDI
             SoundfontsUpdated?.Invoke(false);
         }
 
-        public SoundfontData[] Soundfonts { get; set; }
+        public SoundfontData[] Soundfonts { get; set; } = new SoundfontData[0];
     }
 }
