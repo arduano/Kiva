@@ -61,6 +61,9 @@ namespace Kiva_MIDI
             firstKey.Value = settings.General.CustomFirstKey;
             lastKey.Value = settings.General.CustomLastKey;
 
+            syncFps.IsChecked = settings.General.SyncFPS;
+            fpsLock.IsEnabled = !syncFps.IsChecked;
+
             randomisePaletteOrder.IsChecked = settings.General.PaletteRandomized;
 
             SetPalettes();
@@ -159,6 +162,13 @@ namespace Kiva_MIDI
         {
             if (!IsInitialized) return;
             settings.General.PaletteRandomized = randomisePaletteOrder.IsChecked;
+        }
+
+        private void syncFps_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            if (!IsInitialized) return;
+            settings.General.SyncFPS = syncFps.IsChecked;
+            fpsLock.IsEnabled = !syncFps.IsChecked;
         }
     }
 }

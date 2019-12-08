@@ -14,7 +14,7 @@ namespace Kiva_MIDI
         public byte EventVelocityThreshold { get; set; } = 0;
         public byte NoteVelocityThreshold { get; set; } = 0;
         public int EventPlayerThreads { get; set; } = Environment.ProcessorCount;
-        public bool RemoveOverlaps { get; set; } = true;
+        public bool RemoveOverlaps { get; set; } = false;
 
         public MIDILoaderSettings Clone()
         {
@@ -22,7 +22,8 @@ namespace Kiva_MIDI
             {
                 EventVelocityThreshold = EventVelocityThreshold,
                 NoteVelocityThreshold = NoteVelocityThreshold,
-                EventPlayerThreads = EventPlayerThreads
+                EventPlayerThreads = EventPlayerThreads,
+                RemoveOverlaps = RemoveOverlaps
             };
         }
     }

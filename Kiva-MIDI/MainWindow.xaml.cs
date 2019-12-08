@@ -24,6 +24,7 @@ using SharpDX.WPF;
 using Microsoft.Win32;
 using System.Collections.Concurrent;
 using System.IO;
+using DiscordRPC;
 using MessageBox = KivaShared.MessageBox;
 using KivaShared;
 
@@ -32,6 +33,14 @@ namespace Kiva_MIDI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>E:\Programming\Personal\2019\Kiva\Kiva-MIDI\MainWindow.xaml
+
+    enum RPCStatus
+    {
+        Idle,
+        Loading,
+        Playing,
+        Paused
+    }
 
     public partial class MainWindow : Window
     {
@@ -203,6 +212,68 @@ namespace Kiva_MIDI
         SettingsWindow settingsWindow = null;
         LoadingMidiForm loadingForm = null;
 
+        DiscordRpcClient rpclient;
+
+        void SetDiscordRP(RPCStatus status, string filename = null)
+        {
+            try
+            {
+                if (settings.General.DiscordRP && rpclient == null)
+                {
+                    rpclient = new DiscordRpcClient("652205384521482259");
+                    rpclient.Initialize();
+                }
+
+                if (!settings.General.DiscordRP && rpclient != null)
+                {
+                    rpclient.Deinitialize();
+                    rpclient = null;
+                }
+
+                if (settings.General.DiscordRP)
+                {
+                    RichPresence presence = new RichPresence()
+                    {
+                        Assets = new Assets()
+                        {
+                            LargeImageKey = "kiva_logo",
+                            LargeImageText = "Kiva"
+                        }
+                    };
+
+                    if (status == RPCStatus.Idle) presence.Details = "Idle";
+                    else if (status == RPCStatus.Loading)
+                    {
+                        presence.Details = "Loading Midi";
+                        presence.Timestamps = new Timestamps(DateTime.UtcNow);
+                        if (filename != null)
+                        {
+                            presence.State = System.IO.Path.GetFileName(filename);
+                        }
+                    }
+                    else if (status == RPCStatus.Playing || status == RPCStatus.Paused)
+                    {
+                        if (status == RPCStatus.Paused)
+                        {
+                            presence.Details = "Paused";
+                        }
+                        else
+                        {
+                            presence.Details = "Playing Midi";
+                            presence.Timestamps = new Timestamps(DateTime.UtcNow - TimeSpan.FromSeconds(Time.GetTime()));
+                        }
+                        if (filename != null)
+                        {
+                            presence.State = System.IO.Path.GetFileName(filename);
+                        }
+                    }
+
+                    rpclient.SetPresence(presence);
+                }
+            }
+            catch { }
+        }
+
         void StartMIDIPlayer(bool kdmapi)
         {
             player = new MIDIPlayer(settings);
@@ -327,6 +398,8 @@ namespace Kiva_MIDI
                         player.DeviceID = settings.General.SelectedMIDIDevice;
                 if (e.PropertyName == "CompatibilityFPS")
                     d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
+                if (e.PropertyName == "SyncFPS")
+                    d3d.SyncRender = settings.General.SyncFPS;
                 if (e.PropertyName == "BackgroundColor")
                     glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
                 if (e.PropertyName == "HideInfoCard")
@@ -337,6 +410,17 @@ namespace Kiva_MIDI
                     SwitchAudioEngine(settings.General.SelectedAudioEngine);
                 if (e.PropertyName == "InfoCardParams")
                     SetInfoPanelVisibility();
+                if (e.PropertyName == "DiscordRP")
+                {
+                    if (loadedFle == null) SetDiscordRP(RPCStatus.Idle);
+                    else
+                    {
+                        if (Time.Paused)
+                            SetDiscordRP(RPCStatus.Paused, loadedFle == null ? null : loadedFle.filepath);
+                        else
+                            SetDiscordRP(RPCStatus.Playing, loadedFle == null ? null : loadedFle.filepath);
+                    }
+                }
                 if (loadedFle != null)
                 {
                     if (e.PropertyName == "PaletteName" || e.PropertyName == "PaletteRandomized")
@@ -346,10 +430,13 @@ namespace Kiva_MIDI
 
             d3d.FPSLock = settings.General.FPSLock;
             d3d.SingleThreadedRender = settings.General.CompatibilityFPS;
+            d3d.SyncRender = settings.General.SyncFPS;
             glContainer.Background = new SolidColorBrush(settings.General.BackgroundColor);
             infoCard.Visibility = settings.General.HideInfoCard ? Visibility.Hidden : Visibility.Visible;
             Topmost = settings.General.MainWindowTopmost;
             SetInfoPanelVisibility();
+
+            SetDiscordRP(RPCStatus.Idle);
 
             Func<TimeSpan, string> timeSpanString = (s) =>
             {
@@ -440,6 +527,7 @@ namespace Kiva_MIDI
                 loadingForm.Dispose();
                 loadingForm = null;
                 GC.Collect(2, GCCollectionMode.Forced);
+                SetDiscordRP(RPCStatus.Playing, loadedFle.filepath);
                 Time.Play();
             };
             loadingForm.ParseCancelled += () =>
@@ -448,7 +536,9 @@ namespace Kiva_MIDI
                 loadingForm.Dispose();
                 GC.Collect(2, GCCollectionMode.Forced);
                 loadingForm = null;
+                SetDiscordRP(RPCStatus.Idle);
             };
+            SetDiscordRP(RPCStatus.Loading, filename);
             loadingForm.ShowDialog();
         }
 
@@ -518,11 +608,31 @@ namespace Kiva_MIDI
             {
                 pauseButton.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
                 playButton.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                SetDiscordRP(RPCStatus.Paused, loadedFle == null ? null : loadedFle.filepath);
             }
             else
             {
                 pauseButton.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
                 playButton.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
+
+                if (settings.Soundfonts.Soundfonts.Length == 0)
+                {
+                    MessageBox.Show("Please add soundfonts to the list in audio settings", "No soundfonts");
+                }
+
+                if (settings.Soundfonts.Soundfonts.Where(s => s.enabled).Count() == 0)
+                {
+                    MessageBox.Show("No soundfonts Enabled", "All soundfonts are disabled, please enable at least one in audio settings");
+                }
+
+                try
+                {
+                    var missing = settings.Soundfonts.Soundfonts.Where(s => !File.Exists(s.path)).First();
+                    MessageBox.Show("Missing Soundfont", "Soundfont " + System.IO.Path.GetFileName(missing.path) + " is missing from the disk. Please check audio settings.");
+                }
+                catch { }
+
+                SetDiscordRP(RPCStatus.Playing, loadedFle == null ? null : loadedFle.filepath);
             }
         }
 
@@ -643,6 +753,7 @@ namespace Kiva_MIDI
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (rpclient.IsInitialized) rpclient.Deinitialize();
             if (selectedAudioEngine == AudioEngine.PreRender)
                 preRenderPlayer.Dispose();
             else

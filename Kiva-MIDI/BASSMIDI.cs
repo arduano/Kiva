@@ -89,6 +89,7 @@ namespace Kiva_MIDI
                 }
             }
             fontarr = fonts.ToArray();
+            Array.Reverse(fontarr);
         }
 
         public bool WriteBass(int buflen, Stream bs, ref ulong progress)

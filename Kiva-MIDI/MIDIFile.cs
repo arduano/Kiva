@@ -111,7 +111,7 @@ namespace Kiva_MIDI
         protected Stream MidiFileReader;
         protected MIDILoaderSettings loaderSettings;
 
-        protected string filepath;
+        public string filepath;
         protected CancellationToken cancel;
 
         public MIDIFile(string path, MIDILoaderSettings settings, CancellationToken cancel)

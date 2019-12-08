@@ -28,10 +28,15 @@ namespace Kiva_MIDI
 
         public int FPSLock { get; set; } = 60;
         public bool SingleThreadedRender { get; set; } = false;
+        public bool SyncRender { get; set; } = false;
         Stopwatch frameTimer = new Stopwatch();
         double delayExtraDelay = 0;
 
+        SemaphoreSlim semaphore = new SemaphoreSlim(0, 5);
+
         Stopwatch renderTimer = new Stopwatch();
+
+        CancellationTokenSource disposeCancel = new CancellationTokenSource();
 
         object fpslock = new object();
 
@@ -73,6 +78,7 @@ namespace Kiva_MIDI
         protected virtual void Dispose(bool disposing)
         {
             disposed = true;
+            disposeCancel.Cancel();
             renderThread.GetAwaiter().GetResult();
         }
 
@@ -147,6 +153,8 @@ namespace Kiva_MIDI
                     TrueRender();
                 }
             }
+            if (semaphore.CurrentCount < 5)
+                semaphore.Release();
             lock (argsPointer)
                 argsPointer.args = args;
         }
@@ -179,7 +187,15 @@ namespace Kiva_MIDI
                         }
                     }
                     lock (fpslock) FrameTimes.Add(frameTimer.ElapsedTicks);
-                    if (FPSLock != 0)
+                    if (SyncRender)
+                    {
+                        try
+                        {
+                            semaphore.Wait(disposeCancel.Token);
+                        }
+                        catch (OperationCanceledException) { }
+                    }
+                    else if (FPSLock != 0)
                     {
                         var desired = 10000000 / FPSLock;
                         var elapsed = frameTimer.ElapsedTicks;

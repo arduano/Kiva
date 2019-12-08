@@ -49,6 +49,7 @@
                     <local:BetterCheckbox x:Name="windowTopmost" Text="Main Window Topmost" CheckToggled="windowTopmost_CheckToggled"/>
                     <local:InfoIcon Margin="5,0,0,0" Title="Topmost" Text="The Kiva window will always appear above other windows"/>
                 </DockPanel>
+                <local:BetterCheckbox x:Name="discordRP" Text="Discord Rich Presence" Margin="0,5,0,0" CheckToggled="discordRP_CheckToggled"/>
             </StackPanel>
         </Border>
     </Grid>

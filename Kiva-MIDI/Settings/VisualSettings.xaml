@@ -52,9 +52,11 @@
                 </StackPanel>
                 <DockPanel>
                     <Label FontSize="14" HorizontalAlignment="Left">
-                        Lock FPS (0 = unlocked):
+                        Lock FPS
                     </Label>
                     <local:NumberSelect x:Name="fpsLock" ValueChanged="FpsLock_ValueChanged" Minimum="0" Maximum="10000" HorizontalAlignment="Left" Width="80" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
+                    <local:BetterCheckbox x:Name="syncFps" Text="Sync" Margin="10,0,0,0" CheckToggled="syncFps_CheckToggled"/>
+                    <local:InfoIcon Title="FPS" Text="The Sync option forces the framerate to be synced to the WPF's render framerate. Very similar to VSync, makes smoother fps. Also setting FPS to 0 makes it unlocked." HorizontalAlignment="Left" Margin="5,0,0,0"/>
                 </DockPanel>
             </StackPanel>
         </Border>

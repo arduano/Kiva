@@ -42,6 +42,7 @@ namespace Kiva_MIDI
             barColor.Color = settings.General.BarColor;
             hideInfoCard.IsChecked = settings.General.HideInfoCard;
             windowTopmost.IsChecked = settings.General.MainWindowTopmost;
+            discordRP.IsChecked = settings.General.DiscordRP;
 
             var cp = settings.General.InfoCardParams;
 
@@ -91,6 +92,11 @@ namespace Kiva_MIDI
             if (bufferLengthLabel.IsChecked) cp |= CardParams.AudioBuffer;
 
             settings.General.InfoCardParams = cp;
+        }
+
+        private void discordRP_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            settings.General.DiscordRP = discordRP.IsChecked;
         }
     }
 }

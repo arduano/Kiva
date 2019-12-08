@@ -54,6 +54,7 @@ namespace Kiva_MIDI
 
         public int FPSLock { get; set; } = 60;
         public bool CompatibilityFPS { get; set; } = false;
+        public bool SyncFPS { get; set; } = true;
 
         public Color BackgroundColor { get; set; } = Color.FromArgb(255, 142, 142, 142);
         public Color ForegroundColor { get; set; } = Color.FromArgb(255, 142, 142, 142);
@@ -73,6 +74,8 @@ namespace Kiva_MIDI
         public int RenderVoices { get; set; } = 1000;
         public bool RenderNoFx { get; set; } = false;
         public double RenderSimulateLag { get; set; } = 0;
+
+        public bool DiscordRP { get; set; } = false;
 
         public int SelectedMIDIDevice { get; set; } = -1;
         public string SelectedMIDIDeviceName { get; set; } = "";
