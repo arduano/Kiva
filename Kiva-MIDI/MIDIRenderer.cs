@@ -389,6 +389,7 @@ namespace Kiva_MIDI
             context.UnmapSubresource(globalNoteConstants, 0);
             context.VertexShader.SetConstantBuffer(0, globalNoteConstants);
             context.GeometryShader.SetConstantBuffer(0, globalNoteConstants);
+            data.Dispose();
         }
 
         void SetKeyboardShaderConstants(DeviceContext context, KeyboardGlobalConstants constants)
@@ -399,12 +400,14 @@ namespace Kiva_MIDI
             context.UnmapSubresource(globalNoteConstants, 0);
             context.VertexShader.SetConstantBuffer(0, globalNoteConstants);
             context.GeometryShader.SetConstantBuffer(0, globalNoteConstants);
+            data.Dispose();
         }
 
         double[] x1array = new double[257];
         double[] wdtharray = new double[257];
         bool[] pressedKeys = new bool[256];
         private PlayingState _time = new PlayingState();
+        object addLock = new object();
 
         public void Render(Device device, RenderTargetView target, DrawEventArgs args)
         {
@@ -495,7 +498,6 @@ namespace Kiva_MIDI
                         long notesRendered = 0;
                         int polyphonySum = 0;
                         int notesHitSum = 0;
-                        object addLock = new object();
 
                         int firstRenderKey = 256;
                         int lastRenderKey = -1;
@@ -713,6 +715,7 @@ namespace Kiva_MIDI
                 noteConstants.NoteRight = right;
                 SetNoteShaderConstants(context, noteConstants);
                 context.Draw(count, 0);
+                data.Dispose();
             }
         }
 
