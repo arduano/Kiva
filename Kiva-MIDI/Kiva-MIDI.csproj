@@ -224,6 +224,9 @@
     </Compile>
     <Compile Include="PaletteSettings.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Settings\AdvancedSettings.xaml.cs">
+      <DependentUpon>AdvancedSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\KDMAPIAudioSettings.xaml.cs">
       <DependentUpon>KDMAPIAudioSettings.xaml</DependentUpon>
     </Compile>
@@ -256,6 +259,7 @@
     <Compile Include="SoundfontSettings.cs" />
     <Compile Include="VelocityEase.cs" />
     <Compile Include="VolatileSettings.cs" />
+    <Compile Include="WinMM.cs" />
     <Page Include="Material.WPF\InfoIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -297,6 +301,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Scrollbar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\AdvancedSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

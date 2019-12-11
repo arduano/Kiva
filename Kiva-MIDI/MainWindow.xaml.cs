@@ -346,6 +346,13 @@ namespace Kiva_MIDI
         public MainWindow(Settings settings)
         {
             this.settings = settings;
+
+            if (!settings.General.DisableTransparency)
+            {
+                AllowsTransparency = true;
+                Background = Brushes.Transparent;
+            }
+
             InitializeComponent();
             SourceInitialized += (s, e) =>
             {
@@ -714,6 +721,28 @@ namespace Kiva_MIDI
                 }
                 else Time.Pause();
             }
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Key == Key.Up)
+                {
+                    sizeSlider.Value *= 1.3;
+                }
+                if (e.Key == Key.Down)
+                {
+                    sizeSlider.Value /= 1.3;
+                }
+            }
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                if (e.Key == Key.Up)
+                {
+                    speedSlider.Value *= 1.3;
+                }
+                if (e.Key == Key.Down)
+                {
+                    speedSlider.Value /= 1.3;
+                }
+            }
         }
 
         private void SpeedSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -753,7 +782,14 @@ namespace Kiva_MIDI
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (rpclient.IsInitialized) rpclient.Deinitialize();
+            try
+            {
+                if (rpclient != null)
+                {
+                    if (rpclient.IsInitialized) rpclient?.Deinitialize();
+                }
+            }
+            catch { }
             if (selectedAudioEngine == AudioEngine.PreRender)
                 preRenderPlayer.Dispose();
             else

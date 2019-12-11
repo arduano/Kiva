@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Sanford.Multimedia.Midi;
 
 namespace Kiva_MIDI
 {
@@ -75,7 +75,7 @@ namespace Kiva_MIDI
         List<Task> tasks = new List<Task>();
         private int deviceID = -1;
 
-        OutputDevice device = null;
+        IntPtr device = IntPtr.Zero;
         Task deviceThread = null;
 
         CancellationTokenSource cancelConsumer;
@@ -133,6 +133,23 @@ namespace Kiva_MIDI
 
         bool changed = true;
 
+        void ResetControllers()
+        {
+            //for (int c = 0; c < 16; c++)
+            //{
+            //    var ce = 0b1011000 | c + (123 << 8);
+            //    eventFeed.Add(new MIDIEvent() { data = (uint)ce, time = (float)Time.GetTime(), vel = 127 });
+            //}
+            if (deviceID == -1)
+                KDMAPI.ResetKDMAPIStream();
+            else if (device != IntPtr.Zero)
+                try
+                {
+                    WinMM.midiOutReset(device);
+                }
+                catch { }
+        }
+
         Task RunPlayerThread(int i)
         {
             return Task.Factory.StartNew(() =>
@@ -162,6 +179,7 @@ namespace Kiva_MIDI
                     double time = Time.GetTime();
                     if (Time.Paused)
                     {
+                        ResetControllers();
                         while (Time.Paused)
                         {
                             Thread.Sleep(50);
@@ -178,14 +196,7 @@ namespace Kiva_MIDI
                     if (changed || lastTime > time)
                     {
                         time = Time.GetTime();
-                        if (deviceID == -1)
-                            KDMAPI.ResetKDMAPIStream();
-                        else if (device != null)
-                            try
-                            {
-                                device.Reset();
-                            }
-                            catch { }
+                        ResetControllers();
 
                         evid = GetEventPos(events, time) - 10;
                         if (evid < 0 || i == -1) evid = 0;
@@ -213,7 +224,7 @@ namespace Kiva_MIDI
                         if ((eventFeed.Count > events[evid].vel * 100 || delay < -1) && i != -1)
                             while ((evid < events.Length && events[evid].time < Time.GetTime() && (eventFeed.Count > events[evid].vel * 100 || delay < -1)))
                             {
-                                if(events[evid].vel > 80) 
+                                if (events[evid].vel > 80)
                                 { }
                                 evid++;
                             }
@@ -264,27 +275,30 @@ namespace Kiva_MIDI
             var id = deviceID;
             try
             {
-                var device = new OutputDevice(id);
+                IntPtr device;
+                WinMM.midiOutOpen(out device, id, (
+                    IntPtr hMidiOut,
+                    uint wMsg,
+                    UIntPtr dwInstance,
+                    UIntPtr dwParam1,
+                    UIntPtr dwParam2) =>
+                { }, Process.GetCurrentProcess().Handle, WinMM.CALLBACK_FUNCTION);
+                this.device = device;
                 this.device = device;
                 foreach (var e in eventFeed.GetConsumingEnumerable(cancel))
                 {
-                    device.SendShort((int)e.data);
+                    WinMM.midiOutShortMsg(device, e.data);
                     if (deviceID != id || disposed) break;
                 }
             }
             catch { }
             try
             {
-                device.Dispose();
-            }
-            catch { }
-            try
-            {
-                device.Close();
+                WinMM.midiOutClose(device);
             }
             catch { }
 
-            this.device = null;
+            this.device = IntPtr.Zero;
         }
 
         int GetEventPos(MIDIEvent[] events, double time)

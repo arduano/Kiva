@@ -58,8 +58,11 @@ namespace Kiva_MIDI
             fpsLock.Value = settings.General.FPSLock;
             //compatibilityFps.IsChecked = settings.General.CompatibilityFPS;
 
-            firstKey.Value = settings.General.CustomFirstKey;
-            lastKey.Value = settings.General.CustomLastKey;
+            var first = settings.General.CustomFirstKey;
+            var last = settings.General.CustomLastKey;
+
+            firstKey.Value = first;
+            lastKey.Value = last;
 
             syncFps.IsChecked = settings.General.SyncFPS;
             fpsLock.IsEnabled = !syncFps.IsChecked;

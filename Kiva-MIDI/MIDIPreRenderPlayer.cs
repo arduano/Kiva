@@ -188,6 +188,8 @@ namespace Kiva_MIDI
             Time.TimeChanged -= OnTimeChange;
             Time.PauseChanged -= OnPauseChange;
             Time.SpeedChanged -= OnSpeedChanged;
+
+            GC.Collect(2, GCCollectionMode.Forced);
         }
 
         void OnSettingsPropertyChanged(object s, PropertyChangedEventArgs e)

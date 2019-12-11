@@ -1,7 +1,7 @@
-﻿using Sanford.Multimedia.Midi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,7 +23,7 @@ namespace Kiva_MIDI
     {
         struct DeviceData
         {
-            public int id;
+            public uint id;
             public string name;
         }
 
@@ -44,11 +44,14 @@ namespace Kiva_MIDI
         {
             InitializeComponent();
 
-            for (int i = 0; i < OutputDevice.DeviceCount; i++)
+            var devCount = WinMM.midiOutGetNumDevs();
+
+            for (uint i = 0; i < devCount; i++)
             {
                 string name;
-                var device = OutputDevice.GetDeviceCapabilities(i);
-                name = device.name;
+                MIDIOUTCAPS device;
+                WinMM.midiOutGetDevCaps(i, out device, (uint)Marshal.SizeOf(typeof(MIDIOUTCAPS)));
+                name = device.szPname;
                 var item = new Grid()
                 {
                     Tag = new DeviceData() { id = i, name = name },
@@ -80,7 +83,7 @@ namespace Kiva_MIDI
             ClearSelectedDevice();
             ((Grid)devicesList.Children[index]).Background = selectBrush;
             var tag = (DeviceData)((Grid)devicesList.Children[index]).Tag;
-            settings.General.SelectedMIDIDevice = tag.id;
+            settings.General.SelectedMIDIDevice = (int)tag.id;
             settings.General.SelectedMIDIDeviceName = tag.name;
         }
 

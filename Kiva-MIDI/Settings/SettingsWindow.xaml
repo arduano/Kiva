@@ -38,6 +38,9 @@
                         <Button Style="{DynamicResource TransparentButtonStyle}" HorizontalAlignment="Left" Width="87">
                             Misc
                         </Button>
+                        <Button Style="{DynamicResource TransparentButtonStyle}" HorizontalAlignment="Left" Width="100">
+                            Advanced
+                        </Button>
                     </DockPanel>
                     <DockPanel HorizontalAlignment="Right" Margin="0" Width="40">
                         <Button Style="{StaticResource WindowButton}" Focusable="False" Name="ExitButton" Background="Red" Width="20" Height="20" Margin="3" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Click="ExitButton_Click"></Button>
@@ -48,6 +51,7 @@
                 <local:VisualSettings x:Name="visualSettings"/>
                 <local:AudioSettings x:Name="audioSettings"/>
                 <local:MiscSettings x:Name="miscSettings"/>
+                <local:AdvancedSettings x:Name="advancedSettings"/>
             </Grid>
         </DockPanel>
     </Grid>

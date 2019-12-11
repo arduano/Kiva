@@ -26,6 +26,8 @@ namespace Kiva_MIDI
 
         static BASS_MIDI_FONTEX[] fontarr;
 
+        static object sfLock = new object();
+
         public static void InitBASS(WaveFormat format)
         {
             WaveFormatStatic = format;
@@ -57,9 +59,12 @@ namespace Kiva_MIDI
             Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_MIDI_VOICES, voices);
             Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_SRC, 3);
 
-            if(nofx) Bass.BASS_ChannelFlags(Handle, BASSFlag.BASS_MIDI_NOFX, BASSFlag.BASS_MIDI_NOFX);
+            if (nofx) Bass.BASS_ChannelFlags(Handle, BASSFlag.BASS_MIDI_NOFX, BASSFlag.BASS_MIDI_NOFX);
 
-            BassMidi.BASS_MIDI_StreamSetFonts(Handle, fontarr, fontarr.Length);
+            lock (sfLock)
+            {
+                BassMidi.BASS_MIDI_StreamSetFonts(Handle, fontarr, fontarr.Length);
+            }
         }
 
         public static void FreeSoundfonts()
@@ -73,23 +78,26 @@ namespace Kiva_MIDI
 
         public static void LoadSoundfonts(SoundfontData[] soundfonts)
         {
-            FreeSoundfonts();
-            List<BASS_MIDI_FONTEX> fonts = new List<BASS_MIDI_FONTEX>();
-            foreach (var s in soundfonts)
+            lock (sfLock)
             {
-                if (!s.enabled) continue;
-                var font = BassMidi.BASS_MIDI_FontInit(s.path,
-                    s.xgdrums ? BASSFlag.BASS_MIDI_FONT_XGDRUMS : BASSFlag.BASS_DEFAULT);
-
-                if (font != 0)
+                FreeSoundfonts();
+                List<BASS_MIDI_FONTEX> fonts = new List<BASS_MIDI_FONTEX>();
+                foreach (var s in soundfonts)
                 {
-                    fonts.Add(new BASS_MIDI_FONTEX(font, s.srcp, s.srcb, s.desp, s.desb, s.xgdrums ? 1 : 0));
+                    if (!s.enabled) continue;
+                    var font = BassMidi.BASS_MIDI_FontInit(s.path,
+                        s.xgdrums ? BASSFlag.BASS_MIDI_FONT_XGDRUMS : BASSFlag.BASS_DEFAULT);
 
-                    BassMidi.BASS_MIDI_FontLoad(font, s.srcp, s.srcb);
+                    if (font != 0)
+                    {
+                        fonts.Add(new BASS_MIDI_FONTEX(font, s.srcp, s.srcb, s.desp, s.desb, s.xgdrums ? 1 : 0));
+
+                        BassMidi.BASS_MIDI_FontLoad(font, s.srcp, s.srcb);
+                    }
                 }
+                fontarr = fonts.ToArray();
+                Array.Reverse(fontarr);
             }
-            fontarr = fonts.ToArray();
-            Array.Reverse(fontarr);
         }
 
         public bool WriteBass(int buflen, Stream bs, ref ulong progress)

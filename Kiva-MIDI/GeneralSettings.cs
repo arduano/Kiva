@@ -80,6 +80,8 @@ namespace Kiva_MIDI
         public int SelectedMIDIDevice { get; set; } = -1;
         public string SelectedMIDIDeviceName { get; set; } = "";
 
+        public bool DisableTransparency { get; set; } = false;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public GeneralSettings()
