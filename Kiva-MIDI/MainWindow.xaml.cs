@@ -39,6 +39,7 @@ namespace Kiva_MIDI
         Idle,
         Loading,
         Playing,
+        Ended,
         Paused
     }
 
@@ -214,6 +215,8 @@ namespace Kiva_MIDI
 
         DiscordRpcClient rpclient;
 
+        RPCStatus rpStatus = RPCStatus.Idle;
+
         void SetDiscordRP(RPCStatus status, string filename = null)
         {
             try
@@ -251,11 +254,15 @@ namespace Kiva_MIDI
                             presence.State = System.IO.Path.GetFileName(filename);
                         }
                     }
-                    else if (status == RPCStatus.Playing || status == RPCStatus.Paused)
+                    else
                     {
                         if (status == RPCStatus.Paused)
                         {
                             presence.Details = "Paused";
+                        }
+                        else if (status == RPCStatus.Ended)
+                        {
+                            presence.Details = "Ended";
                         }
                         else
                         {
@@ -269,6 +276,7 @@ namespace Kiva_MIDI
                     }
 
                     rpclient.SetPresence(presence);
+                    rpStatus = status;
                 }
             }
             catch { }
@@ -396,6 +404,18 @@ namespace Kiva_MIDI
 
             d3d.FPSLock = settings.General.FPSLock;
 
+            Time.TimeChanged += () =>
+            {
+                if (Time.Paused)
+                {
+                    SetDiscordRP(RPCStatus.Paused, loadedFle == null ? null : loadedFle.filepath);
+                }
+                else
+                {
+                    SetDiscordRP(RPCStatus.Playing, loadedFle == null ? null : loadedFle.filepath);
+                }
+            };
+
             settings.General.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == "FPSLock")
@@ -473,6 +493,11 @@ namespace Kiva_MIDI
                 npsLabelLabel.Text = scene.LastNPS.ToString("#,##0");
                 polyphonyLabel.Text = scene.LastPolyphony.ToString("#,##0");
 
+                if(Time.GetTime() > midiLen && !Time.Paused && loadedFle != null)
+                {
+                    if (rpStatus != RPCStatus.Ended) SetDiscordRP(RPCStatus.Ended, loadedFle.filepath);
+                }
+
                 double eventSkip;
                 if (selectedAudioEngine == AudioEngine.PreRender)
                     eventSkip = preRenderPlayer.SkippingVelocity;
@@ -536,6 +561,7 @@ namespace Kiva_MIDI
                 GC.Collect(2, GCCollectionMode.Forced);
                 SetDiscordRP(RPCStatus.Playing, loadedFle.filepath);
                 Time.Play();
+                Topmost = settings.General.MainWindowTopmost;
             };
             loadingForm.ParseCancelled += () =>
             {

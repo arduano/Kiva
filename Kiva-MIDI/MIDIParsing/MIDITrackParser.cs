@@ -269,6 +269,8 @@ namespace Kiva_MIDI
                             {
                                 throw new Exception("Corrupt Track");
                             }
+                            reader.Read();
+                            reader.Read();
                         }
                         else if ((command >= 0x01 && command <= 0x0A) || command == 0x7F)
                         {
@@ -632,6 +634,8 @@ namespace Kiva_MIDI
                             {
                                 throw new Exception("Corrupt Track");
                             }
+                            reader.Read();
+                            reader.Read();
                         }
                         else if ((command >= 0x01 && command <= 0x0A) || command == 0x7F)
                         {
@@ -944,6 +948,8 @@ namespace Kiva_MIDI
                         {
                             throw new Exception("Corrupt Track");
                         }
+                        reader.Read();
+                        reader.Read();
                     }
                     else if ((command >= 0x01 && command <= 0x0A) || command == 0x7F)
                     {
