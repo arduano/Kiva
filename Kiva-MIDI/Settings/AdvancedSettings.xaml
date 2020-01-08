@@ -12,6 +12,16 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Margin="10">
+            <DockPanel>
+                <Label FontSize="14">Max Render Threads</Label>
+                <local:NumberSelect x:Name="threadCount" Minimum="1" Value="1" Maximum="16" Margin="5,0" Width="70" HorizontalAlignment="Left" ValueChanged="threadCount_ValueChanged"/>
+            </DockPanel>
+            <DockPanel>
+                <local:BetterCheckbox x:Name="forceSingleThread" Text="Force single thread" CheckToggled="forceSingleThread_CheckToggled"/>
+                <local:InfoIcon Title="Single Threaded" Text="Forces the renderer to use only 1 thread. Note audio will still be rendered in different threads." HorizontalAlignment="Left" Margin="5,0,0,0"/>
+            </DockPanel>
+        </StackPanel>
+        <StackPanel Margin="10" Grid.Column="1">
             <DockPanel HorizontalAlignment="Left">
                 <Label FontSize="14">
                     Require Kiva Restart

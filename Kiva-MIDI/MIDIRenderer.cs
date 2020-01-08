@@ -15,6 +15,7 @@ using SharpDX.Direct3D;
 using System.Collections.Concurrent;
 using IO = System.IO;
 using System.Reflection;
+using System.Threading;
 
 namespace Kiva_MIDI
 {
@@ -508,7 +509,7 @@ namespace Kiva_MIDI
                         {
                             if (black == 1) ids = blackKeysID;
                             else ids = whiteKeysID;
-                            Parallel.ForEach(ids, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, k =>
+                            RenderLoop(ids, k =>
                             {
                                 long _notesRendered = 0;
                                 float left = (float)((x1array[k] - fullLeft) / fullWidth);
@@ -577,7 +578,7 @@ namespace Kiva_MIDI
                                         }
                                     }
                                     FlushNoteBuffer(context, left, right, (IntPtr)rn, nid);
-                                    skipLoop:
+                                skipLoop:
                                     renderKeys[k].colorl = col.rgba;
                                     renderKeys[k].colorr = col.rgba2;
                                     renderKeys[k].MarkPressed(pressed);
@@ -699,24 +700,37 @@ namespace Kiva_MIDI
             }
         }
 
+        bool singleThreaded = false;
+        void RenderLoop(int[] ids, Action<int> render)
+        {
+            singleThreaded = settings.General.MultiThreadedRendering;
+            if (settings.General.MultiThreadedRendering)
+            {
+                Parallel.ForEach(ids, new ParallelOptions() { MaxDegreeOfParallelism = settings.General.MaxRenderThreads }, render);
+            }
+            else
+            {
+                foreach (var i in ids) render(i);
+            }
+        }
+
         unsafe void FlushNoteBuffer(DeviceContext context, float left, float right, IntPtr notes, int count)
         {
             if (count == 0) return;
-            lock (context)
-            {
-                DataStream data;
-                context.MapSubresource(noteBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
-                data.Position = 0;
-                data.WriteRange(notes, count * sizeof(RenderNote));
-                context.UnmapSubresource(noteBuffer, 0);
-                context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
-                context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 16, 0));
-                noteConstants.NoteLeft = left;
-                noteConstants.NoteRight = right;
-                SetNoteShaderConstants(context, noteConstants);
-                context.Draw(count, 0);
-                data.Dispose();
-            }
+            if (singleThreaded) Monitor.Enter(context);
+            DataStream data;
+            context.MapSubresource(noteBuffer, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out data);
+            data.Position = 0;
+            data.WriteRange(notes, count * sizeof(RenderNote));
+            context.UnmapSubresource(noteBuffer, 0);
+            context.InputAssembler.PrimitiveTopology = PrimitiveTopology.PointList;
+            context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(noteBuffer, 16, 0));
+            noteConstants.NoteLeft = left;
+            noteConstants.NoteRight = right;
+            SetNoteShaderConstants(context, noteConstants);
+            context.Draw(count, 0);
+            data.Dispose();
+            if (singleThreaded) Monitor.Exit(context);
         }
 
         private DeviceContext GetInternalContext(Device device)

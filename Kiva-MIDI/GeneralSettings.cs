@@ -80,6 +80,9 @@ namespace Kiva_MIDI
         public int SelectedMIDIDevice { get; set; } = -1;
         public string SelectedMIDIDeviceName { get; set; } = "";
 
+        public bool MultiThreadedRendering { get; set; } = true;
+        public int MaxRenderThreads { get; set; } = 0;
+
         public bool DisableTransparency { get; set; } = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -91,6 +94,8 @@ namespace Kiva_MIDI
                 SelectedMIDIDevice = KDMAPI.IsKDMAPIAvailable() ? -1 : 0;
             }
             catch { SelectedMIDIDevice = 0; }
+            if (MaxRenderThreads <= 0) MaxRenderThreads = Environment.ProcessorCount;
+            if (MaxRenderThreads > Environment.ProcessorCount) MaxRenderThreads = Environment.ProcessorCount;
         }
     }
 }
