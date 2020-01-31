@@ -44,13 +44,13 @@
                             <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="7" Source="Material.WPF/open.png"/>
                         </Button>
                         <Button Name="pauseButton" PreviewMouseDown="PauseButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
-                            <Image HorizontalAlignment="Center" Height="Auto" Margin="5" Source="Material.WPF/pause.png"/>
+                            <Image HorizontalAlignment="Center" Height="Auto" Margin="3" Source="Material.WPF/pause.png"/>
                         </Button>
                         <Button Name="playButton" PreviewMouseDown="PlayButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
-                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="5" Source="Material.WPF/play.png"/>
+                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="3" Source="Material.WPF/play.png"/>
                         </Button>
                         <Button Name="settingsButton" PreviewMouseDown="SettingsButton_PreviewMouseDown" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
-                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="7" Source="Material.WPF/settings.png"/>
+                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="8" Source="Material.WPF/settings.png"/>
                         </Button>
                         <DockPanel Margin="5,0" WindowChrome.IsHitTestVisibleInChrome="True">
                             <Label FontSize="16" VerticalAlignment="Center" Padding="5,0,5,3" Margin="0,0,5,0">Speed:</Label>

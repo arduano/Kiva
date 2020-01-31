@@ -2,7 +2,6 @@
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
 using SharpDX.DXGI;
-using SharpDX.WPF;
 using System.Runtime.InteropServices;
 using System.IO;
 using System;

@@ -187,7 +187,7 @@ namespace Kiva_MIDI
                     if (timeDist < simulatedLagScale)
                     {
                         evTime += r.NextDouble() / 100 * (simulatedLagScale + timeDist);
-                        if(evTime - e.time >= simulatedLagScale)
+                        if (evTime - e.time >= simulatedLagScale)
                         { }
                     }
                     prevTime = evTime;
@@ -222,39 +222,11 @@ namespace Kiva_MIDI
 
                 byte cmd = (byte)(ev & 0xF0);
 
-                if (cmd < 0xA0) //Note
-                {
-                    if (samples >= 0 && !(bufferWritePos - shiftedBufferReadPos < (127 - e.vel + 10) * 20 && bufferReadPos > 1000))
-                        bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_NOTE, cmd < 0x90 ? (byte)(ev >> 8) : (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
-                    //else if (bufferWritePos - shiftedBufferReadPos < (127 - e.vel + 9) * 20)
-                    //    continue;
-                    else
-                        skipEvents(startTime + shiftedBufferReadPos / 48000.0, 127 - (bufferWritePos - shiftedBufferReadPos) / 50);
-                }
-                else if (cmd == 0xE0) //PitchBend
-                {
-                    var b1 = (ev >> 8) & 0x7f;
-                    var b2 = (ev >> 16) & 0x7f;
-                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_PITCH, (int)(b1 | (b2 << 7)), (int)ev & 0xF, 0, 0);
-                }
-                else if (cmd == 0xC0) //InstrumentSelect
-                {
-                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_PROGRAM, (byte)(ev >> 8), (int)ev & 0xF, 0, 0);
-                }
-                else if (cmd == 0xA0) //AfterTouch
-                {
-                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_KEYPRES, (ushort)(ev >> 8), (int)ev & 0xF, 0, 0);
-                }
-                else if (cmd == 0xD0) //Channel Pressure
-                {
-                    bass.SendEvent(BASSMIDIEvent.MIDI_EVENT_CHANPRES, (byte)(ev >> 8), (int)ev & 0xF, 0, 0);
-                }
-                else if (cmd == 0xB0) //Control
-                {
-                    var b1 = (ev >> 8) & 0x7f;
-                    var b2 = (ev >> 16) & 0x7f;
-                    bass.SendEventRaw(ev & 0xFFFFF0, (int)ev & 0xF);
-                }
+                int err = 1;
+
+                err = bass.SendEventRaw(ev & 0xFFFFFF, 0);
+                if (err <= 0)
+                { }
                 if (cancelGenerator.Token.IsCancellationRequested) break;
             }
             while (!cancelGenerator.Token.IsCancellationRequested)

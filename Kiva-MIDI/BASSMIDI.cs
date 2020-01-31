@@ -58,6 +58,7 @@ namespace Kiva_MIDI
 
             Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_MIDI_VOICES, voices);
             Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_SRC, 3);
+            Bass.BASS_ChannelSetAttribute(Handle, BASSAttribute.BASS_ATTRIB_MIDI_CHANS, 16);
 
             if (nofx) Bass.BASS_ChannelFlags(Handle, BASSFlag.BASS_MIDI_NOFX, BASSFlag.BASS_MIDI_NOFX);
 
@@ -201,7 +202,7 @@ namespace Kiva_MIDI
 
         public unsafe int SendEventRaw(uint data, int channel)
         {
-            var mode = BASSMIDIEventMode.BASS_MIDI_EVENTS_RAW;
+            var mode = BASSMIDIEventMode.BASS_MIDI_EVENTS_RAW | BASSMIDIEventMode.BASS_MIDI_EVENTS_NORSTATUS;
             return BassMidi.BASS_MIDI_StreamEvents(Handle, mode, channel, (IntPtr)(&data), 3);
         }
 

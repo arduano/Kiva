@@ -172,6 +172,7 @@ namespace Kiva_MIDI
 
         public void SetColorEvents(double time)
         {
+            if (time < 0) time = 0;
             Parallel.For(0, MidiNoteColors.Length, i =>
             {
                 MidiNoteColors[i] = OriginalMidiNoteColors[i];
