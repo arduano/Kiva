@@ -107,7 +107,7 @@ namespace Kiva_MIDI
         void OnPauseChange()
         {
             ma.Paused = Time.Paused;
-            ma.SyncPlayer(Time.GetTime());
+            ma.SyncPlayer(Time.GetTime(), Time.Speed);
         }
 
         void StartRender(bool force)
@@ -130,7 +130,7 @@ namespace Kiva_MIDI
             }
             else
             {
-                ma.SyncPlayer(Time.GetTime());
+                ma.SyncPlayer(Time.GetTime(), Time.Speed);
             }
         }
 
@@ -158,7 +158,7 @@ namespace Kiva_MIDI
                         var time = Time.GetTime();
                         if (time + 0.1 < ma.PlayerTime)
                         {
-                            ma.SyncPlayer(Time.GetTime());
+                            ma.SyncPlayer(Time.GetTime(), Time.Speed);
                         }
                     }
                     Thread.Sleep(100);

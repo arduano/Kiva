@@ -179,10 +179,10 @@ namespace Kiva_MIDI
                 {
                     bufferWritePos = bufferReadPos;
                 }
-                double evTime = e.time;
+                double evTime = e.time / speed;
                 if (simulatedLagScale != 0)
                 {
-                    var timeDist = (evTime - prevTime) / speed;
+                    var timeDist = (evTime - prevTime);
                     if (evTime < prevTime) evTime = prevTime;
                     if (timeDist < simulatedLagScale)
                     {
@@ -192,7 +192,7 @@ namespace Kiva_MIDI
                     }
                     prevTime = evTime;
                 }
-                double offset = (evTime - startTime) / speed;
+                double offset = (evTime - startTime);
                 int samples = (int)(offset * 48000) - bufferWritePos;
 
                 if (samples > 0)
@@ -255,7 +255,7 @@ namespace Kiva_MIDI
         {
             KillLastGenerator();
             cancelGenerator = new CancellationTokenSource();
-            startTime = time;
+            startTime = time / speed;
             generatorThread = Task.Run(() => GeneratorFunc(events, speed, skipEvents));
             awaitingReset = false;
         }
@@ -269,15 +269,17 @@ namespace Kiva_MIDI
             bufferReadPos = 0;
         }
 
-        public void SyncPlayer(double time)
+        public void SyncPlayer(double time, double speed)
         {
             lock (AudioBuffer)
             {
+                time /= speed;
                 var t = startTime + bufferReadPos / 48000.0;
                 var offset = time - t;
                 var newPos = bufferReadPos + (int)(offset * 48000);
                 if (newPos < 0) newPos = 0;
-                bufferReadPos = newPos;
+                if (Math.Abs(bufferReadPos - newPos) / 48000.0 > 0.03)
+                    bufferReadPos = newPos;
             }
         }
 
