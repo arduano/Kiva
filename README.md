@@ -34,7 +34,7 @@ DirectX 11 is required for the program to run, which you can find [here](https:/
 After downloading the app, install and run the program. Many settings have a question mark button next to them, that should help clear up the purpose of many confusing settings.
 
 ## License
-Kiva is licensed under the terms of the [GNU General Public License v3.0](https://github.com/arduano/Kiva/blob/master/LICENSE)
+Kiva is licensed under the terms of the [Don't Be a Dick](https://github.com/arduano/Kiva/blob/master/LICENSE)
 
 ## Screenshots
 <img src="https://i.imgur.com/YD0wHE1.png" width="512" />
