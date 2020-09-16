@@ -50,6 +50,7 @@
                     <local:InfoIcon Margin="5,0,0,0" Title="Topmost" Text="The Kiva window will always appear above other windows"/>
                 </DockPanel>
                 <local:BetterCheckbox x:Name="discordRP" Text="Discord Rich Presence" Margin="0,5,0,0" CheckToggled="discordRP_CheckToggled"/>
+                <local:BetterCheckbox x:Name="skipLoad" Text="Skip Loader Settings Prompt" Margin="0,5,0,0" CheckToggled="skipLoad_CheckToggled"/>
             </StackPanel>
         </Border>
     </Grid>

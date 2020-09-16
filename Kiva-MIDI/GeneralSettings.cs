@@ -65,6 +65,7 @@ namespace Kiva_MIDI
 
         public bool HideInfoCard { get; set; } = false;
         public CardParams InfoCardParams { get; set; } = CardParams.AudioBuffer | CardParams.FPS | CardParams.NoteCount | CardParams.NPS | CardParams.Polyphony | CardParams.RenderedNotes | CardParams.Time;
+        public bool SkipLoadSettings { get; set; } = false;
 
         public bool MainWindowTopmost { get; set; } = false;
 

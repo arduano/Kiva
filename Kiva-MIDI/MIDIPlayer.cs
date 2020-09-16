@@ -85,6 +85,11 @@ namespace Kiva_MIDI
             this.settings = settings;
         }
 
+        void ResetBuffer()
+        {
+            //eventFeed.;
+        }
+
         public void Dispose()
         {
             File = null;

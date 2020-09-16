@@ -247,6 +247,7 @@ namespace Kiva_MIDI
 
         void KillLastGenerator()
         {
+            for (int i = 0; i < AudioBuffer.Length; i++) AudioBuffer[i] = 0;
             if (cancelGenerator != null) cancelGenerator.Cancel();
             if (generatorThread != null) generatorThread.GetAwaiter().GetResult();
         }

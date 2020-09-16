@@ -223,19 +223,19 @@ namespace Kiva_MIDI
             );
 
             noteLayout = new InputLayout(device, ShaderSignature.GetInputSignature(notesShader.vertexShaderByteCode), new[] {
-                new InputElement("START",0,Format.R32_Float,0,0),
-                new InputElement("END",0,Format.R32_Float,4,0),
-                new InputElement("COLORL",0,Format.R32_UInt,8,0),
-                new InputElement("COLORR",0,Format.R32_UInt,12,0),
+                new InputElement("START",0,Format.R32_Float,0),
+                new InputElement("END",0,Format.R32_Float,0),
+                new InputElement("COLORL",0,Format.R32_UInt,0),
+                new InputElement("COLORR",0,Format.R32_UInt,0),
             });
 
             keyLayout = new InputLayout(device, ShaderSignature.GetInputSignature(SmallWhiteKeyShader.vertexShaderByteCode), new[] {
-                new InputElement("COLORL",0,Format.R32_UInt,0,0),
-                new InputElement("COLORR",0,Format.R32_UInt,4,0),
-                new InputElement("LEFT",0,Format.R32_Float,8,0),
-                new InputElement("RIGHT",0,Format.R32_Float,12,0),
-                new InputElement("DISTANCE",0,Format.R32_Float,16,0),
-                new InputElement("META",0,Format.R32_UInt,20,0),
+                new InputElement("COLORL",0,Format.R32_UInt,0),
+                new InputElement("COLORR",0,Format.R32_UInt,0),
+                new InputElement("LEFT",0,Format.R32_Float,0),
+                new InputElement("RIGHT",0,Format.R32_Float,0),
+                new InputElement("DISTANCE",0,Format.R32_Float,0),
+                new InputElement("META",0,Format.R32_UInt,0),
             });
 
             noteConstants = new NotesGlobalConstants()

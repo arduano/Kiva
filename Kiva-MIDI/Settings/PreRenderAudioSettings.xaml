@@ -35,7 +35,7 @@
                         Simuated Realtime Lag (ms)
                     </Label>
                     <local:NumberSelect x:Name="simulatedLag" Minimum="0" Maximum="1000" Value="0" DecimalPoints="0" VerticalAlignment="Bottom" Width="100" HorizontalAlignment="Left" ValueChanged="simulatedLag_ValueChanged"/>
-                    <local:InfoIcon Title="Simulated Realtime Lag" Text="If you really want to use Pre-Renderd but want it to also sound realtime. 0 means disabled. Small values (10-20) can cause a nice subtle rendered sound." VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0,0,6"/>
+                    <local:InfoIcon Title="Simulated Realtime Lag" Text="If you really want to use Pre-Renderd but want it to also sound realtime. 0 means disabled. Small values (10-20) can cause a nice subtle realtime sound." VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0,0,6"/>
                 </DockPanel>
             </StackPanel>
             <StackPanel Grid.Column="1">

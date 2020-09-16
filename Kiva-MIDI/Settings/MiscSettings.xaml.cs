@@ -43,6 +43,7 @@ namespace Kiva_MIDI
             hideInfoCard.IsChecked = settings.General.HideInfoCard;
             windowTopmost.IsChecked = settings.General.MainWindowTopmost;
             discordRP.IsChecked = settings.General.DiscordRP;
+            skipLoad.IsChecked = settings.General.SkipLoadSettings;
 
             var cp = settings.General.InfoCardParams;
 
@@ -97,6 +98,11 @@ namespace Kiva_MIDI
         private void discordRP_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             settings.General.DiscordRP = discordRP.IsChecked;
+        }
+
+        private void skipLoad_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            settings.General.SkipLoadSettings = skipLoad.IsChecked;
         }
     }
 }

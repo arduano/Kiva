@@ -17,7 +17,7 @@ namespace Kiva_MIDI
 		{
 			using (var dg = new DisposeGroup())
 			{
-				var level = Direct3D11.Device.GetSupportedFeatureLevel();
+				var level = Direct3D.FeatureLevel.Level_10_0;//Direct3D11.Device.GetSupportedFeatureLevel();
 				if (level < minLevel)
 					return null;
 				return new Direct3D11.Device(Direct3D.DriverType.Hardware, cFlags, level);

@@ -90,6 +90,11 @@ namespace Kiva_MIDI
             visibleThresh.Value = ls.NoteVelocityThreshold;
             audioThreads.Value = ls.EventPlayerThreads;
             removeOverlaps.IsChecked = loaderSettings.RemoveOverlaps;
+
+            if (settings.General.SkipLoadSettings)
+            {
+                ContinueLoading();
+            }
         }
 
         void ContinueLoading()
