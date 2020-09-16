@@ -247,7 +247,7 @@ namespace Kiva_MIDI
                     if (status == RPCStatus.Idle) presence.Details = "Idle";
                     else if (status == RPCStatus.Loading)
                     {
-                        presence.Details = "Loading Midi";
+                        presence.Details = "Loading a MIDI";
                         presence.Timestamps = new Timestamps(DateTime.UtcNow);
                         if (filename != null)
                         {
@@ -266,7 +266,7 @@ namespace Kiva_MIDI
                         }
                         else
                         {
-                            presence.Details = "Playing Midi";
+                            presence.Details = "Playing a MIDI";
                             presence.Timestamps = new Timestamps(DateTime.UtcNow - TimeSpan.FromSeconds(Time.GetTime()));
                         }
                         if (filename != null)
