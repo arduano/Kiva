@@ -25,8 +25,6 @@ namespace Kiva_MIDI
 #endif
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
 
-            MIDIAudio.Init();
-
             var s = new Settings();
             s.InitSoundfontListner();
             if (s.EnableUpdates)
@@ -52,6 +50,9 @@ namespace Kiva_MIDI
                     TryDownloadUpdatePackage(s.VersionName);
                 }
             }
+
+            if (s.General.SelectedAudioEngine == AudioEngine.PreRender)
+                MIDIAudio.Init();
 
             var window = new MainWindow(s);
             if (args.Length != 0)
