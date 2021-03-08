@@ -164,7 +164,8 @@ namespace Kiva_MIDI
             }
             else if (cmd < 0xC0) //Control
             {
-                //TODO
+                // Don't even bother, let BASSMIDI handle them
+                BassMidi.BASS_MIDI_StreamEvents(Handle, BASSMIDIEventMode.BASS_MIDI_EVENTS_RAW, 0, (IntPtr)(&dwParam1), 3);
                 return 0;
             }
             else if (cmd < 0xD0) //InstrumentSelect
