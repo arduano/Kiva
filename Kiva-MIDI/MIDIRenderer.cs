@@ -144,100 +144,85 @@ namespace Kiva
 
         Settings settings;
 
+        DisposeGroup dispose = new DisposeGroup();
+
         public MIDIRenderer(Device device, Settings settings)
         {
             this.settings = settings;
-            string noteShaderData;
-            if (IO.File.Exists("Notes.fx"))
+
+            string GetShaderCode(string filename, string resourceName)
             {
-                noteShaderData = IO.File.ReadAllText("Notes.fx");
+                if (IO.File.Exists(filename))
+                {
+                    return IO.File.ReadAllText(filename);
+                }
+                else
+                {
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var names = assembly.GetManifestResourceNames();
+                    using (var stream = assembly.GetManifestResourceStream(resourceName))
+                    using (var reader = new IO.StreamReader(stream))
+                        return reader.ReadToEnd();
+                }
             }
-            else
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var names = assembly.GetManifestResourceNames();
-                using (var stream = assembly.GetManifestResourceStream("Kiva.Notes.fx"))
-                using (var reader = new IO.StreamReader(stream))
-                    noteShaderData = reader.ReadToEnd();
-            }
-            notesShader = new ShaderManager(
+
+            string noteShaderData = GetShaderCode("Notes.fx", "Kiva.Notes.fx");
+            notesShader = dispose.Add(new ShaderManager(
                 device,
                 ShaderBytecode.Compile(noteShaderData, "VS_Note", "vs_4_0", ShaderFlags.None, EffectFlags.None),
                 ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
                 ShaderBytecode.Compile(noteShaderData, "GS_Note", "gs_4_0", ShaderFlags.None, EffectFlags.None)
-            );
+            ));
 
-            if (IO.File.Exists("KeyboardSmall.fx"))
-            {
-                noteShaderData = IO.File.ReadAllText("KeyboardSmall.fx");
-            }
-            else
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var names = assembly.GetManifestResourceNames();
-                using (var stream = assembly.GetManifestResourceStream("Kiva.KeyboardSmall.fx"))
-                using (var reader = new IO.StreamReader(stream))
-                    noteShaderData = reader.ReadToEnd();
-            }
-            SmallWhiteKeyShader = new ShaderManager(
+            string keyboardSmallShaderData = GetShaderCode("KeyboardSmall.fx", "Kiva.KeyboardSmall.fx");
+            SmallWhiteKeyShader = dispose.Add(new ShaderManager(
                 device,
-                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "GS_White", "gs_4_0", ShaderFlags.None, EffectFlags.None)
-            );
-            SmallBlackKeyShader = new ShaderManager(
+                ShaderBytecode.Compile(keyboardSmallShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardSmallShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardSmallShaderData, "GS_White", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            ));
+            SmallBlackKeyShader = dispose.Add(new ShaderManager(
                 device,
-                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "GS_Black", "gs_4_0", ShaderFlags.None, EffectFlags.None)
-            );
+                ShaderBytecode.Compile(keyboardSmallShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardSmallShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardSmallShaderData, "GS_Black", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            ));
 
-            if (IO.File.Exists("KeyboardBig.fx"))
-            {
-                noteShaderData = IO.File.ReadAllText("KeyboardBig.fx");
-            }
-            else
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var names = assembly.GetManifestResourceNames();
-                using (var stream = assembly.GetManifestResourceStream("Kiva.KeyboardBig.fx"))
-                using (var reader = new IO.StreamReader(stream))
-                    noteShaderData = reader.ReadToEnd();
-            }
-            BigWhiteKeyShader = new ShaderManager(
+            string keyboardBigShaderData = GetShaderCode("KeyboardBig.fx", "Kiva.KeyboardBig.fx");
+            BigWhiteKeyShader = dispose.Add(new ShaderManager(
                 device,
-                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "GS_White", "gs_4_0", ShaderFlags.None, EffectFlags.None)
-            );
-            BigBlackKeyShader = new ShaderManager(
+                ShaderBytecode.Compile(keyboardBigShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardBigShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardBigShaderData, "GS_White", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            ));
+            BigBlackKeyShader = dispose.Add(new ShaderManager(
                 device,
-                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "GS_Black", "gs_4_0", ShaderFlags.None, EffectFlags.None)
-            );
-            BigBarShader = new ShaderManager(
+                ShaderBytecode.Compile(keyboardBigShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardBigShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardBigShaderData, "GS_Black", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            ));
+            BigBarShader = dispose.Add(new ShaderManager(
                 device,
-                ShaderBytecode.Compile(noteShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
-                ShaderBytecode.Compile(noteShaderData, "GS_Bar", "gs_4_0", ShaderFlags.None, EffectFlags.None)
-            );
+                ShaderBytecode.Compile(keyboardBigShaderData, "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardBigShaderData, "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None),
+                ShaderBytecode.Compile(keyboardBigShaderData, "GS_Bar", "gs_4_0", ShaderFlags.None, EffectFlags.None)
+            ));
 
-            noteLayout = new InputLayout(device, ShaderSignature.GetInputSignature(notesShader.vertexShaderByteCode), new[] {
+            noteLayout = dispose.Add(new InputLayout(device, ShaderSignature.GetInputSignature(notesShader.vertexShaderByteCode), new[] {
                 new InputElement("START",0,Format.R32_Float,0),
                 new InputElement("END",0,Format.R32_Float,0),
                 new InputElement("COLORL",0,Format.R32_UInt,0),
                 new InputElement("COLORR",0,Format.R32_UInt,0),
-            });
+            }));
 
-            keyLayout = new InputLayout(device, ShaderSignature.GetInputSignature(SmallWhiteKeyShader.vertexShaderByteCode), new[] {
+            keyLayout = dispose.Add(new InputLayout(device, ShaderSignature.GetInputSignature(SmallWhiteKeyShader.vertexShaderByteCode), new[] {
                 new InputElement("COLORL",0,Format.R32_UInt,0),
                 new InputElement("COLORR",0,Format.R32_UInt,0),
                 new InputElement("LEFT",0,Format.R32_Float,0),
                 new InputElement("RIGHT",0,Format.R32_Float,0),
                 new InputElement("DISTANCE",0,Format.R32_Float,0),
                 new InputElement("META",0,Format.R32_UInt,0),
-            });
+            }));
 
             noteConstants = new NotesGlobalConstants()
             {
@@ -247,7 +232,7 @@ namespace Kiva
                 ScreenAspect = 1f
             };
 
-            noteBuffer = new Buffer(device, new BufferDescription()
+            noteBuffer = dispose.Add(new Buffer(device, new BufferDescription()
             {
                 BindFlags = BindFlags.VertexBuffer,
                 CpuAccessFlags = CpuAccessFlags.Write,
@@ -255,9 +240,9 @@ namespace Kiva
                 SizeInBytes = 40 * noteBufferLength,
                 Usage = ResourceUsage.Dynamic,
                 StructureByteStride = 0
-            });
+            }));
 
-            keyBuffer = new Buffer(device, new BufferDescription()
+            keyBuffer = dispose.Add(new Buffer(device, new BufferDescription()
             {
                 BindFlags = BindFlags.VertexBuffer,
                 CpuAccessFlags = CpuAccessFlags.Write,
@@ -265,9 +250,9 @@ namespace Kiva
                 SizeInBytes = 24 * renderKeys.Length,
                 Usage = ResourceUsage.Dynamic,
                 StructureByteStride = 0
-            });
+            }));
 
-            globalNoteConstants = new Buffer(device, new BufferDescription()
+            globalNoteConstants = dispose.Add(new Buffer(device, new BufferDescription()
             {
                 BindFlags = BindFlags.ConstantBuffer,
                 CpuAccessFlags = CpuAccessFlags.Write,
@@ -275,7 +260,7 @@ namespace Kiva
                 SizeInBytes = 32,
                 Usage = ResourceUsage.Dynamic,
                 StructureByteStride = 0
-            });
+            }));
 
             for (int i = 0; i < blackKeys.Length; i++) blackKeys[i] = isBlackNote(i);
             int b = 0;
@@ -360,7 +345,7 @@ namespace Kiva
             desc.IndependentBlendEnable = false;
             desc.RenderTarget[0] = renderTargetDesc;
 
-            var blendStateEnabled = new BlendState(device, desc);
+            var blendStateEnabled = dispose.Add(new BlendState(device, desc));
 
             device.ImmediateContext.OutputMerger.SetBlendState(blendStateEnabled);
 
@@ -377,7 +362,7 @@ namespace Kiva
                 IsScissorEnabled = false,
                 SlopeScaledDepthBias = 0
             };
-            var rasterStateSolid = new RasterizerState(device, renderStateDesc);
+            var rasterStateSolid = dispose.Add(new RasterizerState(device, renderStateDesc));
             device.ImmediateContext.Rasterizer.State = rasterStateSolid;
         }
 
@@ -744,17 +729,7 @@ namespace Kiva
 
         public void Dispose()
         {
-            Disposer.SafeDispose(ref noteLayout);
-            Disposer.SafeDispose(ref keyLayout);
-            Disposer.SafeDispose(ref notesShader);
-            Disposer.SafeDispose(ref SmallWhiteKeyShader);
-            Disposer.SafeDispose(ref SmallBlackKeyShader);
-            Disposer.SafeDispose(ref BigWhiteKeyShader);
-            Disposer.SafeDispose(ref BigBarShader);
-            Disposer.SafeDispose(ref BigBlackKeyShader);
-            Disposer.SafeDispose(ref globalNoteConstants);
-            Disposer.SafeDispose(ref noteBuffer);
-            Disposer.SafeDispose(ref keyBuffer);
+            dispose.Dispose();
 
             Time.TimeChanged -= onTimeChanged;
         }
