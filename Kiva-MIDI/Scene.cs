@@ -7,13 +7,13 @@ using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using SharpDX.WPF;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using SharpDX.Direct3D;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Kiva.MIDI;
+using Kiva.Util;
 
 namespace Kiva
 {
@@ -31,7 +31,7 @@ namespace Kiva
             set => render.File = value;
         }
 
-        public PlayingState Time
+        public GlobalTime Time
         {
             get => render.Time;
             set => render.Time = value;

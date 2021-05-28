@@ -193,8 +193,8 @@
     <Compile Include="DX.WPF\DXImageSource.cs" />
     <Compile Include="DX.WPF\DXSharing.cs" />
     <Compile Include="DX.WPF\DXUtils.cs" />
-    <Compile Include="FastList.cs" />
-    <Compile Include="FPS.cs" />
+    <Compile Include="Util\FastList.cs" />
+    <Compile Include="Util\FPS.cs" />
     <Compile Include="DX.WPF\IDirect3D.cs" />
     <Compile Include="GeneralSettings.cs" />
     <Compile Include="Audio\APIs\KDMAPI.cs" />
@@ -230,7 +230,7 @@
     <Compile Include="Settings\MiscSettings.xaml.cs">
       <DependentUpon>MiscSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PlayingState.cs" />
+    <Compile Include="GlobalTime.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="MIDI\TimedMerger.cs" />
     <Compile Include="Settings.cs" />
@@ -254,7 +254,7 @@
       <DependentUpon>ValueSlider.xaml</DependentUpon>
     </Compile>
     <Compile Include="SoundfontSettings.cs" />
-    <Compile Include="VelocityEase.cs" />
+    <Compile Include="Util\VelocityEase.cs" />
     <Compile Include="VolatileSettings.cs" />
     <Compile Include="Audio\APIs\WinMM.cs" />
     <Page Include="Material.WPF\InfoIcon.xaml">

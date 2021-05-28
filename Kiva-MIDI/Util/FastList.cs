@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kiva
+namespace Kiva.Util
 {
 
     public class FastList<T> : IEnumerable<T>

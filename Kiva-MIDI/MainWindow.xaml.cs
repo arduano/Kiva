@@ -20,7 +20,6 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D9;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using SharpDX.WPF;
 using Microsoft.Win32;
 using System.Collections.Concurrent;
 using System.IO;
@@ -29,6 +28,7 @@ using MessageBox = KivaShared.MessageBox;
 using KivaShared;
 using Kiva.MIDI;
 using Kiva.Audio;
+using Kiva.Util;
 
 namespace Kiva
 {
@@ -371,7 +371,7 @@ namespace Kiva
             };
 
             FPS = new FPS();
-            Time = new PlayingState();
+            Time = new GlobalTime();
             Time.PauseChanged += PauseChanged;
             PauseChanged();
             d3d = new D3D11();
@@ -522,7 +522,7 @@ namespace Kiva
             };
         }
         public FPS FPS { get; set; }
-        public PlayingState Time { get; set; }
+        public GlobalTime Time { get; set; }
 
         public void LoadMidi(string filename)
         {

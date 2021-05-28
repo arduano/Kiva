@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kiva
 {
-    public class PlayingState
+    public class GlobalTime
     {
         public DateTime Time { get; private set; } = DateTime.UtcNow;
         public double MIDITime { get; private set; } = 0;

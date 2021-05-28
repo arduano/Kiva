@@ -40,7 +40,7 @@ namespace Kiva.Audio
         }
 
         MIDIFile file = null;
-        public PlayingState Time
+        public GlobalTime Time
         {
             get => time;
             set
@@ -59,7 +59,7 @@ namespace Kiva.Audio
             }
         }
         MIDIPreRenderAudio ma;
-        private PlayingState time = new PlayingState();
+        private GlobalTime time = new GlobalTime();
 
         Task syncThread;
         bool disposed = false;

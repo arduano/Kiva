@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace SharpDX.WPF
+namespace Kiva.Util
 {
     public class FPS : INotifyPropertyChanged
     {

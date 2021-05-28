@@ -8,7 +8,6 @@ using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using SharpDX.WPF;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using SharpDX.Direct3D;
@@ -17,6 +16,7 @@ using IO = System.IO;
 using System.Reflection;
 using System.Threading;
 using Kiva.MIDI;
+using Kiva.Util;
 
 namespace Kiva
 {
@@ -93,7 +93,7 @@ namespace Kiva
         }
 
         object fileLock = new object();
-        public PlayingState Time
+        public GlobalTime Time
         {
             get => _time;
             set
@@ -393,7 +393,7 @@ namespace Kiva
         double[] x1array = new double[257];
         double[] wdtharray = new double[257];
         bool[] pressedKeys = new bool[256];
-        private PlayingState _time = new PlayingState();
+        private GlobalTime _time = new GlobalTime();
         object addLock = new object();
 
         public void Render(Device device, RenderTargetView target, DrawEventArgs args)

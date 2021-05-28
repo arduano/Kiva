@@ -70,7 +70,7 @@ namespace Kiva.Audio
         BlockingCollection<MIDIEvent> eventFeed;
 
         MIDIFile file = null;
-        public PlayingState Time { get; set; } = new PlayingState();
+        public GlobalTime Time { get; set; } = new GlobalTime();
         bool disposed = false;
         Task playerThread = null;
 
