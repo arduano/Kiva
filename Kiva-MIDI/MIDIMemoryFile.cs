@@ -77,7 +77,7 @@ namespace Kiva_MIDI
             int keysMerged = 0;
             var eventMerger = Task.Run(() =>
             {
-                int count = loaderSettings.EventPlayerThreads;
+                int count = LoaderSettings.EventPlayerThreads;
                 MIDINoteEvents = new MIDIEvent[count][];
                 Parallel.For(0, count, new ParallelOptions() { CancellationToken = cancel }, i =>
                 {
@@ -95,7 +95,7 @@ namespace Kiva_MIDI
             });
             var controlEventMerger = Task.Run(() =>
             {
-                int count = loaderSettings.EventPlayerThreads;
+                int count = LoaderSettings.EventPlayerThreads;
                 MIDIControlEvents = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => p.ControlEvents).ToArray(), e => e.time).ToArray();
             });
             cancel.ThrowIfCancellationRequested();
@@ -104,7 +104,7 @@ namespace Kiva_MIDI
             Parallel.For(0, 256, new ParallelOptions() { CancellationToken = cancel }, (i) =>
             {
                 var en = TimedMerger<Note>.MergeMany(parsers.Select(p => p.Notes[i]).ToArray(), n => n.start);
-                if (loaderSettings.RemoveOverlaps) Notes[i] = RemoveOverlaps(en).ToArray();
+                if (LoaderSettings.RemoveOverlaps) Notes[i] = RemoveOverlaps(en).ToArray();
                 else Notes[i] = en.ToArray();
                 foreach (var p in parsers) p.Notes[i] = null;
                 lock (l)

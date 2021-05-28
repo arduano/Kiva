@@ -108,15 +108,16 @@ namespace Kiva_MIDI
         public int trackcount { get; private set; }
         public ushort format { get; private set; }
 
-        protected Stream MidiFileReader;
-        protected MIDILoaderSettings loaderSettings;
+        protected Stream MidiFileReader { get; set; }
+        protected DiskReadProvider ReadProvider { get; set; }
+        protected MIDILoaderSettings LoaderSettings { get; set; }
 
         public string filepath;
         protected CancellationToken cancel;
 
         public MIDIFile(string path, MIDILoaderSettings settings, CancellationToken cancel)
         {
-            loaderSettings = settings;
+            LoaderSettings = settings;
             this.cancel = cancel;
             filepath = path;
         }
@@ -179,6 +180,7 @@ namespace Kiva_MIDI
         protected void Open()
         {
             MidiFileReader = File.Open(filepath, FileMode.Open);
+            ReadProvider = new DiskReadProvider(MidiFileReader);
             ParseHeaderChunk();
             while (MidiFileReader.Position < MidiFileReader.Length)
             {
@@ -193,7 +195,7 @@ namespace Kiva_MIDI
                     {
                         ParseStatusText = "Chunk " + (trackcount - 1) + " has corrupt length\nCalculating length...";
                         var pos = trackBeginnings.Last();
-                        var reader = new BufferByteReader(MidiFileReader, 10000, pos, MidiFileReader.Length - pos);
+                        var reader = new BufferByteReader(ReadProvider, 1000000, pos, MidiFileReader.Length - pos);
                         try
                         {
                             var len = MIDITrackParser.GetCorruptChunkLength(reader);
@@ -216,8 +218,8 @@ namespace Kiva_MIDI
             ParseStage = ParsingStage.FirstPass;
             Parallel.For(0, parsers.Length, new ParallelOptions() { CancellationToken = cancel }, (i) =>
             {
-                var reader = new BufferByteReader(MidiFileReader, 100000, trackBeginnings[i], trackLengths[i]);
-                parsers[i] = new MIDITrackParser(reader, division, i, loaderSettings);
+                var reader = new BufferByteReader(ReadProvider, 10000000, trackBeginnings[i], trackLengths[i]);
+                parsers[i] = new MIDITrackParser(reader, division, i, LoaderSettings);
                 parsers[i].FirstPassParse();
                 lock (l)
                 {

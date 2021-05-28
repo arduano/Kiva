@@ -81,10 +81,10 @@ namespace Kiva_MIDI
             Activate();
             Keyboard.Focus(this);
 
-            audioThreads.Maximum = Environment.ProcessorCount;
-
             loaderSettings = settings.GetMIDILoaderSettings();
             var ls = loaderSettings.Clone();
+
+            audioThreads.Maximum = Environment.ProcessorCount;
 
             audioThresh.Value = ls.EventVelocityThreshold;
             visibleThresh.Value = ls.NoteVelocityThreshold;

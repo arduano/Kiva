@@ -209,14 +209,13 @@
     <Compile Include="Material.WPF\BetterSlider.xaml.cs">
       <DependentUpon>BetterSlider.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MIDIParsing\ConsumingEnumerable.cs" />
     <Compile Include="Material.WPF\RippleEffectDecorator.cs" />
     <Compile Include="MIDILoaderSettings.cs" />
-    <Compile Include="MIDIParsing\BufferByteReader.cs" />
+    <Compile Include="MIDI\BufferByteReader.cs" />
     <Compile Include="Disposer.cs" />
     <Compile Include="MIDIFile.cs" />
-    <Compile Include="MIDIParsing\MIDITrackParser.cs" />
-    <Compile Include="MIDIParsing\SkipIterator.cs" />
+    <Compile Include="MIDI\MIDITrackParser.cs" />
+    <Compile Include="MIDI\SkipIterator.cs" />
     <Compile Include="MIDIPreRenderPlayer.cs" />
     <Compile Include="MIDIRenderer.cs" />
     <Compile Include="Material.WPF\NumberSelect.xaml.cs">
@@ -235,7 +234,7 @@
     </Compile>
     <Compile Include="PlayingState.cs" />
     <Compile Include="Scene.cs" />
-    <Compile Include="MIDIParsing\TimedMerger.cs" />
+    <Compile Include="MIDI\TimedMerger.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Settings\AudioSettings.xaml.cs">
       <DependentUpon>AudioSettings.xaml</DependentUpon>
