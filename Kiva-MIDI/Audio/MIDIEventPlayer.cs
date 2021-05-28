@@ -183,7 +183,7 @@ namespace Kiva.Audio
                 while (file != null)
                 {
                     reset:
-                    double time = Time.GetTime();
+                    int time = Time.GetTimeInt();
                     if (Time.Paused)
                     {
                         ResetControllers();
@@ -202,7 +202,7 @@ namespace Kiva.Audio
                     }
                     if (changed || lastTime > time)
                     {
-                        time = Time.GetTime();
+                        time = Time.GetTimeInt();
                         ResetControllers();
 
                         evid = GetEventPos(events, time) - 10;
@@ -214,22 +214,22 @@ namespace Kiva.Audio
                     {
                         var ev = events[evid];
                         var delay = (ev.time - time) / Time.Speed;
-                        while (delay > 0.2 && file != null)
+                        while (delay > Constants.TimeToInt(0.2) && file != null)
                         {
                             Thread.Sleep(20);
-                            delay = (ev.time - Time.GetTime()) / Time.Speed;
+                            delay = (ev.time - Time.GetTimeInt()) / Time.Speed;
                             if (changed) break;
                             if (file == null) goto dispose;
                         }
                         if (changed) goto reset;
                         if (delay > 0)
                         {
-                            Int64 s = (long)(delay * -10000000);
-                            NtDelayExecution(false, ref s);
-                            //Thread.Sleep(new TimeSpan((long)(delay * 10000000)));
+                            //Int64 s = (long)(delay * -10000000 / Constants.TicksPerSecond);
+                            //NtDelayExecution(false, ref s);
+                            Thread.Sleep(new TimeSpan((long)(delay * 10000000 / Constants.TicksPerSecond)));
                         }
                         if ((eventFeed.Count > events[evid].vel * 100 || delay < -1) && i != -1)
-                            while ((evid < events.Length && events[evid].time < Time.GetTime() && (eventFeed.Count > events[evid].vel * 100 || delay < -1)))
+                            while ((evid < events.Length && events[evid].time < Time.GetTimeInt() && (eventFeed.Count > events[evid].vel * 100 || delay < -1)))
                             {
                                 if (events[evid].vel > 80)
                                 { }
@@ -240,7 +240,7 @@ namespace Kiva.Audio
                     }
                     else
                     {
-                        while (Time.GetTime() > events[events.Length - 1].time)
+                        while (Time.GetTimeInt() > events[events.Length - 1].time)
                         {
                             Thread.Sleep(50);
                             if (file == null) goto dispose;
@@ -308,7 +308,7 @@ namespace Kiva.Audio
             this.device = IntPtr.Zero;
         }
 
-        int GetEventPos(MIDIEvent[] events, double time)
+        int GetEventPos(MIDIEvent[] events, int time)
         {
             if (time < events[0].time) return 0;
             if (time > events[events.Length - 1].time) return events.Length;

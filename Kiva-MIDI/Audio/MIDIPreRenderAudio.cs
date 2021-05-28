@@ -181,7 +181,7 @@ namespace Kiva.Audio
                 {
                     bufferWritePos = bufferReadPos;
                 }
-                double evTime = e.time / speed;
+                double evTime = Constants.IntTimeToSeconds(e.time) / speed;
                 if (simulatedLagScale != 0)
                 {
                     var timeDist = (evTime - prevTime);
@@ -189,7 +189,7 @@ namespace Kiva.Audio
                     if (timeDist < simulatedLagScale)
                     {
                         evTime += r.NextDouble() / 100 * (simulatedLagScale + timeDist);
-                        if (evTime - e.time >= simulatedLagScale)
+                        if (evTime - Constants.IntTimeToSeconds(e.time) >= simulatedLagScale)
                         { }
                     }
                     prevTime = evTime;

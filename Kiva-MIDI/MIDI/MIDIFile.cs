@@ -45,14 +45,14 @@ namespace Kiva.MIDI
     [StructLayout(LayoutKind.Sequential)]
     public struct Note
     {
-        public double start, end;
+        public int start, end;
         public int colorPointer;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct MIDIEvent
     {
-        public float time;
+        public int time;
         public uint data;
         public byte vel;
     }

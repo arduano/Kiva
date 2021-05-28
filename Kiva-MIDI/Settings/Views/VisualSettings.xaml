@@ -9,8 +9,8 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../ButtonTemplates.xaml"/>
-                <ResourceDictionary Source="../Scrollbar.xaml"/>
+                <ResourceDictionary Source="../../ButtonTemplates.xaml"/>
+                <ResourceDictionary Source="../../Scrollbar.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>

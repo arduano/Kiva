@@ -170,6 +170,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Audio\APIs\BASSMIDI.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="LoudMaxStream.cs" />
     <Compile Include="UI\InfoIcon.xaml.cs">
       <DependentUpon>InfoIcon.xaml</DependentUpon>

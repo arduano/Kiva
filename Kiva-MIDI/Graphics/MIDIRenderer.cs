@@ -401,8 +401,8 @@ namespace Kiva.Graphics
             var context = device.ImmediateContext;
             context.InputAssembler.InputLayout = noteLayout;
 
-            double time = Time.GetTime();
-            double timeScale = settings.Volatile.Size;
+            double time = Time.GetTimeInt();
+            double timeScale = Constants.TimeToInt(settings.Volatile.Size);
             double renderCutoff = time + timeScale;
             int firstNote = 0;
             int lastNote = 128;

@@ -50,6 +50,11 @@ namespace Kiva
             return MIDITime + (DateTime.UtcNow - Time).TotalSeconds * Speed;
         }
 
+        public int GetTimeInt()
+        {
+            return Constants.TimeToInt(GetTime());
+        }
+
         public void Navigate(double time)
         {
             Time = DateTime.UtcNow;
