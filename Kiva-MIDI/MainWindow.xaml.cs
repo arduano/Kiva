@@ -29,6 +29,8 @@ using KivaShared;
 using Kiva.MIDI;
 using Kiva.Audio;
 using Kiva.Util;
+using Kiva.Graphics;
+using Kiva.Settings.Views;
 
 namespace Kiva
 {
@@ -210,7 +212,7 @@ namespace Kiva
 
         MIDIFile loadedFle;
 
-        Settings settings;
+        KivaSettings settings;
 
         SettingsWindow settingsWindow = null;
         LoadingMidiForm loadingForm = null;
@@ -353,7 +355,7 @@ namespace Kiva
             bufferLenPanel.Visibility = (cp & CardParams.AudioBuffer) > 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public MainWindow(Settings settings)
+        public MainWindow(KivaSettings settings)
         {
             this.settings = settings;
 

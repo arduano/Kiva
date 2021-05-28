@@ -51,10 +51,10 @@ namespace Kiva
         double rotateProgress = 0;
 
         string filepath;
-        Settings settings;
+        KivaSettings settings;
         MIDILoaderSettings loaderSettings;
 
-        public LoadingMidiForm(string filepath, Settings settings)
+        public LoadingMidiForm(string filepath, KivaSettings settings)
         {
             InitializeComponent();
             this.filepath = filepath;

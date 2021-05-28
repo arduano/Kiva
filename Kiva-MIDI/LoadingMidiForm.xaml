@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Kiva"
+        xmlns:local="clr-namespace:Kiva" xmlns:ui="clr-namespace:Kiva.UI"
         mc:Ignorable="d"
         KeyDown="Window_KeyDown"
         Title="LoadingMidiForm" WindowStyle="None" Height="353.5" Width="270.5" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
@@ -46,22 +46,22 @@
                 <StackPanel WindowChrome.IsHitTestVisibleInChrome="True" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Label FontSize="16" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0">Visible Note Threshold</Label>
                     <DockPanel HorizontalAlignment="Center">
-                        <local:NumberSelect x:Name="visibleThresh" ValueChanged="VisibleThresh_ValueChanged" Minimum="0" Maximum="127" Width="80" VerticalAlignment="Center" Margin="20,0,0,0"/>
-                        <local:InfoIcon Margin="5,0,0,0" Title="Visible Note Threshold" Text="Threshold of the visible notes. Change this from 0 if you want to see the melody without the note art."/>
+                        <ui:NumberSelect x:Name="visibleThresh" ValueChanged="VisibleThresh_ValueChanged" Minimum="0" Maximum="127" Width="80" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <ui:InfoIcon Margin="5,0,0,0" Title="Visible Note Threshold" Text="Threshold of the visible notes. Change this from 0 if you want to see the melody without the note art."/>
                     </DockPanel>
                     <Label FontSize="16" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0">Audio Note Threshold</Label>
                     <DockPanel HorizontalAlignment="Center" Margin="20,0,0,0">
-                        <local:NumberSelect x:Name="audioThresh" ValueChanged="AudioThresh_ValueChanged" Minimum="0" Maximum="127" Width="80" VerticalAlignment="Center"/>
-                        <local:InfoIcon Margin="5,0,0,0" Title="Audio Note Threshold" Text="Prevent events with low velocity from being loaded into ram and being played. Faster load times, less lag. Values of around 10-20 recommended for massive midis."/>
+                        <ui:NumberSelect x:Name="audioThresh" ValueChanged="AudioThresh_ValueChanged" Minimum="0" Maximum="127" Width="80" VerticalAlignment="Center"/>
+                        <ui:InfoIcon Margin="5,0,0,0" Title="Audio Note Threshold" Text="Prevent events with low velocity from being loaded into ram and being played. Faster load times, less lag. Values of around 10-20 recommended for massive midis."/>
                     </DockPanel>
                     <Label FontSize="16" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0">Audio Player Threads</Label>
                     <DockPanel HorizontalAlignment="Center" Margin="20,0,0,0">
-                        <local:NumberSelect Value="1" x:Name="audioThreads" ValueChanged="AudioThreads_ValueChanged" Minimum="1" Maximum="1" Width="80" VerticalAlignment="Center"/>
-                        <local:InfoIcon Margin="5,0,0,0" Title="Audio Player Threads" Text="Faster load times when merging events, faster performance when playing. Doesn't apply to Pre-Rendered audio mode."/>
+                        <ui:NumberSelect Value="1" x:Name="audioThreads" ValueChanged="AudioThreads_ValueChanged" Minimum="1" Maximum="1" Width="80" VerticalAlignment="Center"/>
+                        <ui:InfoIcon Margin="5,0,0,0" Title="Audio Player Threads" Text="Faster load times when merging events, faster performance when playing. Doesn't apply to Pre-Rendered audio mode."/>
                     </DockPanel>
                     <DockPanel HorizontalAlignment="Center" Margin="0,15,0,0">
-                        <local:BetterCheckbox x:Name="removeOverlaps" Text="Remove Overlaps" CheckToggled="removeOverlaps_CheckToggled"/>
-                        <local:InfoIcon Margin="5,0,0,2" Title="Remove Note Overlaps" Text="Performs an overlaps remover algorithm while merging notes. Will load less visible notes, but the audio event loading will stay the same." VerticalAlignment="Bottom"/>
+                        <ui:BetterCheckbox x:Name="removeOverlaps" Text="Remove Overlaps" CheckToggled="removeOverlaps_CheckToggled"/>
+                        <ui:InfoIcon Margin="5,0,0,2" Title="Remove Note Overlaps" Text="Performs an overlaps remover algorithm while merging notes. Will load less visible notes, but the audio event loading will stay the same." VerticalAlignment="Bottom"/>
                     </DockPanel>
                     <Button Content="Save As Defaults" Foreground="White" Name="saveDefaults" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TransparentButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="110" Height="26" Grid.Row="1" Margin="0,10,0,0" PreviewMouseDown="SaveDefaults_Click" />
                 </StackPanel>

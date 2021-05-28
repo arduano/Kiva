@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Kiva">
+                    xmlns:local="clr-namespace:Kiva" xmlns:ui="clr-namespace:Kiva.UI">
     <Style x:Key="WindowButton" TargetType="Button">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Focusable" Value="False"/>
@@ -70,12 +70,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ContentControl">
                     <Grid Background="{TemplateBinding Background}">
-                        <local:RippleEffectDecorator ExpandTime="0.2" FadeTime="0.2">
+                        <ui:RippleEffectDecorator ExpandTime="0.2" FadeTime="0.2">
                             <Grid>
-                                <ContentPresenter HorizontalAlignment="Center"
-                           VerticalAlignment="Center" Name="content"/>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content"/>
                             </Grid>
-                        </local:RippleEffectDecorator>
+                        </ui:RippleEffectDecorator>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

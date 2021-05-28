@@ -17,7 +17,7 @@ namespace Kiva.Audio
         [DllImport("ntdll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int NtDelayExecution([MarshalAs(UnmanagedType.I1)] bool alertable, ref Int64 DelayInterval);
 
-        Settings settings;
+        KivaSettings settings;
 
         public int BufferLen => eventFeed == null ? 0 : eventFeed.Count;
 
@@ -82,7 +82,7 @@ namespace Kiva.Audio
 
         CancellationTokenSource cancelConsumer;
 
-        public MIDIEventPlayer(Settings settings)
+        public MIDIEventPlayer(KivaSettings settings)
         {
             this.settings = settings;
         }

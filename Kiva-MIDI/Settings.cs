@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Kiva
 {
-    public class Settings
+    public class KivaSettings
     {
         class loadingSettings { public dynamic version, midi, general; };
         class versionSettings { public string version; public bool enableUpdates; public bool installed; };
@@ -48,7 +48,7 @@ namespace Kiva
             SaveSetings(s, midiPath);
         }
 
-        public Settings()
+        public KivaSettings()
         {
             if (!Directory.Exists(SettingsFolderPath)) Directory.CreateDirectory(SettingsFolderPath);
 

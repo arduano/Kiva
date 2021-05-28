@@ -28,7 +28,7 @@ namespace Kiva
 
             MIDIPreRenderAudio.Init();
 
-            var s = new Settings();
+            var s = new KivaSettings();
             s.InitSoundfontListner();
             if (s.EnableUpdates)
             {

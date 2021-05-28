@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kiva"
-        xmlns:i="clr-namespace:System.Windows.Interop;assembly=PresentationCore"
+        xmlns:i="clr-namespace:System.Windows.Interop;assembly=PresentationCore" xmlns:ui="clr-namespace:Kiva.UI"
         mc:Ignorable="d"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -41,34 +41,34 @@
                     </DockPanel>
                     <DockPanel LastChildFill="False">
                         <Button Name="openButton" PreviewMouseDown="OpenButton_PreviewMouseDown" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
-                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="7" Source="Material.WPF/open.png"/>
+                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="7" Source="UI/open.png"/>
                         </Button>
                         <Button Name="pauseButton" PreviewMouseDown="PauseButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
-                            <Image HorizontalAlignment="Center" Height="Auto" Margin="3" Source="Material.WPF/pause.png"/>
+                            <Image HorizontalAlignment="Center" Height="Auto" Margin="3" Source="UI/pause.png"/>
                         </Button>
                         <Button Name="playButton" PreviewMouseDown="PlayButton_Click" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
-                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="3" Source="Material.WPF/play.png"/>
+                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="3" Source="UI/play.png"/>
                         </Button>
                         <Button Name="settingsButton" PreviewMouseDown="SettingsButton_PreviewMouseDown" WindowChrome.IsHitTestVisibleInChrome="True" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Style="{StaticResource TransparentButtonStyle}" Padding="0" Margin="0,0,0,0">
-                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="8" Source="Material.WPF/settings.png"/>
+                            <Image HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" Height="Auto" Margin="8" Source="UI/settings.png"/>
                         </Button>
                         <DockPanel Margin="5,0" WindowChrome.IsHitTestVisibleInChrome="True">
                             <Label FontSize="16" VerticalAlignment="Center" Padding="5,0,5,3" Margin="0,0,5,0">Speed:</Label>
-                            <local:ValueSlider ValueChanged="SpeedSlider_ValueChanged" x:Name="speedSlider" Width="220" Minimum="-3" Maximum="3" TrueMin="0.01" TrueMax="100" DecimalPoints="2" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
+                            <ui:ValueSlider ValueChanged="SpeedSlider_ValueChanged" x:Name="speedSlider" Width="220" Minimum="-3" Maximum="3" TrueMin="0.01" TrueMax="100" DecimalPoints="2" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
                         </DockPanel>
-                        <local:InfoIcon Title="Speed" Text="The relative time scale. Higher values mean faster playback."/>
+                        <ui:InfoIcon Title="Speed" Text="The relative time scale. Higher values mean faster playback."/>
                         <DockPanel Margin="5,0" WindowChrome.IsHitTestVisibleInChrome="True">
                             <Label FontSize="16" VerticalAlignment="Center" Padding="5,0,5,3" Margin="0,0,5,0">Size:</Label>
-                            <local:ValueSlider ValueChanged="SizeSlider_ValueChanged" x:Name="sizeSlider" Width="220" Minimum="-4" Maximum="3" TrueMin="0.01" TrueMax="1000" DecimalPoints="2" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
+                            <ui:ValueSlider ValueChanged="SizeSlider_ValueChanged" x:Name="sizeSlider" Width="220" Minimum="-4" Maximum="3" TrueMin="0.01" TrueMax="1000" DecimalPoints="2" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True"/>
                         </DockPanel>
-                        <local:InfoIcon Title="Height Scale" Text="The 'Size' of the notes. The smaller the size, the faster they fall."/>
+                        <ui:InfoIcon Title="Height Scale" Text="The 'Size' of the notes. The smaller the size, the faster they fall."/>
                         <Grid>
                             <Label Name="downloadingUpdateLabel" FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0">Downloading update...</Label>
                             <Button Name="updateInstalledButton" PreviewMouseDown="updateInstalledButton_PreviewMouseDown" FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TransparentButtonStyle}" Height="25">Update installed! Click here to restart Kiva</Button>
                         </Grid>
                     </DockPanel>
                     <!--<Slider Name="timeSlider" Margin="10,8,10,7" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True" ValueChanged="TimeSlider_ValueChanged" VerticalAlignment="Center"/>-->
-                    <local:BetterSlider Focusable="False" x:Name="timeSlider" UserValueChanged="TimeSlider_UserValueChanged" Margin="10,0,10,0" Minimum="0" Maximum="3" Value="1" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True"/>
+                    <ui:BetterSlider Focusable="False" x:Name="timeSlider" UserValueChanged="TimeSlider_UserValueChanged" Margin="10,0,10,0" Minimum="0" Maximum="3" Value="1" Grid.Row="1" WindowChrome.IsHitTestVisibleInChrome="True"/>
                 </Grid>
             </Border>
             <Grid Name="glContainer" MouseDown="GlContainer_MouseDown">

@@ -14,7 +14,7 @@ namespace Kiva.Audio
 {
     class MIDIPreRenderPlayer : IDisposable
     {
-        Settings settings;
+        KivaSettings settings;
 
         public int SkippingVelocity => ma.SkippingVelocity;
         public double BufferSeconds => ma.BufferSeconds;
@@ -137,7 +137,7 @@ namespace Kiva.Audio
             }
         }
 
-        public MIDIPreRenderPlayer(Settings settings)
+        public MIDIPreRenderPlayer(KivaSettings settings)
         {
             this.settings = settings;
             ma = new MIDIPreRenderAudio(48000 * settings.General.RenderBufferLength);

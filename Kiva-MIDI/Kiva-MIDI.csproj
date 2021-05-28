@@ -171,17 +171,17 @@
     </ApplicationDefinition>
     <Compile Include="Audio\APIs\BASSMIDI.cs" />
     <Compile Include="LoudMaxStream.cs" />
-    <Compile Include="Material.WPF\InfoIcon.xaml.cs">
+    <Compile Include="UI\InfoIcon.xaml.cs">
       <DependentUpon>InfoIcon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Material.WPF\HexColorPicker.xaml.cs">
+    <Compile Include="UI\HexColorPicker.xaml.cs">
       <DependentUpon>HexColorPicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Material.WPF\BBinding.cs" />
-    <Compile Include="Material.WPF\BetterRadio.xaml.cs">
+    <Compile Include="UI\BBinding.cs" />
+    <Compile Include="UI\BetterRadio.xaml.cs">
       <DependentUpon>BetterRadio.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Material.WPF\BetterCheckbox.xaml.cs">
+    <Compile Include="UI\BetterCheckbox.xaml.cs">
       <DependentUpon>BetterCheckbox.xaml</DependentUpon>
     </Compile>
     <Compile Include="DX.WPF\D3D.cs" />
@@ -198,78 +198,78 @@
     <Compile Include="DX.WPF\IDirect3D.cs" />
     <Compile Include="GeneralSettings.cs" />
     <Compile Include="Audio\APIs\KDMAPI.cs" />
-    <Compile Include="Material.WPF\InplaceConverter.cs" />
+    <Compile Include="UI\InplaceConverter.cs" />
     <Compile Include="Audio\MIDIPreRenderAudio.cs" />
     <Compile Include="MIDI\MIDIMemoryFile.cs" />
     <Compile Include="Audio\MIDIEventPlayer.cs" />
     <Compile Include="LoadingMidiForm.xaml.cs">
       <DependentUpon>LoadingMidiForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Material.WPF\BetterSlider.xaml.cs">
+    <Compile Include="UI\BetterSlider.xaml.cs">
       <DependentUpon>BetterSlider.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Material.WPF\RippleEffectDecorator.cs" />
+    <Compile Include="UI\RippleEffectDecorator.cs" />
     <Compile Include="MIDILoaderSettings.cs" />
     <Compile Include="MIDI\BufferByteReader.cs" />
     <Compile Include="MIDI\MIDIFile.cs" />
     <Compile Include="MIDI\MIDITrackParser.cs" />
     <Compile Include="MIDI\SkipIterator.cs" />
     <Compile Include="Audio\MIDIPreRenderPlayer.cs" />
-    <Compile Include="MIDIRenderer.cs" />
-    <Compile Include="Material.WPF\NumberSelect.xaml.cs">
+    <Compile Include="Graphics\MIDIRenderer.cs" />
+    <Compile Include="UI\NumberSelect.xaml.cs">
       <DependentUpon>NumberSelect.xaml</DependentUpon>
     </Compile>
     <Compile Include="PaletteSettings.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Settings\AdvancedSettings.xaml.cs">
+    <Compile Include="Settings\Views\AdvancedSettings.xaml.cs">
       <DependentUpon>AdvancedSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\KDMAPIAudioSettings.xaml.cs">
+    <Compile Include="Settings\Views\KDMAPIAudioSettings.xaml.cs">
       <DependentUpon>KDMAPIAudioSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\MiscSettings.xaml.cs">
+    <Compile Include="Settings\Views\MiscSettings.xaml.cs">
       <DependentUpon>MiscSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="GlobalTime.cs" />
-    <Compile Include="Scene.cs" />
+    <Compile Include="Graphics\Scene.cs" />
     <Compile Include="MIDI\TimedMerger.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Settings\AudioSettings.xaml.cs">
+    <Compile Include="Settings\Views\AudioSettings.xaml.cs">
       <DependentUpon>AudioSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\PreRenderAudioSettings.xaml.cs">
+    <Compile Include="Settings\Views\PreRenderAudioSettings.xaml.cs">
       <DependentUpon>PreRenderAudioSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\SettingsWindow.xaml.cs">
+    <Compile Include="Settings\Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\VisualSettings.xaml.cs">
+    <Compile Include="Settings\Views\VisualSettings.xaml.cs">
       <DependentUpon>VisualSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\WinMMAudioSettings.xaml.cs">
+    <Compile Include="Settings\Views\WinMMAudioSettings.xaml.cs">
       <DependentUpon>WinMMAudioSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShaderManager.cs" />
-    <Compile Include="Material.WPF\ValueSlider.xaml.cs">
+    <Compile Include="Graphics\ShaderManager.cs" />
+    <Compile Include="UI\ValueSlider.xaml.cs">
       <DependentUpon>ValueSlider.xaml</DependentUpon>
     </Compile>
     <Compile Include="SoundfontSettings.cs" />
     <Compile Include="Util\VelocityEase.cs" />
     <Compile Include="VolatileSettings.cs" />
     <Compile Include="Audio\APIs\WinMM.cs" />
-    <Page Include="Material.WPF\InfoIcon.xaml">
+    <Page Include="UI\InfoIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Material.WPF\HexColorPicker.xaml">
+    <Page Include="UI\HexColorPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Material.WPF\BetterRadio.xaml">
+    <Page Include="UI\BetterRadio.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Material.WPF\BetterCheckbox.xaml">
+    <Page Include="UI\BetterCheckbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -289,11 +289,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Material.WPF\BetterSlider.xaml">
+    <Page Include="UI\BetterSlider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Material.WPF\NumberSelect.xaml">
+    <Page Include="UI\NumberSelect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -301,27 +301,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\AdvancedSettings.xaml">
+    <Page Include="Settings\Views\AdvancedSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\KDMAPIAudioSettings.xaml">
+    <Page Include="Settings\Views\KDMAPIAudioSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\MiscSettings.xaml">
+    <Page Include="Settings\Views\MiscSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\AudioSettings.xaml">
+    <Page Include="Settings\Views\AudioSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\PreRenderAudioSettings.xaml">
+    <Page Include="Settings\Views\PreRenderAudioSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\SettingsWindow.xaml">
+    <Page Include="Settings\Views\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -329,15 +329,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Material.WPF\ValueSlider.xaml">
+    <Page Include="UI\ValueSlider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\VisualSettings.xaml">
+    <Page Include="Settings\Views\VisualSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\WinMMAudioSettings.xaml">
+    <Page Include="Settings\Views\WinMMAudioSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -370,8 +370,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Material.WPF\play.png" />
-    <Resource Include="Material.WPF\pause.png" />
+    <Resource Include="UI\play.png" />
+    <Resource Include="UI\pause.png" />
     <EmbeddedResource Include="Notes.fx" />
   </ItemGroup>
   <ItemGroup>
@@ -381,10 +381,10 @@
     <Resource Include="kiva.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Material.WPF\settings.png" />
+    <Resource Include="UI\settings.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Material.WPF\open.png" />
+    <Resource Include="UI\open.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="KeyboardSmall.fx" />
@@ -396,7 +396,7 @@
     <EmbeddedResource Include="KeyboardBig.fx" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Material.WPF\infoIcon.png" />
+    <Resource Include="UI\infoIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

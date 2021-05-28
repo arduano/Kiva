@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="Kiva.Settings.Views.MiscSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Kiva.Settings.Views" xmlns:ui="clr-namespace:Kiva.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Padding="10">
+            <StackPanel>
+                <Label FontSize="16">Info Card Values</Label>
+                <ui:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="timeLabel" Text="Time"/>
+                <ui:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="fpsLabel" Text="FPS"/>
+                <DockPanel HorizontalAlignment="Left">
+                    <ui:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="estimatedFpsLabel" Text="Estimated FPS"/>
+                    <ui:InfoIcon Margin="5,1,0,0" Title="Estimated FPS" Text="Due to Kiva's multithreading, unlocking the FPS can make Kiva to fight for resources with all other programs causing stutter. This option allows Kiva to estimate what FPS you would have *if it was unlocked* while it's locked."/>
+                </DockPanel>
+                <ui:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="ncLabel" Text="Note Count"/>
+                <ui:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="npsLabel" Text="NPS"/>
+                <ui:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="renderedNotesLabel" Text="Rendered Notes"/>
+                <ui:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="polyphonyLabel" Text="Polyphony"/>
+                <DockPanel HorizontalAlignment="Left">
+                    <ui:BetterCheckbox CheckToggled="cardLabel_CheckToggled" x:Name="bufferLengthLabel" Text="Audio Buffer Length"/>
+                    <ui:InfoIcon Margin="5,1,0,0" Title="Audio Buffer Length" Text="Length of the pre-render audio buffer. Doesn't show anything when KDMAPI or WinMM are selected."/>
+                </DockPanel>
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Padding="10">
+            <StackPanel>
+                <DockPanel>
+                    <Label FontSize="14" HorizontalAlignment="Left">
+                        Background Color
+                    </Label>
+                    <ui:HexColorPicker ValueChanged="BackgroundColor_ValueChanged" UseAlpha="True" x:Name="backgroundColor" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                </DockPanel>
+                <DockPanel>
+                    <Label FontSize="14" HorizontalAlignment="Left">
+                        Bar Color
+                    </Label>
+                    <ui:HexColorPicker ValueChanged="BarColor_ValueChanged" x:Name="barColor" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                </DockPanel>
+                <ui:BetterCheckbox x:Name="hideInfoCard" Text="Hide Info Card" Margin="0,5,0,0" CheckToggled="hideInfoCard_CheckToggled"/>
+                <DockPanel Margin="0,5,0,0" LastChildFill="False">
+                    <ui:BetterCheckbox x:Name="windowTopmost" Text="Main Window Topmost" CheckToggled="windowTopmost_CheckToggled"/>
+                    <ui:InfoIcon Margin="5,0,0,0" Title="Topmost" Text="The Kiva window will always appear above other windows"/>
+                </DockPanel>
+                <ui:BetterCheckbox x:Name="discordRP" Text="Discord Rich Presence" Margin="0,5,0,0" CheckToggled="discordRP_CheckToggled"/>
+                <ui:BetterCheckbox x:Name="skipLoad" Text="Skip Loader Settings Prompt" Margin="0,5,0,0" CheckToggled="skipLoad_CheckToggled"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
