@@ -1,4 +1,5 @@
-﻿using Kiva.MIDI;
+﻿using Kiva.Audio.APIs;
+using Kiva.MIDI;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kiva
+namespace Kiva.Audio
 {
-    class MIDIPlayer : IDisposable
+    class MIDIEventPlayer : IDisposable
     {
         [DllImport("ntdll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int NtDelayExecution([MarshalAs(UnmanagedType.I1)] bool alertable, ref Int64 DelayInterval);
@@ -81,7 +82,7 @@ namespace Kiva
 
         CancellationTokenSource cancelConsumer;
 
-        public MIDIPlayer(Settings settings)
+        public MIDIEventPlayer(Settings settings)
         {
             this.settings = settings;
         }

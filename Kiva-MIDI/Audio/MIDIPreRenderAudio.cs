@@ -10,10 +10,11 @@ using Un4seen.Bass.AddOn.Midi;
 using CSCore.SoundOut;
 using System.IO;
 using Kiva.MIDI;
+using Kiva.Audio.APIs;
 
-namespace Kiva
+namespace Kiva.Audio
 {
-    public class MIDIAudio : IDisposable
+    public class MIDIPreRenderAudio : IDisposable
     {
         class AudioBufferStream : ISampleSource
         {
@@ -25,9 +26,9 @@ namespace Kiva
 
             public long Length => throw new NotImplementedException();
 
-            MIDIAudio audioSource;
+            MIDIPreRenderAudio audioSource;
 
-            public AudioBufferStream(MIDIAudio source)
+            public AudioBufferStream(MIDIPreRenderAudio source)
             {
                 audioSource = source;
             }
@@ -139,7 +140,7 @@ namespace Kiva
                 return new DirectSoundOut();
         }
 
-        public MIDIAudio(int bufferLength)
+        public MIDIPreRenderAudio(int bufferLength)
         {
             AudioBuffer = new float[bufferLength * 2];
             audioStream = new AudioBufferStream(this);

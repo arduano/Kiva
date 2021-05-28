@@ -28,6 +28,7 @@ using DiscordRPC;
 using MessageBox = KivaShared.MessageBox;
 using KivaShared;
 using Kiva.MIDI;
+using Kiva.Audio;
 
 namespace Kiva
 {
@@ -203,7 +204,7 @@ namespace Kiva
 
         Scene scene;
         D3D11 d3d;
-        MIDIPlayer player;
+        MIDIEventPlayer player;
         MIDIPreRenderPlayer preRenderPlayer;
         AudioEngine selectedAudioEngine;
 
@@ -285,7 +286,7 @@ namespace Kiva
 
         void StartMIDIPlayer(bool kdmapi)
         {
-            player = new MIDIPlayer(settings);
+            player = new MIDIEventPlayer(settings);
             if (kdmapi)
                 player.DeviceID = -1;
             else

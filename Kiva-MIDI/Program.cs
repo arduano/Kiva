@@ -8,6 +8,7 @@ using KivaShared;
 using System.IO;
 using System.IO.Compression;
 using System.Diagnostics;
+using Kiva.Audio;
 
 namespace Kiva
 {
@@ -25,7 +26,7 @@ namespace Kiva
 #endif
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
 
-            MIDIAudio.Init();
+            MIDIPreRenderAudio.Init();
 
             var s = new Settings();
             s.InitSoundfontListner();

@@ -29,7 +29,8 @@ namespace Kiva
 
         public Settings Settings
         {
-            get => settings; set
+            get => settings;
+            set
             {
                 if (settings != null) settings.Soundfonts.SoundfontsUpdated -= DispatcherSetSfs;
                 settings = value;
@@ -160,13 +161,17 @@ namespace Kiva
 
         private void bufferLength_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
         {
-            settings.General.RenderBufferLength = (int)bufferLength.Value;
-            SetSizeLabel();
+            if (IsInitialized)
+            {
+                settings.General.RenderBufferLength = (int)bufferLength.Value;
+                SetSizeLabel();
+            }
         }
 
         private void voices_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
         {
-            settings.General.RenderVoices = (int)voices.Value;
+            if (IsInitialized)
+                settings.General.RenderVoices = (int)voices.Value;
         }
 
         bool IsValidSF(string path)

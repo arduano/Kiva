@@ -169,7 +169,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BASSMIDI.cs" />
+    <Compile Include="Audio\APIs\BASSMIDI.cs" />
     <Compile Include="LoudMaxStream.cs" />
     <Compile Include="Material.WPF\InfoIcon.xaml.cs">
       <DependentUpon>InfoIcon.xaml</DependentUpon>
@@ -197,11 +197,11 @@
     <Compile Include="FPS.cs" />
     <Compile Include="DX.WPF\IDirect3D.cs" />
     <Compile Include="GeneralSettings.cs" />
-    <Compile Include="KDMAPI.cs" />
+    <Compile Include="Audio\APIs\KDMAPI.cs" />
     <Compile Include="Material.WPF\InplaceConverter.cs" />
-    <Compile Include="MIDIAudio.cs" />
+    <Compile Include="Audio\MIDIPreRenderAudio.cs" />
     <Compile Include="MIDI\MIDIMemoryFile.cs" />
-    <Compile Include="MIDIPlayer.cs" />
+    <Compile Include="Audio\MIDIEventPlayer.cs" />
     <Compile Include="LoadingMidiForm.xaml.cs">
       <DependentUpon>LoadingMidiForm.xaml</DependentUpon>
     </Compile>
@@ -215,7 +215,7 @@
     <Compile Include="MIDI\MIDIFile.cs" />
     <Compile Include="MIDI\MIDITrackParser.cs" />
     <Compile Include="MIDI\SkipIterator.cs" />
-    <Compile Include="MIDIPreRenderPlayer.cs" />
+    <Compile Include="Audio\MIDIPreRenderPlayer.cs" />
     <Compile Include="MIDIRenderer.cs" />
     <Compile Include="Material.WPF\NumberSelect.xaml.cs">
       <DependentUpon>NumberSelect.xaml</DependentUpon>
@@ -257,7 +257,7 @@
     <Compile Include="SoundfontSettings.cs" />
     <Compile Include="VelocityEase.cs" />
     <Compile Include="VolatileSettings.cs" />
-    <Compile Include="WinMM.cs" />
+    <Compile Include="Audio\APIs\WinMM.cs" />
     <Page Include="Material.WPF\InfoIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -428,6 +428,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

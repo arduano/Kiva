@@ -1,4 +1,6 @@
-﻿using Kiva.MIDI;
+﻿using Kiva.Audio;
+using Kiva.Audio.APIs;
+using Kiva.MIDI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kiva
+namespace Kiva.Audio
 {
     class MIDIPreRenderPlayer : IDisposable
     {
@@ -56,7 +58,7 @@ namespace Kiva
                 ma.Paused = Time.Paused;
             }
         }
-        MIDIAudio ma;
+        MIDIPreRenderAudio ma;
         private PlayingState time = new PlayingState();
 
         Task syncThread;
@@ -138,7 +140,7 @@ namespace Kiva
         public MIDIPreRenderPlayer(Settings settings)
         {
             this.settings = settings;
-            ma = new MIDIAudio(48000 * settings.General.RenderBufferLength);
+            ma = new MIDIPreRenderAudio(48000 * settings.General.RenderBufferLength);
             Time.TimeChanged += OnTimeChange;
             Time.PauseChanged += OnPauseChange;
 
