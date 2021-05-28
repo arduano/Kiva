@@ -15,14 +15,14 @@ using System.Windows.Shapes;
 
 namespace Kiva
 {
-  /// <summary>
-  /// Interaction logic for KDMAPIAudioSettings.xaml
-  /// </summary>
-  public partial class KDMAPIAudioSettings : UserControl
-  {
-    public KDMAPIAudioSettings()
+    /// <summary>
+    /// Interaction logic for KDMAPIAudioSettings.xaml
+    /// </summary>
+    public partial class KDMAPIAudioSettings : UserControl
     {
-      InitializeComponent();
+        public KDMAPIAudioSettings()
+        {
+            InitializeComponent();
+        }
     }
-  }
 }

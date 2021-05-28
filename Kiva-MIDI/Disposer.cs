@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Kiva
 {
-  public static class Disposer
-  {
-    public static void SafeDispose<T>(ref T obj)
-        where T : class, IDisposable
+    public static class Dispkoser
     {
-      if (obj != null)
-      {
-        obj.Dispose();
-        obj = null;
-      }
+        public static void SafeDispose<T>(ref T obj)
+            where T : class, IDisposable
+        {
+            if (obj != null)
+            {
+                obj.Dispose();
+                obj = null;
+            }
+        }
     }
-  }
 }

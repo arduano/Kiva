@@ -14,40 +14,37 @@ using SharpDX.Direct3D;
 
 namespace Kiva
 {
-  class ShaderManager : IDisposable
-  {
-    public ShaderBytecode vertexShaderByteCode;
-    public VertexShader vertexShader;
-    public ShaderBytecode pixelShaderByteCode;
-    public PixelShader pixelShader;
-    public ShaderBytecode geometryShaderByteCode;
-    public GeometryShader geometryShader;
-
-    public ShaderManager(Device device, ShaderBytecode vertexShaderByteCode, ShaderBytecode pixelShaderByteCode, ShaderBytecode geometryShaderByteCode)
+    class ShaderManager : IDisposable
     {
-      this.vertexShaderByteCode = vertexShaderByteCode;
-      this.pixelShaderByteCode = pixelShaderByteCode;
-      this.geometryShaderByteCode = geometryShaderByteCode;
-      vertexShader = new VertexShader(device, vertexShaderByteCode);
-      pixelShader = new PixelShader(device, pixelShaderByteCode);
-      geometryShader = new GeometryShader(device, geometryShaderByteCode);
-    }
+        public ShaderBytecode vertexShaderByteCode;
+        public VertexShader vertexShader;
+        public ShaderBytecode pixelShaderByteCode;
+        public PixelShader pixelShader;
+        public ShaderBytecode geometryShaderByteCode;
+        public GeometryShader geometryShader;
 
-    public void SetShaders(DeviceContext ctx)
-    {
-      ctx.VertexShader.Set(vertexShader);
-      ctx.PixelShader.Set(pixelShader);
-      ctx.GeometryShader.Set(geometryShader);
-    }
+        DisposeGroup dispose = new DisposeGroup();
 
-    public void Dispose()
-    {
-      Disposer.SafeDispose(ref vertexShaderByteCode);
-      Disposer.SafeDispose(ref vertexShader);
-      Disposer.SafeDispose(ref pixelShaderByteCode);
-      Disposer.SafeDispose(ref pixelShader);
-      Disposer.SafeDispose(ref geometryShaderByteCode);
-      Disposer.SafeDispose(ref geometryShader);
+        public ShaderManager(Device device, ShaderBytecode vertexShaderByteCode, ShaderBytecode pixelShaderByteCode, ShaderBytecode geometryShaderByteCode)
+        {
+            this.vertexShaderByteCode = dispose.Add(vertexShaderByteCode);
+            this.pixelShaderByteCode = dispose.Add(pixelShaderByteCode);
+            this.geometryShaderByteCode = dispose.Add(geometryShaderByteCode);
+            vertexShader = dispose.Add(new VertexShader(device, vertexShaderByteCode));
+            pixelShader = dispose.Add(new PixelShader(device, pixelShaderByteCode));
+            geometryShader = dispose.Add(new GeometryShader(device, geometryShaderByteCode));
+        }
+
+        public void SetShaders(DeviceContext ctx)
+        {
+            ctx.VertexShader.Set(vertexShader);
+            ctx.PixelShader.Set(pixelShader);
+            ctx.GeometryShader.Set(geometryShader);
+        }
+
+        public void Dispose()
+        {
+            dispose.Dispose();
+        }
     }
-  }
 }

@@ -15,54 +15,54 @@ using System.Windows.Shapes;
 
 namespace Kiva
 {
-  /// <summary>
-  /// Interaction logic for AdvancedSettings.xaml
-  /// </summary>
-  public partial class AdvancedSettings : UserControl
-  {
-    private Settings settings;
-
-    public Settings Settings
+    /// <summary>
+    /// Interaction logic for AdvancedSettings.xaml
+    /// </summary>
+    public partial class AdvancedSettings : UserControl
     {
-      get => settings; set
-      {
-        settings = value;
-        SetValues();
-      }
-    }
+        private Settings settings;
 
-    public AdvancedSettings()
-    {
-      InitializeComponent();
-    }
+        public Settings Settings
+        {
+            get => settings; set
+            {
+                settings = value;
+                SetValues();
+            }
+        }
 
-    bool valuesSet = false;
+        public AdvancedSettings()
+        {
+            InitializeComponent();
+        }
 
-    public void SetValues()
-    {
-      threadCount.Maximum = Environment.ProcessorCount;
-      threadCount.Value = settings.General.MaxRenderThreads;
-      forceSingleThread.IsChecked = !settings.General.MultiThreadedRendering;
-      disableTransparency.IsChecked = settings.General.DisableTransparency;
-      valuesSet = true;
-    }
+        bool valuesSet = false;
 
-    private void disableTransparency_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
-    {
-      if (!valuesSet) return;
-      settings.General.DisableTransparency = disableTransparency.IsChecked;
-    }
+        public void SetValues()
+        {
+            threadCount.Maximum = Environment.ProcessorCount;
+            threadCount.Value = settings.General.MaxRenderThreads;
+            forceSingleThread.IsChecked = !settings.General.MultiThreadedRendering;
+            disableTransparency.IsChecked = settings.General.DisableTransparency;
+            valuesSet = true;
+        }
 
-    private void forceSingleThread_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
-    {
-      if (!valuesSet) return;
-      settings.General.MultiThreadedRendering = !forceSingleThread.IsChecked;
-    }
+        private void disableTransparency_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            if (!valuesSet) return;
+            settings.General.DisableTransparency = disableTransparency.IsChecked;
+        }
 
-    private void threadCount_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
-    {
-      if (!valuesSet) return;
-      settings.General.MaxRenderThreads = (int)threadCount.Value;
+        private void forceSingleThread_CheckToggled(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            if (!valuesSet) return;
+            settings.General.MultiThreadedRendering = !forceSingleThread.IsChecked;
+        }
+
+        private void threadCount_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+        {
+            if (!valuesSet) return;
+            settings.General.MaxRenderThreads = (int)threadCount.Value;
+        }
     }
-  }
 }

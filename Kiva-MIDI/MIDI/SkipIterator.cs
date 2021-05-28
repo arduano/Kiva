@@ -7,63 +7,63 @@ using System.Threading.Tasks;
 
 namespace Kiva.MIDI
 {
-  class SkipIterator<T> : IEnumerable<T>
-  {
-    class Iterator : IEnumerator<T>
+    class SkipIterator<T> : IEnumerable<T>
     {
-      T[] a;
-      int start;
-      int skip;
+        class Iterator : IEnumerator<T>
+        {
+            T[] a;
+            int start;
+            int skip;
 
-      int current;
+            int current;
 
-      public Iterator(T[] a, int start, int skip)
-      {
-        this.a = a;
-        this.start = start;
-        this.skip = skip;
-        current = start - skip;
-      }
+            public Iterator(T[] a, int start, int skip)
+            {
+                this.a = a;
+                this.start = start;
+                this.skip = skip;
+                current = start - skip;
+            }
 
-      public T Current => a[current];
+            public T Current => a[current];
 
-      object IEnumerator.Current => a[current];
+            object IEnumerator.Current => a[current];
 
-      public void Dispose()
-      {
-        a = null;
-      }
+            public void Dispose()
+            {
+                a = null;
+            }
 
-      public bool MoveNext()
-      {
-        if ((current += skip) >= a.Length) return false;
-        return true;
-      }
+            public bool MoveNext()
+            {
+                if ((current += skip) >= a.Length) return false;
+                return true;
+            }
 
-      public void Reset()
-      {
-        current = start;
-      }
+            public void Reset()
+            {
+                current = start;
+            }
+        }
+
+        T[] a;
+        int start;
+        int skip;
+        public SkipIterator(T[] a, int start, int skip)
+        {
+            this.a = a;
+            this.start = start;
+            this.skip = skip;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new Iterator(a, start, skip);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
-
-    T[] a;
-    int start;
-    int skip;
-    public SkipIterator(T[] a, int start, int skip)
-    {
-      this.a = a;
-      this.start = start;
-      this.skip = skip;
-    }
-
-    public IEnumerator<T> GetEnumerator()
-    {
-      return new Iterator(a, start, skip);
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-      return GetEnumerator();
-    }
-  }
 }
