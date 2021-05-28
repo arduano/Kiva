@@ -211,7 +211,6 @@
     <Compile Include="Material.WPF\RippleEffectDecorator.cs" />
     <Compile Include="MIDILoaderSettings.cs" />
     <Compile Include="MIDI\BufferByteReader.cs" />
-    <Compile Include="Disposer.cs" />
     <Compile Include="MIDI\MIDIFile.cs" />
     <Compile Include="MIDI\MIDITrackParser.cs" />
     <Compile Include="MIDI\SkipIterator.cs" />
