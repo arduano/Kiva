@@ -13,16 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Kiva_MIDI
+namespace Kiva
 {
-    /// <summary>
-    /// Interaction logic for KDMAPIAudioSettings.xaml
-    /// </summary>
-    public partial class KDMAPIAudioSettings : UserControl
+  /// <summary>
+  /// Interaction logic for KDMAPIAudioSettings.xaml
+  /// </summary>
+  public partial class KDMAPIAudioSettings : UserControl
+  {
+    public KDMAPIAudioSettings()
     {
-        public KDMAPIAudioSettings()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

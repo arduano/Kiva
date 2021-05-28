@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kiva_MIDI
+namespace Kiva
 {
     public class LoudMaxStream : ISampleSource
     {

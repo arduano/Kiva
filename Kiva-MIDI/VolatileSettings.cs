@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kiva_MIDI
+namespace Kiva
 {
-    public class VolatileSettings
-    {
-        public double Speed { get; set; } = 1;
-        public double Size { get; set; } = 0.25;
-    }
+  public class VolatileSettings
+  {
+    public double Speed { get; set; } = 1;
+    public double Size { get; set; } = 0.25;
+  }
 }

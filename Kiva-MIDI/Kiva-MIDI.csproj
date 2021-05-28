@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{47B2D2B8-530D-484C-955C-DBA0472AE45B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Kiva_MIDI</RootNamespace>
+    <RootNamespace>Kiva</RootNamespace>
     <AssemblyName>Kiva</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -57,7 +57,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Kiva_MIDI.Program</StartupObject>
+    <StartupObject>Kiva.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -200,8 +200,7 @@
     <Compile Include="KDMAPI.cs" />
     <Compile Include="Material.WPF\InplaceConverter.cs" />
     <Compile Include="MIDIAudio.cs" />
-    <Compile Include="MIDIMemoryFile.cs" />
-    <Compile Include="MIDIParseFile.cs" />
+    <Compile Include="MIDI\MIDIMemoryFile.cs" />
     <Compile Include="MIDIPlayer.cs" />
     <Compile Include="LoadingMidiForm.xaml.cs">
       <DependentUpon>LoadingMidiForm.xaml</DependentUpon>
@@ -213,7 +212,7 @@
     <Compile Include="MIDILoaderSettings.cs" />
     <Compile Include="MIDI\BufferByteReader.cs" />
     <Compile Include="Disposer.cs" />
-    <Compile Include="MIDIFile.cs" />
+    <Compile Include="MIDI\MIDIFile.cs" />
     <Compile Include="MIDI\MIDITrackParser.cs" />
     <Compile Include="MIDI\SkipIterator.cs" />
     <Compile Include="MIDIPreRenderPlayer.cs" />

@@ -1,7 +1,7 @@
-﻿<Application x:Class="Kiva_MIDI.App"
+﻿<Application x:Class="Kiva.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Kiva_MIDI"
+             xmlns:local="clr-namespace:Kiva"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>

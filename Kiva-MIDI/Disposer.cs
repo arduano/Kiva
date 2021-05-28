@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kiva_MIDI
+namespace Kiva
 {
-    public static class Disposer
+  public static class Disposer
+  {
+    public static void SafeDispose<T>(ref T obj)
+        where T : class, IDisposable
     {
-        public static void SafeDispose<T>(ref T obj)
-            where T : class, IDisposable
-        {
-            if (obj != null)
-            {
-                obj.Dispose();
-                obj = null;
-            }
-        }
+      if (obj != null)
+      {
+        obj.Dispose();
+        obj = null;
+      }
     }
+  }
 }
