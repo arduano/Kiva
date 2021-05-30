@@ -172,6 +172,8 @@
     <Compile Include="Audio\APIs\BASSMIDI.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="LoudMaxStream.cs" />
+    <Compile Include="MIDI\MIDINoteFile.cs" />
+    <Compile Include="MIDI\MIDITreeFile.cs" />
     <Compile Include="UI\InfoIcon.xaml.cs">
       <DependentUpon>InfoIcon.xaml</DependentUpon>
     </Compile>

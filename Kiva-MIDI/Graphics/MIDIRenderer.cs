@@ -474,9 +474,9 @@ namespace Kiva.Graphics
             {
                 if (File != null)
                 {
-                    if (File is MIDIMemoryFile)
+                    if (File is MIDINoteFile)
                     {
-                        var file = File as MIDIMemoryFile;
+                        var file = File as MIDINoteFile;
                         file.SetColorEvents(time);
 
                         var colors = file.MidiNoteColors;

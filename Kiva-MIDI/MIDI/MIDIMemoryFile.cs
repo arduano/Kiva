@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace Kiva
 {
-    public class MIDIMemoryFile : MIDIFile
+    public abstract class MIDIMemoryFile : MIDIFile
     {
         public MIDIEvent[][] MIDINoteEvents { get; private set; } = null;
         public MIDIEvent[] MIDIControlEvents { get; private set; } = null;
-        public Note[][] Notes { get; private set; } = new Note[256][];
         public int[] FirstRenderNote { get; private set; } = new int[256];
         public int[] FirstUnhitNote { get; private set; } = new int[256];
         public double lastRenderTime { get; set; } = 0;
@@ -58,11 +57,10 @@ namespace Kiva
             }
         }
 
-        void SecondPassParse()
+        protected void RunSecondPassParse()
         {
             object l = new object();
             int tracksParsed = 0;
-            ParseStage = ParsingStage.SecondPass;
             Parallel.For(0, parsers.Length, (i) =>
             {
                 parsers[i].SecondPassParse();
@@ -74,63 +72,41 @@ namespace Kiva
                     Console.WriteLine("Pass 2 Parsed track " + tracksParsed + "/" + parsers.Length);
                 }
             });
-            cancel.ThrowIfCancellationRequested();
-            int keysMerged = 0;
-            var eventMerger = Task.Run(() =>
+        }
+
+        protected void MergeAudioEvents()
+        {
+            int count = LoaderSettings.EventPlayerThreads;
+            MIDINoteEvents = new MIDIEvent[count][];
+            Parallel.For(0, count, new ParallelOptions() { CancellationToken = cancel }, i =>
             {
-                int count = LoaderSettings.EventPlayerThreads;
-                MIDINoteEvents = new MIDIEvent[count][];
-                Parallel.For(0, count, new ParallelOptions() { CancellationToken = cancel }, i =>
+                try
                 {
-                        try
-                        {
-                            MIDINoteEvents[i] = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => new SkipIterator<MIDIEvent>(p.NoteEvents, i, count)).ToArray(), e =>
-                            {
-                              return e.time;
-                          }).ToArray();
-                        }
-                        catch (OperationCanceledException)
-                        {
-                        }
-                    });
-            });
-            var controlEventMerger = Task.Run(() =>
-            {
-                int count = LoaderSettings.EventPlayerThreads;
-                MIDIControlEvents = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => p.ControlEvents).ToArray(), e => e.time).ToArray();
-            });
-            cancel.ThrowIfCancellationRequested();
-            ParseStage = ParsingStage.MergingKeys;
-            long noteCount = 0;
-            Parallel.For(0, 256, new ParallelOptions() { CancellationToken = cancel }, (i) =>
-            {
-                var en = TimedMerger<Note>.MergeMany(parsers.Select(p => p.Notes[i]).ToArray(), n => n.start);
-                if (LoaderSettings.RemoveOverlaps) Notes[i] = RemoveOverlaps(en).ToArray();
-                else Notes[i] = en.ToArray();
-                foreach (var p in parsers) p.Notes[i] = null;
-                lock (l)
+                    MIDINoteEvents[i] = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => new SkipIterator<MIDIEvent>(p.NoteEvents, i, count)).ToArray(), e =>
+                    {
+                        return e.time;
+                    }).ToArray();
+                }
+                catch (OperationCanceledException)
                 {
-                    noteCount += Notes[i].Length;
-                    keysMerged++;
-                    ParseNumber += 10;
-                    ParseStatusText = "Merging Notes\nMerged keys " + keysMerged + " of " + 256;
-                    Console.WriteLine("Merged key " + keysMerged + "/" + 256);
                 }
             });
-            MidiNoteCount = noteCount;
+        }
+
+        protected void MergeControlEvents()
+        {
+            int count = LoaderSettings.EventPlayerThreads;
+            MIDIControlEvents = TimedMerger<MIDIEvent>.MergeMany(parsers.Select(p => p.ControlEvents).ToArray(), e => e.time).ToArray();
+        }
+
+        protected void MergeColorEvents()
+        {
             List<ColorEvent[]> ce = new List<ColorEvent[]>();
             foreach (var p in parsers) ce.AddRange(p.ColorEvents);
             ColorEvents = ce.ToArray();
-            cancel.ThrowIfCancellationRequested();
-            ParseStatusText = "Merging Events...";
-            ParseStage = ParsingStage.MergingEvents;
-            Console.WriteLine("Merging events...");
-            controlEventMerger.GetAwaiter().GetResult();
-            eventMerger.GetAwaiter().GetResult();
-            ParseStatusText = "Done!";
         }
 
-        IEnumerable<Note> RemoveOverlaps(IEnumerable<Note> input)
+        protected IEnumerable<Note> RemoveOverlaps(IEnumerable<Note> input)
         {
             List<Note> tickNotes = new List<Note>();
             double currTick = -1;
@@ -170,6 +146,8 @@ namespace Kiva
             }
             foreach (var _n in tickNotes) yield return _n;
         }
+
+        protected abstract void SecondPassParse();
 
         public void SetColorEvents(double time)
         {

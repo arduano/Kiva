@@ -105,7 +105,7 @@ namespace Kiva
             Keyboard.ClearFocus();
             loadSettingsScreen.Visibility = Visibility.Collapsed;
             loadProgessScreen.Visibility = Visibility.Visible;
-            LoadedFile = new MIDIMemoryFile(filepath, loaderSettings, cancel.Token);
+            LoadedFile = new MIDINoteFile(filepath, loaderSettings, cancel.Token);
             LoadedFile.ParseFinished += () =>
             {
                 Dispatcher.InvokeAsync(() =>
