@@ -180,6 +180,7 @@ namespace Kiva_MIDI
         {
             ma.Dispose();
             BASSMIDI.FreeSoundfonts();
+            BASSMIDI.CloseBASS();
             disposed = true;
             syncThread.GetAwaiter().GetResult();
             settings.Soundfonts.SoundfontsUpdated -= OnSoundfontsChanged;

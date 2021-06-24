@@ -52,6 +52,10 @@ namespace Kiva_MIDI
                 MIDIOUTCAPS device;
                 WinMM.midiOutGetDevCaps(i, out device, (uint)Marshal.SizeOf(typeof(MIDIOUTCAPS)));
                 name = device.szPname;
+
+                if (name == "OmniMIDI")
+                    continue;
+
                 var item = new Grid()
                 {
                     Tag = new DeviceData() { id = i, name = name },

@@ -125,11 +125,6 @@ namespace Kiva_MIDI
         AudioBufferStream audioStream;
         ISoundOut soundOut;
 
-        public static void Init()
-        {
-            BASSMIDI.InitBASS(format);
-        }
-
         private ISoundOut GetSoundOut()
         {
             if (WasapiOut.IsSupportedOnCurrentPlatform)
@@ -140,6 +135,7 @@ namespace Kiva_MIDI
 
         public MIDIAudio(int bufferLength)
         {
+            BASSMIDI.InitBASS(format);
             AudioBuffer = new float[bufferLength * 2];
             audioStream = new AudioBufferStream(this);
             soundOut = GetSoundOut();

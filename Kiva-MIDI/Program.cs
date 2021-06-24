@@ -51,9 +51,6 @@ namespace Kiva_MIDI
                 }
             }
 
-            if (s.General.SelectedAudioEngine == AudioEngine.PreRender)
-                MIDIAudio.Init();
-
             var window = new MainWindow(s);
             if (args.Length != 0)
             {

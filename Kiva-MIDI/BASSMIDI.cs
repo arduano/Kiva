@@ -28,21 +28,38 @@ namespace Kiva_MIDI
 
         static object sfLock = new object();
 
+        public static bool IsPreRender()
+        {
+            Settings s = new Settings();
+
+            if (s.General.SelectedAudioEngine != AudioEngine.PreRender)
+                return false;
+
+            return true;
+        }
+
         public static void InitBASS(WaveFormat format)
         {
             WaveFormatStatic = format;
-            Bass.BASS_Free();
+
+            if (!IsPreRender())
+                return;
+
             if (!Bass.BASS_Init(0, WaveFormatStatic.SampleRate, BASSInit.BASS_DEVICE_NOSPEAKER, IntPtr.Zero))
                 throw new Exception();
         }
 
-        public static void DisposeBASS()
+        public static void CloseBASS()
         {
-            Bass.BASS_Free();
+            if (!Bass.BASS_Free())
+                throw new Exception();
         }
 
         public BASSMIDI(int voices, bool nofx = true)
         {
+            if (!IsPreRender())
+                return;
+
             Handle = BassMidi.BASS_MIDI_StreamCreate(16,
                 BASSFlag.BASS_SAMPLE_FLOAT |
                 BASSFlag.BASS_STREAM_DECODE |
@@ -79,6 +96,9 @@ namespace Kiva_MIDI
 
         public static void LoadSoundfonts(SoundfontData[] soundfonts)
         {
+            if (!IsPreRender())
+                return;
+
             lock (sfLock)
             {
                 FreeSoundfonts();
